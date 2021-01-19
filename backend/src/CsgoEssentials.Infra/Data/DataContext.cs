@@ -17,9 +17,6 @@ namespace CsgoEssentials.Infra.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserMap());
-
-            base.OnModelCreating(modelBuilder);
-
             modelBuilder.ApplyConfiguration(new MapMap());
 
             base.OnModelCreating(modelBuilder);
