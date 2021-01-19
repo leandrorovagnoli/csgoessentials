@@ -19,6 +19,11 @@ namespace CsgoEssentials.Infra.Data
             modelBuilder.ApplyConfiguration(new UserMap());
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new MapMap());
+
+            base.OnModelCreating(modelBuilder);
+
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using CsgoEssentials.Domain.Entities;
-using CsgoEssentials.Infra.Data;
+using CsgoEssentials.Domain.Interfaces.Services;
+using CsgoEssentials.Infra.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,67 +11,80 @@ namespace CsgoEssentials.API.Controllers
     public class MapController : Controller
     {
         [HttpGet]
-        public async Task<ActionResult<List<Map>>> Get([FromServices] DataContext context)
+        public async Task<ActionResult<IEnumerable<Map>>> Get([FromServices] IMapService MapService)
         {
             try
             {
-                var maps = await context
-                    .Maps
-                    .AsNoTracking()
-                    .ToListAsync();
-
-                return maps;
+                var maps = await MapService.GetAllAsNoTracking();
+                return Ok(maps);
             }
             catch
             {
-                return BadRequest(new { message = "Não foi possível buscar os mapas." });
+                return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_BUSCAR_OS_MAPAS });
             }
         }
 
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<ActionResult<IEnumerable<Map>>> Get(int id, [FromServices] IMapService mapService)
+        {
+            try
+            {
+                var map = await mapService.GetByIdAsNoTracking(id);
+                if (map == null)
+                    return BadRequest(new { message = Messages.MAPA_NAO_ENCONTRADO });
+
+                return Ok(map);
+            }
+            catch
+            {
+                return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
+            }
+        }
+
+
         [HttpPost]
         public async Task<ActionResult<Map>> Post(
-            [FromServices] DataContext context,
-            [FromBody] Map model)
+            [FromServices] IMapService MapService,
+            [FromBody] Map map)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                context.Maps.Add(model);
-                await context.SaveChangesAsync();
+                await MapService.Add(map);
 
-                return model;
+                return map;
             }
             catch
             {
-                return BadRequest(new { message = "Não foi possível adicionar o mapa." });
+                return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_CRIAR_O_MAPA });
             }
         }
 
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<ActionResult<Map>> Put(
+        public ActionResult<Map> Put(
             int id,
-            [FromServices] DataContext context,
-            [FromBody] Map model)
+            [FromServices] IMapService MapService,
+            [FromBody] Map map)
         {
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (id != model.Id)
-                return NotFound(new { message = "Mapa não encontrado" });
+            if (id != map.Id)
+                return NotFound(new { Messages.MAPA_NAO_ENCONTRADO });
 
             try
             {
-                context.Entry(model).State = EntityState.Modified;
-                await context.SaveChangesAsync();
-                return model;
+                MapService.Update(map);
+                return map;
             }
             catch
             {
-                return BadRequest(new { message = "Não foi possível atualizar o Mapa." });
+                return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_ATUALIZAR_O_MAPA });
             }
         }
 
@@ -79,23 +92,22 @@ namespace CsgoEssentials.API.Controllers
         [Route("{id:int}")]
         public async Task<ActionResult<Map>> Delete(
             int id,
-            [FromServices] DataContext context)
+            [FromServices] IMapService MapService)
         {
             try
             {
-                var Map = await context.Maps.FirstOrDefaultAsync(x => x.Id.Equals(id));
+                var map = await MapService.GetById(id);
 
-                if (Map == null)
-                    return NotFound(new { message = "Mapa não encontrado." });
+                if (map == null)
+                    return NotFound(new { message = Messages.MAPA_NAO_ENCONTRADO });
 
-                context.Maps.Remove(Map);
-                await context.SaveChangesAsync();
+                MapService.Delete(map);
 
-                return Ok(Map);
+                return Ok(new { message = Messages.MAPA_REMOVIDO_COM_SUCESSO });
             }
             catch
             {
-                return BadRequest(new { message = "Ocorreu um erro." });
+                return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
             }
         }
 
