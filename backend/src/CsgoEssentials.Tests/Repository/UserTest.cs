@@ -13,5 +13,23 @@ namespace CsgoEssentials.Tests.Repository
         {
             Assert.Fail();
         }
+
+        [TestMethod]
+        public void DEVE_ATUALIZAR_UM_USUARIO_EXISTENTE()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void DEVE_BUSCAR_UM_USUARIO_EXISTENTE()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void DEVE_EXCLUIR_UM_USUARIO_EXISTENTE()
+        {
+            Assert.Fail();
+        }
     }
 }

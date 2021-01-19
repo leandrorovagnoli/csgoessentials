@@ -1,11 +1,12 @@
-﻿using System.ComponentModel;
+﻿using CsgoEssentials.Domain.Enum;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace CsgoEssentials.Domain.Entities
 {
     public class User
     {
-        public User(string name, string userName, string password, string role)
+        public User(string name, string userName, string password, EUserRole role)
         {
             Name = name;
             UserName = userName;
@@ -31,9 +32,9 @@ namespace CsgoEssentials.Domain.Entities
         [DisplayName("Senha")]
         public string Password { get; set; }
 
-        [MaxLength(length: 60, ErrorMessage = "O campo {0} possui um limite de até {1} caracteres.")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         [DisplayName("Função")]
-        public string Role { get; set; }
+        public EUserRole Role { get; set; }
 
         public override string ToString()
         {
