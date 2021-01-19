@@ -4,14 +4,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3F7BACD7-338A-40BC-B314-3880E9130C0D}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\..\Downloads\appsettings.Development.json = ..\..\..\..\..\Downloads\appsettings.Development.json
+		..\..\..\..\..\Downloads\appsettings.json = ..\..\..\..\..\Downloads\appsettings.json
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsgoEssentials.API", "src\CsgoEssentials.API\CsgoEssentials.API.csproj", "{6E6C2C3A-38E3-4C2B-B0C1-06292C14396D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsgoEssentials.Domain", "src\CsgoEssentials.Domain\CsgoEssentials.Domain.csproj", "{EE61F2D2-93E4-43CD-9085-9551CE5E0220}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsgoEssentials.Domain", "src\CsgoEssentials.Domain\CsgoEssentials.Domain.csproj", "{EE61F2D2-93E4-43CD-9085-9551CE5E0220}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsgoEssentials.Infra", "src\CsgoEssentials.Infra\CsgoEssentials.Infra.csproj", "{92A0827B-5E51-4271-AFA9-5A2AE6F42828}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsgoEssentials.Infra", "src\CsgoEssentials.Infra\CsgoEssentials.Infra.csproj", "{92A0827B-5E51-4271-AFA9-5A2AE6F42828}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsgoEssentials.Tests", "src\CsgoEssentials.Tests\CsgoEssentials.Tests.csproj", "{6CE194D0-16DE-4AA3-B7C2-EDFE5B7115A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsgoEssentials.Tests", "src\CsgoEssentials.Tests\CsgoEssentials.Tests.csproj", "{6CE194D0-16DE-4AA3-B7C2-EDFE5B7115A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
