@@ -6,7 +6,7 @@ namespace CsgoEssentials.Domain.Enum
 {
     public enum Tick
     {
-        128 = 1,
-        64  = 2
+        Tick64 = 1,
+        Tick128 = 2        
     }
 }
