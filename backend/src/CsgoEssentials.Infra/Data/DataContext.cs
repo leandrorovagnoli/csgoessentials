@@ -1,4 +1,5 @@
 ﻿using CsgoEssentials.Domain.Entities;
+using CsgoEssentials.Infra.EntityConfig;
 using Microsoft.EntityFrameworkCore;
 
 namespace CsgoEssentials.Infra.Data
@@ -11,5 +12,12 @@ namespace CsgoEssentials.Infra.Data
         }
 
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new UserMap());
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

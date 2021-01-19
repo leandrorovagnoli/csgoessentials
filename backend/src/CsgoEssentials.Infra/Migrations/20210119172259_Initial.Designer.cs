@@ -2,45 +2,51 @@
 using CsgoEssentials.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CsgoEssentials.Infra.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210117201925_Initial")]
+    [Migration("20210119172259_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 64)
+                .UseIdentityColumns()
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
 
             modelBuilder.Entity("CsgoEssentials.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(60)
-                        .HasColumnType("varchar(60) CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(60)");
 
                     b.Property<string>("Role")
                         .HasMaxLength(60)
-                        .HasColumnType("varchar(60) CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(60)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(60)
-                        .HasColumnType("varchar(60) CHARACTER SET utf8mb4");
+                        .HasColumnType("nvarchar(60)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
+                    b.ToTable("User");
                 });
 #pragma warning restore 612, 618
         }
