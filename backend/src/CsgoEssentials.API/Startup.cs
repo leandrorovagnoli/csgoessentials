@@ -5,6 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CsgoEssentials.Infra.Data;
 using Microsoft.EntityFrameworkCore;
+using CsgoEssentials.Domain.Interfaces.Services;
+using CsgoEssentials.Domain.Services;
+using CsgoEssentials.Infra.Repository;
+using CsgoEssentials.Domain.Interfaces.Repository;
 
 namespace CsgoEssentials.WebAPI
 {
@@ -21,9 +25,12 @@ namespace CsgoEssentials.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            //services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContextPool<DataContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            //services.AddDbContextPool<DataContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

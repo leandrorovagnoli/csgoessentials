@@ -1,7 +1,7 @@
 ﻿using CsgoEssentials.Domain.Entities;
-using CsgoEssentials.Infra.Data;
+using CsgoEssentials.Domain.Interfaces.Services;
+using CsgoEssentials.Infra.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,27 +11,41 @@ namespace CsgoEssentials.API.Controllers
     public class UserController : Controller
     {
         [HttpGet]
-        public async Task<ActionResult<List<User>>> Get([FromServices] DataContext context)
+        public async Task<ActionResult<IEnumerable<User>>> Get([FromServices] IUserService userService)
         {
             try
             {
-                var users = await context
-                    .Users
-                    .AsNoTracking()
-                    .ToListAsync();
-
-                return users;
+                var users = await userService.GetAllAsNoTracking();
+                return Ok(users);
             }
             catch
             {
-                return BadRequest(new { message = "Não foi possível buscar os usuários." });
+                return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_BUSCAR_OS_USUARIOS });
+            }
+        }
+
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<ActionResult<IEnumerable<User>>> Get(int id, [FromServices] IUserService userService)
+        {
+            try
+            {
+                var user = await userService.GetByIdAsNoTracking(id);
+                if (user == null)
+                    return BadRequest(new { message = Messages.USUARIO_NAO_ENCONTRADO });
+
+                return Ok(user);
+            }
+            catch
+            {
+                return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
             }
         }
 
         [HttpPost]
         public async Task<ActionResult<User>> Post(
-            [FromServices] DataContext context,
-            [FromBody] User model)
+            [FromServices] IUserService userService,
+            [FromBody] User user)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -39,44 +53,42 @@ namespace CsgoEssentials.API.Controllers
             try
             {
                 // Criptografando a senha.
-                model.Password = MD5Hash.CalculaHash(model.Password);
+                user.Password = MD5Hash.CalculaHash(user.Password);
 
-                context.Users.Add(model);
-                await context.SaveChangesAsync();
+                await userService.Add(user);
 
-                // Esconde a senha ao retornar para a tela.
-                model.Password = "";
-                return model;
+                return Ok(user);
             }
             catch
             {
-                return BadRequest(new { message = "Não foi possível criar o usuário." });
+                return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_CRIAR_O_USUARIO });
             }
         }
 
         [HttpPut]
         [Route("{id:int}")]
-        public async Task<ActionResult<User>> Put(
+        public ActionResult<User> Put(
             int id,
-            [FromServices] DataContext context,
-            [FromBody] User model)
+            [FromServices] IUserService userService,
+            [FromBody] User user)
         {
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (id != model.Id)
-                return NotFound(new { message = "Usuário não encontrado" });
+            if (id != user.Id)
+                return NotFound(new { message = Messages.USUARIO_NAO_ENCONTRADO });
 
             try
             {
-                context.Entry(model).State = EntityState.Modified;
-                await context.SaveChangesAsync();
-                return model;
+                // Criptografando a senha.
+                user.Password = MD5Hash.CalculaHash(user.Password);
+
+                userService.Update(user);
+                return Ok(user);
             }
             catch
             {
-                return BadRequest(new { message = "Não foi possível atualizar o usuário." });
+                return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_ATUALIZAR_O_USUARIO });
             }
         }
 
@@ -84,23 +96,22 @@ namespace CsgoEssentials.API.Controllers
         [Route("{id:int}")]
         public async Task<ActionResult<User>> Delete(
             int id,
-            [FromServices] DataContext context)
+            [FromServices] IUserService userService)
         {
             try
             {
-                var user = await context.Users.FirstOrDefaultAsync(x => x.Id.Equals(id));
+                var user = await userService.GetById(id);
 
                 if (user == null)
-                    return NotFound(new { message = "Menu não encontrado." });
+                    return NotFound(new { message = Messages.USUARIO_NAO_ENCONTRADO });
 
-                context.Users.Remove(user);
-                await context.SaveChangesAsync();
+                userService.Delete(user);
 
-                return Ok(user);
+                return Ok(new { message = Messages.USUARIO_REMOVIDO_COM_SUCESSO });
             }
             catch
             {
-                return BadRequest(new { message = "Ocorreu um erro." });
+                return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
             }
         }
     }
