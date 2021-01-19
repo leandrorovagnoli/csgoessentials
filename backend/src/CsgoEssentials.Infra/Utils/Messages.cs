@@ -8,6 +8,7 @@
 
         #endregion
 
+
         #region User
 
         public const string USUARIO_NAO_ENCONTRADO = "Usuário não encontrado.";
@@ -18,6 +19,8 @@
 
         #endregion
 
+
+
         #region Map
 
         public const string MAPA_NAO_ENCONTRADO = "Mapa não encontrado.";
@@ -27,5 +30,13 @@
         public const string NAO_FOI_POSSIVEL_ATUALIZAR_O_MAPA = "Não foi possível atualizar o mapa.";
 
         #endregion
+
+
+
+        
+
+        public const string ARTIGO_NAO_ENCONTRADO = "";
+
+        
     }
 }

@@ -19,3 +19,4 @@ namespace CsgoEssentials.Domain.Entities
         public string Role { get; set; }
     }
 }
+
