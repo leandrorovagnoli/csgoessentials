@@ -11,6 +11,7 @@ namespace CsgoEssentials.Infra.Data
 
         }
 
+        public DbSet<Article> Article { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Map> Maps { get; set; }
 
@@ -18,6 +19,8 @@ namespace CsgoEssentials.Infra.Data
         {
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new MapMap());
+            modelBuilder.ApplyConfiguration(new ArticleMap());
+
 
             base.OnModelCreating(modelBuilder);
 

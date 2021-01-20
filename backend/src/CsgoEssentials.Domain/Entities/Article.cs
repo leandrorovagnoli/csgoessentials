@@ -23,8 +23,8 @@ namespace CsgoEssentials.Domain.Entities
         [StringLength(150, MinimumLength = 5, ErrorMessage = "O Campo {0} precisa ter entre {2} até {1} Caracteres")]
         public string Description { get; set; }
 
-
-        // Falta Adicionar a propriedade "AUTOR" para fazer referencia.
+        [Required]
+        public User Usuario { get; set; }
 
     }
 }

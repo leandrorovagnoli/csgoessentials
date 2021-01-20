@@ -8,15 +8,15 @@ using System.Text;
 
 namespace CsgoEssentials.Infra.EntityConfig
 {
-    class ArticleMap : IEntityTypeConfiguration<Map>
+    class ArticleMap : IEntityTypeConfiguration<Article>
     {
-        public void Configure(EntityTypeBuilder<Map> builder)
+        public void Configure(EntityTypeBuilder<Article> builder)
         {
-            builder.ToTable("Map");
+            builder.ToTable("Article");
 
             builder.HasKey(x => x.Id);
 
-            builder.HasIndex(x => x.MapName).IsUnique(true);
+            builder.HasIndex(x => x.ArticleName).IsUnique(true);
         }
     }
 }

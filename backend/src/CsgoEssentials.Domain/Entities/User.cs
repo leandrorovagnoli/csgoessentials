@@ -1,4 +1,5 @@
 ﻿using CsgoEssentials.Domain.Enum;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -35,6 +36,10 @@ namespace CsgoEssentials.Domain.Entities
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         [DisplayName("Função")]
         public EUserRole Role { get; set; }
+
+        
+        public List<Article> Articles { get; set; }
+
 
         public override string ToString()
         {
