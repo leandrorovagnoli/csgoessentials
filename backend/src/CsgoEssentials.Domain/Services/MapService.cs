@@ -16,6 +16,7 @@ namespace CsgoEssentials.Domain.Services
         {
             _mapRepository = MapRepository;
         }
+
         public Task<Map> Add(Map entity)
         {
             return _mapRepository.Add(entity);

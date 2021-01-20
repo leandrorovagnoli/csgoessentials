@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+
 
 namespace CsgoEssentials.Domain.Entities
 {
@@ -13,7 +12,7 @@ namespace CsgoEssentials.Domain.Entities
 
         [Required]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "O Campo {0} precisa ter entre {2} até {1} Caracteres")]
-        public string Name { get; set; }
+        public string ArticleName { get; set; }
 
 
         [DataType(DataType.Date)]

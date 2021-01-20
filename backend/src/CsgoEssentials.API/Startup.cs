@@ -33,6 +33,9 @@ namespace CsgoEssentials.WebAPI
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IMapService, MapService>();
             services.AddScoped<IMapRepository, MapRepository>();
+            services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<IArticleRepository, ArticleRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

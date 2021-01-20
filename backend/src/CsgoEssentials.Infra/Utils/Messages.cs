@@ -32,10 +32,16 @@
         #endregion
 
 
+        #region Article
 
-        
+        public const string ARTIGO_NAO_ENCONTRADO = "Artigo não encontrado.";
+        public const string ARTIGO_REMOVIDO_COM_SUCESSO = "Artigo foi removido com sucesso.";
+        public const string NAO_FOI_POSSIVEL_BUSCAR_OS_ARTIGOS = "Não foi possível buscar os Artigos.";
+        public const string NAO_FOI_POSSIVEL_CRIAR_UM_ARTIGO = "Não foi possível criar o um Artigo.";
+        public const string NAO_FOI_POSSIVEL_ATUALIZAR_O_ARTIGO = "Não foi possível atualizar o Artigo.";
 
-        public const string ARTIGO_NAO_ENCONTRADO = "";
+        #endregion
+
 
         
     }
