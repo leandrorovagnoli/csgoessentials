@@ -4,10 +4,9 @@ using System.Text;
 
 namespace CsgoEssentials.Domain.Enum
 {
-    public enum  GrenadeType
+    public enum ETick
     {
-        Smoke=1,
-        Molotov=2,
-        Flash=3
+        Tick64 = 1,
+        Tick128 = 2        
     }
 }

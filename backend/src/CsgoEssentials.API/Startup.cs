@@ -35,6 +35,8 @@ namespace CsgoEssentials.WebAPI
             services.AddScoped<IMapRepository, MapRepository>();
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<IArticleRepository, ArticleRepository>();
+            services.AddScoped<IVideoService, VideoService>();
+            services.AddScoped<IVideoRepository, VideoRepository>();
 
         }
 

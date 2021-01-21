@@ -24,7 +24,7 @@ namespace CsgoEssentials.Domain.Entities
         public string Description { get; set; }
 
         [Required]
-        public User Usuario { get; set; }
+        public User User { get; set; }
 
     }
 }

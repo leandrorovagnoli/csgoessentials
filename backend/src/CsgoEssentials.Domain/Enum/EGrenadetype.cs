@@ -4,9 +4,10 @@ using System.Text;
 
 namespace CsgoEssentials.Domain.Enum
 {
-    public enum Tick
+    public enum  EGrenadeType
     {
-        Tick64 = 1,
-        Tick128 = 2        
+        Smoke=1,
+        Molotov=2,
+        Flash=3
     }
 }

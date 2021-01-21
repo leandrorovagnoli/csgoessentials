@@ -14,12 +14,14 @@ namespace CsgoEssentials.Infra.Data
         public DbSet<Article> Article { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Map> Maps { get; set; }
+        public DbSet<Video> videos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new MapMap());
             modelBuilder.ApplyConfiguration(new ArticleMap());
+            modelBuilder.ApplyConfiguration(new VideoMap());
 
 
             base.OnModelCreating(modelBuilder);
