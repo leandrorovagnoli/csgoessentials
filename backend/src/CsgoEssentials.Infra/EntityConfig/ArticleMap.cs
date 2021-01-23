@@ -17,6 +17,8 @@ namespace CsgoEssentials.Infra.EntityConfig
             builder.HasKey(x => x.Id);
 
             builder.HasIndex(x => x.ArticleName).IsUnique(true);
+
+            
         }
     }
 }

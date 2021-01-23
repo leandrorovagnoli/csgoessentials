@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CsgoEssentials.Infra.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210121204831_VideoCreationTable")]
-    partial class VideoCreationTable
+    [Migration("20210121214035_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
