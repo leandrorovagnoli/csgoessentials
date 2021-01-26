@@ -17,7 +17,7 @@ namespace CsgoEssentials.Infra.Repository
             _dbContext = context;
         }
 
-        public async Task<TEntity> Add(TEntity entity)
+        public virtual async Task<TEntity> Add(TEntity entity)
         {
             _dbContext.Set<TEntity>().Add(entity);
             await _dbContext.SaveChangesAsync();
@@ -59,7 +59,7 @@ namespace CsgoEssentials.Infra.Repository
             return entity;
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();

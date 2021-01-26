@@ -11,10 +11,10 @@ namespace CsgoEssentials.Infra.Data
 
         }
 
-        public DbSet<Article> Article { get; set; }
+        public DbSet<Article> Articles { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Map> Maps { get; set; }
-        public DbSet<Video> videos { get; set; }
+        public DbSet<Video> Videos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -22,7 +22,6 @@ namespace CsgoEssentials.Infra.Data
             modelBuilder.ApplyConfiguration(new MapMap());
             modelBuilder.ApplyConfiguration(new ArticleMap());
             modelBuilder.ApplyConfiguration(new VideoMap());
-
 
             base.OnModelCreating(modelBuilder);
 

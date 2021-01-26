@@ -1,41 +1,55 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
 using CsgoEssentials.Domain.Enum;
+using System.ComponentModel;
+using CsgoEssentials.Infra.Utils;
+using System.Collections.Generic;
 
 namespace CsgoEssentials.Domain.Entities
 {
-    
-    public class Video
+    public class Video : IValidatableObject
     {
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [StringLength(maximumLength: 60, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres.", MinimumLength = 4)]
-        public string Name { get; set; }
+        [DisplayName(Messages.TITULO)]
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [StringLength(maximumLength: 60, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 4)]
+        public string Title { get; set; }
 
-
-        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [DisplayName(Messages.DATA_DE_PUBLICACAO)]
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime ReleaseDate { get; set; }
 
-
-        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [DisplayName(Messages.TIPO_DE_GRANADA)]
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         public EGrenadeType GrenadeType { get; set; }
 
-
-        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         public ETick TickRate { get; set; }
 
-
-        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [StringLength(maximumLength: 60, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres.", MinimumLength = 3)]
-        [MaxLength(length: 60, ErrorMessage = "O campo {0} possui um limite de até {1} caracteres.")]
+        [DisplayName(Messages.DESCRICAO)]
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [StringLength(maximumLength: 60, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 3)]
         public string Description { get; set; }
 
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [DisplayName(Messages.USUARIO)]
         public User User { get; set; }
+
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [DisplayName(Messages.MAPA)]
         public Map Map { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var results = new List<ValidationResult>();
+
+            // Validations
+
+            return results;
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace CsgoEssentials.API.Controllers
     public class MapController : Controller
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Map>>> Get([FromServices] IMapService MapService)
+        public async Task<ActionResult<IEnumerable<Map>>> GetAll([FromServices] IMapService MapService)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<IEnumerable<Map>>> Get(int id, [FromServices] IMapService mapService)
+        public async Task<ActionResult<IEnumerable<Map>>> GetById(int id, [FromServices] IMapService mapService)
         {
             try
             {

@@ -350,3 +350,6 @@ MigrationBackup/
 .ionide/
 /backend/src/CsgoEssentials.API/appsettings.json
 /backend/src/CsgoEssentials.API/appsettings.Development.json
+/backend/src/CsgoEssentials.Infra/Migrations/
+/backend/src/CsgoEssentials.Infra/Migrations/DataContextModelSnapshot.cs
+**/Migrations/

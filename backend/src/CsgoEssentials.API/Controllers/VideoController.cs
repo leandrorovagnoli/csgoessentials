@@ -11,7 +11,7 @@ namespace CsgoEssentials.API.Controllers
     public class VideoController : Controller
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Video>>> Get([FromServices] IVideoService VideoService)
+        public async Task<ActionResult<IEnumerable<Video>>> GetAll([FromServices] IVideoService VideoService)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<IEnumerable<Video>>> Get(int id, [FromServices] IVideoService videoService)
+        public async Task<ActionResult<IEnumerable<Video>>> GetById(int id, [FromServices] IVideoService videoService)
         {
             try
             {

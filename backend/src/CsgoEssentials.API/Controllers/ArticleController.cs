@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace CsgoEssentials.API.Controllers
 {
-    [Route("article")]
+    [Route("v1/articles")]
     public class ArticleController : Controller
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Article>>> Get([FromServices] IArticleService articleService)
+        public async Task<ActionResult<IEnumerable<Article>>> GetAll([FromServices] IArticleService articleService)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<IEnumerable<Article>>> Get(int id, [FromServices] IArticleService articleService)
+        public async Task<ActionResult<IEnumerable<Article>>> GetById(int id, [FromServices] IArticleService articleService)
         {
             try
             {
