@@ -83,7 +83,7 @@ namespace CsgoEssentials.WebAPI
             });
 
             //if (context.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
-                DummyData.Initialize(context).Wait();
+            DummyData.Initialize(context).Wait();
         }
     }
 }

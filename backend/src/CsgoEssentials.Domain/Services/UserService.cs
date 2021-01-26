@@ -1,8 +1,10 @@
 ﻿using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Interfaces.Repository;
 using CsgoEssentials.Domain.Interfaces.Services;
+using CsgoEssentials.Infra.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -16,43 +18,92 @@ namespace CsgoEssentials.Domain.Services
         {
             _userRepository = userRepository;
         }
-        public Task<User> Add(User entity)
+        
+        public async Task<User> Add(User entity)
         {
-            return _userRepository.Add(entity);
+            await CheckUserNameDuplicity(entity);
+            await EncryptPassword(entity);
+            
+            return await _userRepository.Add(entity);
         }
 
-        public void Delete(User entity)
+        public async Task Delete(User entity)
         {
-            _userRepository.Delete(entity);
+            await _userRepository.Delete(entity);
         }
 
-        public Task<IEnumerable<User>> Find(Expression<Func<User, bool>> predicate)
+        public async Task<IEnumerable<User>> Find(Expression<Func<User, bool>> predicate)
         {
-            return _userRepository.Find(predicate);
+            return await _userRepository.Find(predicate);
         }
 
-        public Task<IEnumerable<User>> GetAll()
+        public async Task<IEnumerable<User>> FindAsNoTracking(Expression<Func<User, bool>> predicate)
         {
-            return _userRepository.GetAll();
+            return await _userRepository.FindAsNoTracking(predicate);
         }
 
-        public Task<IEnumerable<User>> GetAllAsNoTracking()
+        public async Task<IEnumerable<User>> GetAll()
         {
-            return _userRepository.GetAllAsNoTracking();
+            return await _userRepository.GetAll();
         }
 
-        public Task<User> GetById(int id)
+        public async Task<IEnumerable<User>> GetAllAsNoTracking()
         {
-            return _userRepository.GetById(id);
-        }
-        public Task<User> GetByIdAsNoTracking(int id)
-        {
-            return _userRepository.GetByIdAsNoTracking(id);
+            return await _userRepository.GetAllAsNoTracking();
         }
 
-        public void Update(User entity)
+        public async Task<User> GetById(int id)
         {
-            _userRepository.Update(entity);
+            return await _userRepository.GetById(id);
+        }
+        
+        public async Task<User> GetByIdAsNoTracking(int id)
+        {
+            return await _userRepository.GetByIdAsNoTracking(id);
+        }
+
+        public async Task Update(User entity)
+        {
+            await EncryptPassword(entity);
+            await CheckUserNameDuplicity(entity);
+            await PreventUsernameChange(entity);
+
+            await _userRepository.Update(entity);
+        }
+
+        private async Task EncryptPassword(User entity)
+        {
+            if (entity.Id == 0)
+            {
+                entity.Password = MD5Hash.CalculaHash(entity.Password);
+                return;
+            }
+
+            //updating user
+            var user = await GetByIdAsNoTracking(entity.Id);
+            if (user != null && user.Password != entity.Password)
+                entity.Password = MD5Hash.CalculaHash(entity.Password);
+        }
+
+        private async Task CheckUserNameDuplicity(User entity)
+        {
+            var users = await FindAsNoTracking(x => x.UserName == entity.UserName);
+            var user = users.FirstOrDefault();
+
+            if (user != null && user.Id != entity.Id)
+                throw new InvalidOperationException(Messages.NOME_DE_USUARIO_JA_EXISTENTE);
+        }
+
+        private async Task PreventUsernameChange(User entity)
+        {
+            if (entity.Id == 0)
+                return;
+
+            var users = await FindAsNoTracking(x => x.Id == entity.Id);
+            var user = users.FirstOrDefault();
+
+            if (user != null && user.UserName != entity.UserName)
+                throw new InvalidOperationException(Messages.NAO_E_PERMITIDO_ALTERAR_NOME_DE_USUARIO);
         }
     }
 }

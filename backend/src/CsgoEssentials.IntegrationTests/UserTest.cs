@@ -5,6 +5,8 @@ using CsgoEssentials.IntegrationTests.Config;
 using FluentAssertions;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -13,7 +15,6 @@ namespace CsgoEssentials.IntegrationTests.UserTests
     public class UserTest : IntegrationTestConfig
     {
         private User _newMemberUser;
-        private User _newAdminUser;
 
         public UserTest()
         {
@@ -23,13 +24,6 @@ namespace CsgoEssentials.IntegrationTests.UserTests
                 "joaomember",
                 "@123456*",
                 EUserRole.Member);
-
-            _newAdminUser = new User(
-                "Leandro",
-                "leo@leo.com",
-                "leandro",
-                "@123456*",
-                EUserRole.Administrator);
         }
 
         [Fact]
@@ -94,11 +88,8 @@ namespace CsgoEssentials.IntegrationTests.UserTests
         {
             //Arrange
             await AuthenticateAsync();
-            var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Users.Create, _newMemberUser);
+            var responseAux = await Client.GetAsync(ApiRoutes.Users.GetById.Replace("{userId}", "2"));
             var userAux = await responseAux.Content.ReadAsAsync<User>();
-
-            responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
-            userAux.Should().NotBeNull();
 
             userAux.Name = "updatedUser";
             userAux.Role = EUserRole.Editor;
@@ -113,6 +104,25 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             user.Name.Should().Be("updatedUser");
             user.Password.Should().Be(MD5Hash.CalculaHash(_newMemberUser.Password));
             user.Role.Should().Be(EUserRole.Editor);
+        }
+
+        [Fact]
+        public async Task Update_Nao_Deve_Permitir_Alterar_Nome_De_Usuario()
+        {
+            //Arrange
+            await AuthenticateAsync();
+            var responseAux = await Client.GetAsync(ApiRoutes.Users.GetById.Replace("{userId}", "2"));
+            var userAux = await responseAux.Content.ReadAsAsync<User>();
+
+            userAux.UserName = "novonomedeusuario";
+
+            //Act
+            var response = await Client.PutAsJsonAsync(ApiRoutes.Users.Update.Replace("{userId}", userAux.Id.ToString()), userAux);
+            var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            jsonModel.Message.Should().Be(Messages.NAO_E_PERMITIDO_ALTERAR_NOME_DE_USUARIO);
         }
 
         [Fact]
@@ -325,6 +335,82 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             content.Should().Contain(string.Format(Messages.CAMPO_INVALIDO, Messages.NOME_DE_USUARIO));
+        }
+
+        [Fact]
+        public async Task Authenticate_Deve_Retornar_Token_De_Autenticacao_Para_Usuario_Logado()
+        {
+            //Act
+            var response = await Client.PostAsJsonAsync(ApiRoutes.Users.Authenticate, new
+            {
+                UserName = "leolandrooo",
+                Password = "@123456*"
+            });
+
+            var content = await response.Content.ReadFromJsonAsync<JsonModel>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            content.Message.Should().BeNullOrEmpty();
+            content.Token.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task Authenticate_Deve_Retornar_Mensagem_Usuario_Ou_Senha_Invalidos()
+        {
+            //Act
+            var response = await Client.PostAsJsonAsync(ApiRoutes.Users.Authenticate, new
+            {
+                UserName = "leolandrooo",
+                Password = "xpto"
+            });
+
+            var content = await response.Content.ReadFromJsonAsync<JsonModel>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            content.Message.Should().Be(Messages.USUARIO_OU_SENHA_INVALIDOS);
+            content.Token.Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task Authenticate_Deve_Retornar_Status_Proibido_Quando_Tentar_Criar_Novo_Usuario_Com_Funcao_Membro()
+        {
+            //Arrange
+            await AuthenticateAsync();
+            await Client.PostAsJsonAsync(ApiRoutes.Users.Create, _newMemberUser); // Adding joaomember to DB.
+
+            var loginResponse = await Client.PostAsJsonAsync(ApiRoutes.Users.Authenticate, new
+            {
+                UserName = "joaomember",
+                Password = "@123456*"
+            });
+
+            var jsonModel = await loginResponse.Content.ReadFromJsonAsync<JsonModel>();
+            Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jsonModel.Token);
+
+            //Act
+            var response = await Client.PostAsJsonAsync(ApiRoutes.Users.Create,
+                new User("newUser", "newUser@newUser.com", "newuser", "@123456*", EUserRole.Member));
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        [Fact]
+        public async Task Create_Nao_Deve_Criar_Usuario_Com_Nome_De_Usuario_Ja_Existente()
+        {
+            //Arrange
+            await AuthenticateAsync();
+            await Client.PostAsJsonAsync(ApiRoutes.Users.Create, _newMemberUser);
+
+            //Act
+            var response = await Client.PostAsJsonAsync(ApiRoutes.Users.Create, _newMemberUser);
+            var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            jsonModel.Message.Should().Be(Messages.NOME_DE_USUARIO_JA_EXISTENTE);
         }
     }
 }

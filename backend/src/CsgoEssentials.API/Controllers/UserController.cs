@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System;
 
 namespace CsgoEssentials.API.Controllers
 {
@@ -62,6 +63,10 @@ namespace CsgoEssentials.API.Controllers
 
                 return Ok(user);
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
             catch
             {
                 return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_CRIAR_O_USUARIO });
@@ -71,7 +76,7 @@ namespace CsgoEssentials.API.Controllers
         [HttpPut]
         [Route("{id:int}")]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<User> Put(
+        public async Task<ActionResult<User>> Put(
             int id,
             [FromServices] IUserService userService,
             [FromBody] User user)
@@ -84,8 +89,12 @@ namespace CsgoEssentials.API.Controllers
 
             try
             {
-                userService.Update(user);
+                await userService.Update(user);
                 return Ok(user);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch
             {
@@ -107,7 +116,7 @@ namespace CsgoEssentials.API.Controllers
                 if (user == null)
                     return NotFound(new { message = Messages.USUARIO_NAO_ENCONTRADO });
 
-                userService.Delete(user);
+                await userService.Delete(user);
 
                 return Ok(new { message = Messages.USUARIO_REMOVIDO_COM_SUCESSO });
             }

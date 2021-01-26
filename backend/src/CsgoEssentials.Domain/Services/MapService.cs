@@ -17,43 +17,48 @@ namespace CsgoEssentials.Domain.Services
             _mapRepository = MapRepository;
         }
 
-        public Task<Map> Add(Map entity)
+        public async Task<Map> Add(Map entity)
         {
-            return _mapRepository.Add(entity);
+            return await _mapRepository.Add(entity);
         }
 
-        public void Delete(Map entity)
+        public async Task Delete(Map entity)
         {
-            _mapRepository.Delete(entity);
+            await _mapRepository.Delete(entity);
         }
 
-        public Task<IEnumerable<Map>> Find(Expression<Func<Map, bool>> predicate)
+        public async Task<IEnumerable<Map>> Find(Expression<Func<Map, bool>> predicate)
         {
-            return _mapRepository.Find(predicate);
+            return await _mapRepository.Find(predicate);
         }
 
-        public Task<IEnumerable<Map>> GetAll()
+        public async Task<IEnumerable<Map>> FindAsNoTracking(Expression<Func<Map, bool>> predicate)
         {
-            return _mapRepository.GetAll();
+            return await _mapRepository.FindAsNoTracking(predicate);
         }
 
-        public Task<IEnumerable<Map>> GetAllAsNoTracking()
+        public async Task<IEnumerable<Map>> GetAll()
         {
-            return _mapRepository.GetAllAsNoTracking();
+            return await _mapRepository.GetAll();
         }
 
-        public Task<Map> GetById(int id)
+        public async Task<IEnumerable<Map>> GetAllAsNoTracking()
         {
-            return _mapRepository.GetById(id);
-        }
-        public Task<Map> GetByIdAsNoTracking(int id)
-        {
-            return _mapRepository.GetByIdAsNoTracking(id);
+            return await _mapRepository.GetAllAsNoTracking();
         }
 
-        public void Update(Map entity)
+        public async Task<Map> GetById(int id)
         {
-            _mapRepository.Update(entity);
+            return await _mapRepository.GetById(id);
+        }
+        public async Task<Map> GetByIdAsNoTracking(int id)
+        {
+            return await _mapRepository.GetByIdAsNoTracking(id);
+        }
+
+        public async Task Update(Map entity)
+        {
+            await _mapRepository.Update(entity);
         }
     }
 }

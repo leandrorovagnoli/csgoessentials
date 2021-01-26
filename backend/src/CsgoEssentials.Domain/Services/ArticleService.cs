@@ -18,44 +18,49 @@ namespace CsgoEssentials.Domain.Services
             _articleRepository = articleRepository;
         }
 
-        public Task<Article> Add(Article entity)
+        public async Task<Article> Add(Article entity)
         {
-            return _articleRepository.Add(entity);
+            return await _articleRepository.Add(entity);
         }
 
-        public void Delete(Article entity)
+        public async Task Delete(Article entity)
         {
-            _articleRepository.Delete(entity);
+            await _articleRepository.Delete(entity);
         }
 
-        public Task<IEnumerable<Article>> Find(Expression<Func<Article, bool>> predicate)
+        public async Task<IEnumerable<Article>> Find(Expression<Func<Article, bool>> predicate)
         {
-            return _articleRepository.Find(predicate);
+            return await _articleRepository.Find(predicate);
         }
 
-        public Task<IEnumerable<Article>> GetAll()
+        public async Task<IEnumerable<Article>> FindAsNoTracking(Expression<Func<Article, bool>> predicate)
         {
-            return _articleRepository.GetAll();
+            return await _articleRepository.FindAsNoTracking(predicate);
         }
 
-        public Task<IEnumerable<Article>> GetAllAsNoTracking()
+        public async Task<IEnumerable<Article>> GetAll()
         {
-            return _articleRepository.GetAllAsNoTracking();
+            return await _articleRepository.GetAll();
         }
 
-        public Task<Article> GetById(int id)
+        public async Task<IEnumerable<Article>> GetAllAsNoTracking()
         {
-            return _articleRepository.GetById(id);
+            return await _articleRepository.GetAllAsNoTracking();
         }
 
-        public Task<Article> GetByIdAsNoTracking(int id)
+        public async Task<Article> GetById(int id)
         {
-            return _articleRepository.GetByIdAsNoTracking(id);
+            return await _articleRepository.GetById(id);
         }
 
-        public void Update(Article entity)
+        public async Task<Article> GetByIdAsNoTracking(int id)
         {
-            _articleRepository.Update(entity);
+            return await _articleRepository.GetByIdAsNoTracking(id);
+        }
+
+        public async Task Update(Article entity)
+        {
+            await _articleRepository.Update(entity);
         }
     }
 }

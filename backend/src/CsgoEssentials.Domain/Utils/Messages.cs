@@ -38,6 +38,8 @@
         public const string NAO_FOI_POSSIVEL_ATUALIZAR_O_USUARIO = "Não foi possível atualizar o usuário.";
         public const string USUARIO_OU_SENHA_INVALIDOS = "Usuário ou senha inválidos";
         public const string NAO_FOI_POSSIVEL_AUTENTICAR_O_USUARIO = "Não foi possível autenticar o usuário.";
+        public const string NOME_DE_USUARIO_JA_EXISTENTE = "Nome de Usuário já existente.";
+        public const string NAO_E_PERMITIDO_ALTERAR_NOME_DE_USUARIO = "Não é permitido alterar o Nome de Usuário.";
 
         #endregion
 

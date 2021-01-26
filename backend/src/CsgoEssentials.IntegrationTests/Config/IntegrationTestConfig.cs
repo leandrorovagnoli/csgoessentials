@@ -56,7 +56,7 @@ namespace CsgoEssentials.IntegrationTests.Config
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jsonModel.Token);
         }
 
-        private async Task<AuthModel> GetJwtAsync()
+        private async Task<JsonModel> GetJwtAsync()
         {
             var response = await Client.PostAsJsonAsync(ApiRoutes.Users.Authenticate, new
             {
@@ -64,11 +64,11 @@ namespace CsgoEssentials.IntegrationTests.Config
                 Password = "@123456*"
             });
 
-            return await response.Content.ReadFromJsonAsync<AuthModel>();
+            return await response.Content.ReadFromJsonAsync<JsonModel>();
         }
     }
 
-    public class AuthModel
+    public class JsonModel
     {
         public string Message { get; set; }
         public string Token { get; set; }
