@@ -65,7 +65,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        public ActionResult<Article> Put(
+        public async Task<ActionResult<Article>> Put(
             int id,
             [FromServices] IArticleService articleService,
             [FromBody] Article article)
@@ -79,7 +79,7 @@ namespace CsgoEssentials.API.Controllers
 
             try
             {
-                articleService.Update(article);
+                await articleService.Update(article);
                 return article;
             }
             catch
@@ -101,7 +101,7 @@ namespace CsgoEssentials.API.Controllers
                 if (article == null)
                     return NotFound(new { message = Messages.ARTIGO_NAO_ENCONTRADO });
 
-                articleService.Delete(article);
+                await articleService.Delete(article);
 
                 return Ok(new { message = Messages.ARTIGO_REMOVIDO_COM_SUCESSO });
             }
