@@ -21,36 +21,39 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
         public ArticleTest()
         {
-            // Instancias para usar como teste
-            _newArticle = new Article(
-                "Outro",
-                new DateTime(2000, 20, 2, 20, 45, 3, 500),
-                "Não sei",
-                _newAdminUser
-                );
 
 
-            _newArticle2 = new List<Article>
-            {
-                new Article("Novo",
-                new DateTime(2000, 20, 2, 20, 45, 3, 500),
-                "I DONT NOW",
-                _newAdminUser),
 
-                new Article("Smoke",
-                new DateTime(1990, 12, 13, 20, 45, 3, 500),
-                "Sei la amigo",
-                _newAdminUser)
-            };
+            //_newArticle2 = new List<Article>
+            //{
+            //    new Article("Novo",
+            //    new DateTime(2000, 10, 2, 20, 45, 3, 500),
+            //    "I DONT NOW",
+            //    _newAdminUser),
+
+            //    new Article("Smoke",
+            //    new DateTime(1990, 12, 13, 20, 45, 3, 500),
+            //    "Sei la amigo",
+            //    _newAdminUser)
+            //};
 
 
 
             _newAdminUser = new User(
-             "Leandro",
-             "leo@leo.com",
-             "leandro",
-             "@123456*",
-             EUserRole.Administrator);
+            "leandro",
+            "leo@leo.com",
+            "leandro",
+            "@123456*",
+            EUserRole.Administrator);
+
+
+            _newArticle = new Article(
+               "outro",
+               new DateTime(2000, 5, 2, 20, 45, 3, 500),
+               "não sei"
+
+           );
+            _newArticle.User = _newAdminUser;
 
         }
 
@@ -58,9 +61,14 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         public async Task Create_Deve_retornar_O_Artigo_criado()
         {
             //Arrange
-            await AuthenticateAsync();
+            //await AuthenticateAsync();
+            //var responseAux = await Client.GetAsync(ApiRoutes.Users.GetById.Replace("{userId}", "2"));
+            //var user = await responseAux.Content.ReadAsAsync<User>();
 
+
+            
             //Act
+
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
             var article = await response.Content.ReadAsAsync<Article>();
 
@@ -100,7 +108,6 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         }
 
         [Fact]
-
         public async Task GetAll_Deve_Exibir_Todos_Artigos()
         {
             //Arrange
@@ -146,7 +153,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             //Arrange
             await AuthenticateAsync();
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
-            var articleResp = await responseAux.Content.ReadAsAsync<User>();
+            var articleResp = await responseAux.Content.ReadAsAsync<Article>();
 
             responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
             articleResp.Should().NotBeNull();
@@ -172,7 +179,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             //Arrange
             await AuthenticateAsync();
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
-            var articleResp = await responseAux.Content.ReadAsAsync<User>();
+            var articleResp = await responseAux.Content.ReadAsAsync<Article>();
 
             responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
             articleResp.Should().NotBeNull();
@@ -218,35 +225,34 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
         }
 
-
         [Fact]
-        public async Task Delete_Deve_Apagar_Usuario_Existente_Retornando_Mensagem()
+        public async Task Delete_Deve_Apagar_Um_Artigo_Existente_Retornando_Mensagem_De_Erro()
         {
             //Arrange
             await AuthenticateAsync();
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
-            var userAux = await responseAux.Content.ReadAsAsync<User>();
+            var articleAux = await responseAux.Content.ReadAsAsync<Article>();
 
             responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
-            userAux.Should().NotBeNull();
+            articleAux.Should().NotBeNull();
 
             //Act
-            var response = await Client.DeleteAsync(ApiRoutes.Articles.Delete.Replace("{userId}", userAux.Id.ToString()));
+            var response = await Client.DeleteAsync(ApiRoutes.Articles.Delete.Replace("{articleId}", articleAux.Id.ToString()));
             var content = await response.Content.ReadAsStringAsync();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            content.Should().Contain(Messages.USUARIO_REMOVIDO_COM_SUCESSO);
+            content.Should().Contain(Messages.ARTIGO_REMOVIDO_COM_SUCESSO);
         }
 
         [Fact]
-        public async Task Create_Deve_Invalidar_Nome_Vazio()
+        public async Task Create_Deve_Invalidar_O_Title_Vazio()
         {
             //Arrange
             await AuthenticateAsync();
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
-            _newArticle.Name = string.Empty;
+            _newArticle.Title = string.Empty;
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
@@ -254,17 +260,17 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(Messages.CAMPO_OBRIGATORIO.Replace("{0}", Messages.NOME));
+            content.Should().Contain(Messages.CAMPO_OBRIGATORIO.Replace("{0}", Messages.TITULO));
         }
 
         [Fact]
-        public async Task Create_Deve_Invalidar_Nome_De_Usuario_Vazio()
+        public async Task Create_Deve_Invalidar_Se_Não_Houver_User()
         {
             //Arrange
             await AuthenticateAsync();
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
-            _newArticle.UserName = string.Empty;
+            _newArticle.User = null;
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
@@ -272,17 +278,34 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(Messages.CAMPO_OBRIGATORIO.Replace("{0}", Messages.NOME_DE_USUARIO));
+            content.Should().Contain(Messages.CAMPO_OBRIGATORIO.Replace("{0}", Messages.USUARIO));
         }
 
         [Fact]
-        public async Task Create_Deve_Invalidar_Senha_Vazio()
+        public async Task Create_Deve_Validar_Se_Usuario_Estiver_Criado()
+        {
+
+            //Arrange
+            await AuthenticateAsync();
+
+            //Act
+            var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
+            var article = await response.Content.ReadAsAsync<Article>();
+
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            article.User.Should().Be(_newAdminUser);
+        }
+
+        [Fact]
+        public async Task Create_Deve_Invalidar_O_Campo_Title_Menor_Que_O_Permitido()
         {
             //Arrange
             await AuthenticateAsync();
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
-            _newArticle.Password = string.Empty;
+            _newArticle.Title = "o";
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
@@ -290,25 +313,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(string.Format(Messages.CAMPO_OBRIGATORIO, Messages.SENHA));
-        }
-
-        [Fact]
-        public async Task Create_Deve_Invalidar_Nome_Menor_Do_Que_Permitido()
-        {
-            //Arrange
-            await AuthenticateAsync();
-            await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
-
-            _newArticle.Name = "Leo";
-
-            //Act
-            var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
-            var content = await response.Content.ReadAsStringAsync();
-
-            //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.NOME, "60", "4"));
+            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.TITULO, "35", "4"));
         }
 
         [Fact]
@@ -318,7 +323,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             await AuthenticateAsync();
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
-            _newArticle.UserName = "nomedeusuariomuitograndenomedeusuariomuitograndenomedeusuariomuitogrande";
+            _newArticle.Title = "Titulo com trinta e seis caracteres!!!";
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
@@ -326,17 +331,17 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.NOME_DE_USUARIO, "60", "4"));
+            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.TITULO, "35", "4"));
         }
 
         [Fact]
-        public async Task Create_Deve_Invalidar_Email_Fora_Do_Padrao()
+        public async Task Create_Deve_Invalidar_Campo_ReleaseDate_Com_Formato_Errado()
         {
             //Arrange
             await AuthenticateAsync();
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
-            _newArticle.Email = "abc.com";
+            _newArticle.ReleaseDate = DateTime.UtcNow;
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
@@ -344,17 +349,17 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(string.Format(Messages.CAMPO_INVALIDO, Messages.EMAIL));
+            content.Should().Contain(Messages.DATA_COM_FORMATO_INVALIDO);
         }
 
         [Fact]
-        public async Task Create_Deve_Invalidar_Senha_Menor_Do_Que_Permitido()
+        public async Task Create_Deve_Invalidar_Se_Campo_Description_Nao_For_Preenchido()
         {
             //Arrange
             await AuthenticateAsync();
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
-            _newArticle.Password = "12345";
+            _newArticle.Description = null;
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
@@ -362,17 +367,17 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.SENHA, "60", "6"));
+            content.Should().Contain(string.Format(Messages.CAMPO_OBRIGATORIO, Messages.DESCRICAO));
         }
 
         [Fact]
-        public async Task Create_Deve_Invalidar_Nome_De_Usuario_Com_Espacos()
+        public async Task Create_Deve_Invalidar_Description_Se_For_Menor_Do_Que_O_Permitido()
         {
             //Arrange
             await AuthenticateAsync();
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
-            _newArticle.UserName = "meu nome de usuario";
+            _newArticle.Description = "Ola";
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
@@ -380,7 +385,8 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(string.Format(Messages.CAMPO_INVALIDO, Messages.NOME_DE_USUARIO));
+            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.DESCRICAO, "150", "5"));
         }
     }
 }
+

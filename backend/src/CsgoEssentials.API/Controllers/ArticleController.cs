@@ -2,6 +2,7 @@
 using CsgoEssentials.Domain.Interfaces.Services;
 using CsgoEssentials.Infra.Utils;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -57,7 +58,7 @@ namespace CsgoEssentials.API.Controllers
 
                 return Ok(article);
             }
-            catch
+            catch(Exception ex)
             {
                 return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_CRIAR_UM_ARTIGO });
             }

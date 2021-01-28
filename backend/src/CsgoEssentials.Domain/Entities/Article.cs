@@ -8,12 +8,12 @@ namespace CsgoEssentials.Domain.Entities
 {
     public class Article : IValidatableObject
     {
-        public Article(string title, DateTime releaseDate, string description, User user)
+        public Article(string title, DateTime releaseDate, string description)
         {
             Title = title;
             ReleaseDate = releaseDate;
             Description = description;
-            User = user;
+          
         }
 
         [Key]
@@ -21,11 +21,11 @@ namespace CsgoEssentials.Domain.Entities
 
         [DisplayName(Messages.TITULO)]
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES)]
+        [StringLength(35, MinimumLength = 4, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES)]
         public string Title { get; set; }
 
         [DisplayName(Messages.DATA_DE_PUBLICACAO)]
-        [DataType(DataType.Date)]
+        [DataType(DataType.Date, ErrorMessage = Messages.DATA_COM_FORMATO_INVALIDO)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime ReleaseDate { get; set; }
 

@@ -4,6 +4,6 @@
     {
         Administrator = 1,
         Editor = 2,
-        Member = 3
+        Member = 3,
     }
 }

@@ -19,8 +19,8 @@ namespace CsgoEssentials.Domain.Entities
             UserName = userName;
             Password = password;
             Role = role;
-
             Articles = new List<Article>();
+            
         }
 
         #endregion
@@ -56,7 +56,7 @@ namespace CsgoEssentials.Domain.Entities
 
         [DisplayName(Messages.ARTIGOS)]
         public IList<Article> Articles { get; set; }
-        public string Title { get; set; }
+
 
         #endregion
 
