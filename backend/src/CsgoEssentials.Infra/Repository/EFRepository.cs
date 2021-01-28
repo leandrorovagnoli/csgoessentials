@@ -24,15 +24,20 @@ namespace CsgoEssentials.Infra.Repository
             return entity;
         }
 
-        public void Delete(TEntity entity)
+        public async Task Delete(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<TEntity>> Find(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate)
         {
             return await _dbContext.Set<TEntity>().Where(predicate).ToListAsync();
+        }
+
+        public async Task<IEnumerable<TEntity>> FindAsNoTracking(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _dbContext.Set<TEntity>().AsNoTracking().Where(predicate).ToListAsync();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAll()
@@ -59,10 +64,10 @@ namespace CsgoEssentials.Infra.Repository
             return entity;
         }
 
-        public virtual void Update(TEntity entity)
+        public virtual async Task Update(TEntity entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

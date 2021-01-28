@@ -17,43 +17,48 @@ namespace CsgoEssentials.Domain.Services
             _videoRepository = VideoRepository;
         }
 
-        public Task<Video> Add(Video entity)
+        public async Task<Video> Add(Video entity)
         {
-            return _videoRepository.Add(entity);
+            return await _videoRepository.Add(entity);
         }
 
-        public void Delete(Video entity)
+        public async Task Delete(Video entity)
         {
-            _videoRepository.Delete(entity);
+            await _videoRepository.Delete(entity);
         }
 
-        public Task<IEnumerable<Video>> Find(Expression<Func<Video, bool>> predicate)
+        public async Task<IEnumerable<Video>> Find(Expression<Func<Video, bool>> predicate)
         {
-            return _videoRepository.Find(predicate);
+            return await _videoRepository.Find(predicate);
         }
 
-        public Task<IEnumerable<Video>> GetAll()
+        public async Task<IEnumerable<Video>> FindAsNoTracking(Expression<Func<Video, bool>> predicate)
         {
-            return _videoRepository.GetAll();
+            return await _videoRepository.FindAsNoTracking(predicate);
         }
 
-        public Task<IEnumerable<Video>> GetAllAsNoTracking()
+        public async Task<IEnumerable<Video>> GetAll()
         {
-            return _videoRepository.GetAllAsNoTracking();
+            return await _videoRepository.GetAll();
         }
 
-        public Task<Video> GetById(int id)
+        public async Task<IEnumerable<Video>> GetAllAsNoTracking()
         {
-            return _videoRepository.GetById(id);
-        }
-        public Task<Video> GetByIdAsNoTracking(int id)
-        {
-            return _videoRepository.GetByIdAsNoTracking(id);
+            return await _videoRepository.GetAllAsNoTracking();
         }
 
-        public void Update(Video entity)
+        public async Task<Video> GetById(int id)
         {
-            _videoRepository.Update(entity);
+            return await _videoRepository.GetById(id);
+        }
+        public async Task<Video> GetByIdAsNoTracking(int id)
+        {
+            return await _videoRepository.GetByIdAsNoTracking(id);
+        }
+
+        public async Task Update(Video entity)
+        {
+            await _videoRepository.Update(entity);
         }
     }
 }
