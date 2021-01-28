@@ -8,6 +8,14 @@ namespace CsgoEssentials.Domain.Entities
 {
     public class Article : IValidatableObject
     {
+        public Article(string title, DateTime releaseDate, string description, User user)
+        {
+            Title = title;
+            ReleaseDate = releaseDate;
+            Description = description;
+            User = user;
+        }
+
         [Key]
         public int Id { get; set; }
 

@@ -20,5 +20,23 @@
 
             public static readonly string Authenticate = string.Concat(_usersControllerUrl, "/login");
         }
+
+        public static class Articles
+        {
+            private static readonly string _articlesControllerUrl = string.Concat(_baseUrl, "users");
+
+            public static readonly string GetAll = _articlesControllerUrl;
+
+            public static readonly string Create = _articlesControllerUrl;
+
+            public static readonly string GetById = string.Concat(_articlesControllerUrl, "/{userId}");
+
+            public static readonly string Delete = string.Concat(_articlesControllerUrl, "/{userId}");
+
+            public static readonly string Update = string.Concat(_articlesControllerUrl, "/{userId}");
+
+            public static readonly string Authenticate = string.Concat(_articlesControllerUrl, "/login");
+        }
+
     }
 }
