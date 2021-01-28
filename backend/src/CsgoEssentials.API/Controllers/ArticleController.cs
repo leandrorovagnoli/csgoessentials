@@ -1,6 +1,7 @@
 ﻿using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Interfaces.Services;
 using CsgoEssentials.Infra.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,7 @@ namespace CsgoEssentials.API.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Administrator,Editor")]
         public async Task<ActionResult<Article>> Post(
             [FromServices] IArticleService articleService,
             [FromBody] Article article)
@@ -58,7 +60,7 @@ namespace CsgoEssentials.API.Controllers
 
                 return Ok(article);
             }
-            catch(Exception ex)
+            catch
             {
                 return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_CRIAR_UM_ARTIGO });
             }
@@ -66,6 +68,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize(Roles = "Administrator,Editor")]
         public async Task<ActionResult<Article>> Put(
             int id,
             [FromServices] IArticleService articleService,
@@ -91,6 +94,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize(Roles = "Administrator,Editor")]
         public async Task<ActionResult<Article>> Delete(
             int id,
             [FromServices] IArticleService articleService)

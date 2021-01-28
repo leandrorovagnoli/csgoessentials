@@ -2,6 +2,8 @@
 using CsgoEssentials.Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.Linq;
+using System;
 
 namespace CsgoEssentials.Infra.Data
 {
@@ -11,6 +13,7 @@ namespace CsgoEssentials.Infra.Data
         {
             await context.Database.EnsureCreatedAsync();
             await GenerateUsers(context, false);
+            await GenerateArticles(context, false);
 
             await context.SaveChangesAsync();
         }
@@ -61,6 +64,38 @@ namespace CsgoEssentials.Infra.Data
                 EUserRole.Editor);
 
             context.Users.AddRange(adminUserLeo, adminUserRock, adminUserJalaska, memberUserJoao, editorUserMaria);
+
+            if (saveChanges)
+                await context.SaveChangesAsync();
+        }
+
+        public static async Task GenerateArticles(DataContext context, bool saveChanges)
+        {
+            var articles = await context
+                .Articles
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (articles != null && articles.Count() > 0)
+                return;
+
+            var _dust2Article = new Article(
+               "Best Grenade Spots for Dust2 - Must Know!",
+               new DateTime(2021, 01, 10),
+               "Dust2 is probably one of the most recognized maps in CS:GO. If you enter a competitive queue, " +
+               "it's a very high chance you will be playing on Dust2. The map is also one of the most beginner-friendly " +
+               "maps with a simple layout. So many new players will be starting their journey into Counter-Strike Global " +
+               "Offensive on this map. So let's jump straight in and see the essential utility you will need to excel on Dust2.");
+            _dust2Article.UserId = 5;
+
+            var _smokeLineupCrosshairArticle = new Article(
+                "Smoke Lineup Crosshair Bind for CS:GO",
+                new DateTime(2021, 01, 10),
+                "Create a fullscreen crosshair to line up smokes and other nades. For particular smokes, it can be hard to find " +
+                "something natural to place your crosshair at to hit that perfect smoke. This key bind will help you align those hard nades.");
+            _smokeLineupCrosshairArticle.UserId = 5;
+
+            context.Articles.AddRange(_dust2Article, _smokeLineupCrosshairArticle);
 
             if (saveChanges)
                 await context.SaveChangesAsync();
