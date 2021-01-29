@@ -1,7 +1,9 @@
 ﻿using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Interfaces.Services;
 using CsgoEssentials.Infra.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -44,6 +46,7 @@ namespace CsgoEssentials.API.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Administrator,Editor")]
         public async Task<ActionResult<Article>> Post(
             [FromServices] IArticleService articleService,
             [FromBody] Article article)
@@ -65,7 +68,8 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        public ActionResult<Article> Put(
+        [Authorize(Roles = "Administrator,Editor")]
+        public async Task<ActionResult<Article>> Put(
             int id,
             [FromServices] IArticleService articleService,
             [FromBody] Article article)
@@ -79,7 +83,7 @@ namespace CsgoEssentials.API.Controllers
 
             try
             {
-                articleService.Update(article);
+                await articleService.Update(article);
                 return article;
             }
             catch
@@ -90,6 +94,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize(Roles = "Administrator,Editor")]
         public async Task<ActionResult<Article>> Delete(
             int id,
             [FromServices] IArticleService articleService)
@@ -101,7 +106,7 @@ namespace CsgoEssentials.API.Controllers
                 if (article == null)
                     return NotFound(new { message = Messages.ARTIGO_NAO_ENCONTRADO });
 
-                articleService.Delete(article);
+                await articleService.Delete(article);
 
                 return Ok(new { message = Messages.ARTIGO_REMOVIDO_COM_SUCESSO });
             }

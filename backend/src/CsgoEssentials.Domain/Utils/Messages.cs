@@ -16,6 +16,7 @@
         public const string MAPA = "Mapa";
         public const string DATA_DE_PUBLICACAO = "Data de Publicação";
         public const string TIPO_DE_GRANADA = "Tipo de Granada";
+        public const string DATA = "Data";
 
         #endregion
 
@@ -26,7 +27,7 @@
         public const string CAMPO_OBRIGATORIO = "O campo {0} é obrigatório.";
         public const string CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES = "O campo {0} precisa ter entre {2} e {1} caracteres.";
         public const string CAMPO_POSSUI_LIMITE_DE_X1_CARACTERES = "O campo {0} possui um limite de até {1} caracteres.";
-
+        public const string DATA_COM_FORMATO_INVALIDO = "Data em formato inválido";
         #endregion
 
         #region User
@@ -61,7 +62,6 @@
         public const string NAO_FOI_POSSIVEL_BUSCAR_OS_ARTIGOS = "Não foi possível buscar os Artigos.";
         public const string NAO_FOI_POSSIVEL_CRIAR_UM_ARTIGO = "Não foi possível criar o um Artigo.";
         public const string NAO_FOI_POSSIVEL_ATUALIZAR_O_ARTIGO = "Não foi possível atualizar o Artigo.";
-
         #endregion
 
         #region Video
