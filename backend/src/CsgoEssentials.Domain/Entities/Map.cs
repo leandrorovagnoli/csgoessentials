@@ -41,13 +41,7 @@ namespace CsgoEssentials.Domain.Entities
             var results = new List<ValidationResult>();
 
             // Validating Mapname
-            Name = Name.ToLower();
-            var regex = "1";
-            var match = Regex.Match(Name, regex, RegexOptions.IgnoreCase);
-
-            if (!match.Success)
-                results.Add(new ValidationResult(string.Format(Messages.CAMPO_INVALIDO, Messages.MAPA_EXISTENTE), new[] { nameof(Name) }));
-
+            
             return results;
         }
 

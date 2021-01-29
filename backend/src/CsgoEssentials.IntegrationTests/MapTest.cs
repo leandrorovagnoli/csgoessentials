@@ -130,11 +130,11 @@ namespace CsgoEssentials.IntegrationTests.MapTests
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
-            var map = await response.Content.ReadAsAsync<Map>();
+            var map = await response.Content.ReadAsStringAsync();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            map.Name.Should().Be(_newMap.Name);
+            map.Should().Contain(Messages.MAPA_EXISTENTE);            
         }
 
         [Fact]

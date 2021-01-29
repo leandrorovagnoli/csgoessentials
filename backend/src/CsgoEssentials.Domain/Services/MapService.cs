@@ -2,9 +2,11 @@
 using CsgoEssentials.Domain.Interfaces.Repository;
 using CsgoEssentials.Domain.Interfaces.Services;
 using System;
+using CsgoEssentials.Infra.Utils;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace CsgoEssentials.Domain.Services
 {
@@ -19,6 +21,7 @@ namespace CsgoEssentials.Domain.Services
 
         public async Task<Map> Add(Map entity)
         {
+            await CheckUserNameDuplicity(entity);
             return await _mapRepository.Add(entity);
         }
 
@@ -58,7 +61,17 @@ namespace CsgoEssentials.Domain.Services
 
         public async Task Update(Map entity)
         {
+            await CheckUserNameDuplicity(entity);
             await _mapRepository.Update(entity);
+        }
+
+        private async Task CheckUserNameDuplicity(Map entity)
+        {
+            var maps = await FindAsNoTracking(x => x.Name == entity.Name);
+            var map = maps.FirstOrDefault();
+
+            if (map != null && map.Id != entity.Id)
+                throw new InvalidOperationException(Messages.MAPA_EXISTENTE);
         }
     }
 }
