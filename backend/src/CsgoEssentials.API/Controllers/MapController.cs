@@ -76,7 +76,7 @@ namespace CsgoEssentials.API.Controllers
         [HttpPut]
         [Route("{id:int}")]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<Map> Put(
+        public async Task<ActionResult<Map>> Put(
             int id,
             [FromServices] IMapService MapService,
             [FromBody] Map map)
@@ -90,7 +90,7 @@ namespace CsgoEssentials.API.Controllers
 
             try
             {
-                MapService.Update(map);
+                await MapService.Update(map);
                 return map;
             }
             catch (InvalidOperationException ex)
@@ -117,7 +117,7 @@ namespace CsgoEssentials.API.Controllers
                 if (map == null)
                     return NotFound(new { message = Messages.MAPA_NAO_ENCONTRADO });
 
-                MapService.Delete(map);
+                await MapService.Delete(map);
 
                 return Ok(new { message = Messages.MAPA_REMOVIDO_COM_SUCESSO });
             }
