@@ -117,7 +117,7 @@ namespace CsgoEssentials.API.Controllers
                 if (map == null)
                     return NotFound(new { message = Messages.MAPA_NAO_ENCONTRADO });
 
-                MapService.Delete(map);
+                await MapService.Delete(map);
 
                 return Ok(new { message = Messages.MAPA_REMOVIDO_COM_SUCESSO });
             }

@@ -101,7 +101,7 @@ namespace CsgoEssentials.API.Controllers
                 if (video == null)
                     return NotFound(new { message = Messages.VIDEO_NAO_ENCONTRADO });
 
-                VideoService.Delete(video);
+                await VideoService.Delete(video);
 
                 return Ok(new { message = Messages.VIDEO_REMOVIDO_COM_SUCESSO });
             }
