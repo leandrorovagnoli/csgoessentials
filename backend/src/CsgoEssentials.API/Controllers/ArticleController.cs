@@ -79,14 +79,14 @@ namespace CsgoEssentials.API.Controllers
                 return BadRequest(ModelState);
 
             if (id != article.Id)
-                return NotFound(new { Messages.MAPA_NAO_ENCONTRADO });
+                return NotFound(new { Messages.ARTIGO_NAO_ENCONTRADO });
 
             try
             {
                 await articleService.Update(article);
                 return article;
             }
-            catch
+            catch(Exception error)
             {
                 return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_ATUALIZAR_O_ARTIGO });
             }

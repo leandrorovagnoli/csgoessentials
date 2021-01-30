@@ -5,21 +5,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Linq;
+using CsgoEssentials.Infra.Utils;
 
 namespace CsgoEssentials.Domain.Services
 {
     public class ArticleService : IArticleService
     {
         private readonly IArticleRepository _articleRepository;
+        private readonly IUserRepository _userRepository;
         
         //constructor
-        public ArticleService(IArticleRepository articleRepository)
+        public ArticleService(IArticleRepository articleRepository, IUserRepository userRepository)
         {
             _articleRepository = articleRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<Article> Add(Article entity)
         {
+            await CheckIfUserExists(entity);
             return await _articleRepository.Add(entity);
         }
 
@@ -61,6 +66,13 @@ namespace CsgoEssentials.Domain.Services
         public async Task Update(Article entity)
         {
             await _articleRepository.Update(entity);
+        }
+
+        private async Task CheckIfUserExists(Article entity)
+        {
+            var user = await _userRepository.GetByIdAsNoTracking(entity.UserId);
+            if (user == null)
+                throw new InvalidOperationException(Messages.USUARIO_NAO_ENCONTRADO);
         }
     }
 }

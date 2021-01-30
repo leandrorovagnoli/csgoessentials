@@ -85,16 +85,16 @@ namespace CsgoEssentials.Infra.Data
                "Dust2 is probably one of the most recognized maps in CS:GO. If you enter a competitive queue, " +
                "it's a very high chance you will be playing on Dust2. The map is also one of the most beginner-friendly " +
                "maps with a simple layout. So many new players will be starting their journey into Counter-Strike Global " +
-               "Offensive on this map. So let's jump straight in and see the essential utility you will need to excel on Dust2.");
-            _dust2Article.UserId = 5;
+               "Offensive on this map. So let's jump straight in and see the essential utility you will need to excel on Dust2.",
+                5);
 
             var _smokeLineupCrosshairArticle = new Article(
                 "Smoke Lineup Crosshair Bind for CS:GO",
-                new DateTime(2021, 01, 10),
+                new DateTime(2021, 01, 02),
                 "Create a fullscreen crosshair to line up smokes and other nades. For particular smokes, it can be hard to find " +
-                "something natural to place your crosshair at to hit that perfect smoke. This key bind will help you align those hard nades.");
-            _smokeLineupCrosshairArticle.UserId = 5;
-
+                "something natural to place your crosshair at to hit that perfect smoke. This key bind will help you align those hard nades.",
+                5);
+             
             context.Articles.AddRange(_dust2Article, _smokeLineupCrosshairArticle);
 
             if (saveChanges)

@@ -8,12 +8,12 @@ namespace CsgoEssentials.Domain.Entities
 {
     public class Article : IValidatableObject
     {
-        public Article(string title, DateTime releaseDate, string description)
+        public Article(string title, DateTime releaseDate, string description, int userId)
         {
             Title = title;
             ReleaseDate = releaseDate;
             Description = description;
-
+            UserId = userId;
         }
 
         [Key]
@@ -21,7 +21,7 @@ namespace CsgoEssentials.Domain.Entities
 
         [DisplayName(Messages.TITULO)]
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
-        [StringLength(200, MinimumLength = 4, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES)]
+        [StringLength(200, MinimumLength = 10, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES)]
         public string Title { get; set; }
 
         [DisplayName(Messages.DATA_DE_PUBLICACAO)]
@@ -31,7 +31,7 @@ namespace CsgoEssentials.Domain.Entities
 
         [DisplayName(Messages.DESCRICAO)]
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
-        [StringLength(2000, MinimumLength = 5, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES)]
+        [StringLength(2000, MinimumLength = 20, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES)]
         public string Description { get; set; }
 
         [DisplayName(Messages.USUARIO)]
