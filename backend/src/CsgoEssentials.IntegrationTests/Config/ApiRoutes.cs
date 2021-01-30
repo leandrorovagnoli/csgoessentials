@@ -21,6 +21,23 @@
             public static readonly string Authenticate = string.Concat(_usersControllerUrl, "/login");
         }
 
+        public static class Maps
+        {
+            private static readonly string _mapsControllerUrl = string.Concat(_baseUrl, "maps");
+
+            public static readonly string GetAll = _mapsControllerUrl;
+
+            public static readonly string Create = _mapsControllerUrl;
+
+            public static readonly string GetById = string.Concat(_mapsControllerUrl, "/{mapId}");
+
+            public static readonly string Delete = string.Concat(_mapsControllerUrl, "/{mapId}");
+
+            public static readonly string Update = string.Concat(_mapsControllerUrl, "/{mapId}");
+
+            public static readonly string Authenticate = string.Concat(_mapsControllerUrl, "/login");
+        }
+
         public static class Articles
         {
             private static readonly string _articlesControllerUrl = string.Concat(_baseUrl, "articles");

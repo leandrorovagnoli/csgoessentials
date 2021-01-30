@@ -76,11 +76,11 @@ namespace CsgoEssentials.IntegrationTests.UserTests
 
             //Act
             var response = await Client.GetAsync(ApiRoutes.Users.GetById.Replace("{userId}", "9999"));
-            var content = await response.Content.ReadAsStringAsync();
+            var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(Messages.USUARIO_NAO_ENCONTRADO);
+            jsonModel.Message.Should().Be(Messages.USUARIO_NAO_ENCONTRADO);
         }
 
         [Fact]
@@ -141,11 +141,11 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             userAux.Role = EUserRole.Editor;
 
             var response = await Client.PutAsJsonAsync(ApiRoutes.Users.Update.Replace("{userId}", "9999"), userAux);
-            var content = await response.Content.ReadAsStringAsync();
+            var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-            content.Should().Contain(Messages.USUARIO_NAO_ENCONTRADO);
+            jsonModel.Message.Should().Be(Messages.USUARIO_NAO_ENCONTRADO);
         }
 
         [Fact]
@@ -186,11 +186,11 @@ namespace CsgoEssentials.IntegrationTests.UserTests
 
             //Act
             var response = await Client.DeleteAsync(ApiRoutes.Users.Delete.Replace("{userId}", userAux.Id.ToString()));
-            var content = await response.Content.ReadAsStringAsync();
+            var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            content.Should().Contain(Messages.USUARIO_REMOVIDO_COM_SUCESSO);
+            jsonModel.Message.Should().Be(Messages.USUARIO_REMOVIDO_COM_SUCESSO);
         }
 
         [Fact]
@@ -347,12 +347,12 @@ namespace CsgoEssentials.IntegrationTests.UserTests
                 Password = "@123456*"
             });
 
-            var content = await response.Content.ReadFromJsonAsync<JsonModel>();
+            var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            content.Message.Should().BeNullOrEmpty();
-            content.Token.Should().NotBeNullOrEmpty();
+            jsonModel.Message.Should().BeNullOrEmpty();
+            jsonModel.Token.Should().NotBeNullOrEmpty();
         }
 
         [Fact]
@@ -365,12 +365,12 @@ namespace CsgoEssentials.IntegrationTests.UserTests
                 Password = "xpto"
             });
 
-            var content = await response.Content.ReadFromJsonAsync<JsonModel>();
+            var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-            content.Message.Should().Be(Messages.USUARIO_OU_SENHA_INVALIDOS);
-            content.Token.Should().BeNullOrEmpty();
+            jsonModel.Message.Should().Be(Messages.USUARIO_OU_SENHA_INVALIDOS);
+            jsonModel.Token.Should().BeNullOrEmpty();
         }
 
         [Fact]

@@ -2,15 +2,19 @@
 using CsgoEssentials.Domain.Interfaces.Services;
 using CsgoEssentials.Infra.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace CsgoEssentials.API.Controllers
 {
     [Route("v1/maps")]
+    [Authorize(Roles = "Administrator")]
     public class MapController : Controller
     {
         [HttpGet]
+
         public async Task<ActionResult<IEnumerable<Map>>> GetAll([FromServices] IMapService MapService)
         {
             try
@@ -26,6 +30,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<IEnumerable<Map>>> GetById(int id, [FromServices] IMapService mapService)
         {
             try
@@ -44,6 +49,7 @@ namespace CsgoEssentials.API.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Map>> Post(
             [FromServices] IMapService MapService,
             [FromBody] Map map)
@@ -57,6 +63,10 @@ namespace CsgoEssentials.API.Controllers
 
                 return map;
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
             catch
             {
                 return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_CRIAR_O_MAPA });
@@ -65,7 +75,8 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
-        public ActionResult<Map> Put(
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<Map>> Put(
             int id,
             [FromServices] IMapService MapService,
             [FromBody] Map map)
@@ -79,8 +90,12 @@ namespace CsgoEssentials.API.Controllers
 
             try
             {
-                MapService.Update(map);
+                await MapService.Update(map);
                 return map;
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch
             {
@@ -90,6 +105,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Map>> Delete(
             int id,
             [FromServices] IMapService MapService)
@@ -101,7 +117,7 @@ namespace CsgoEssentials.API.Controllers
                 if (map == null)
                     return NotFound(new { message = Messages.MAPA_NAO_ENCONTRADO });
 
-                MapService.Delete(map);
+                await MapService.Delete(map);
 
                 return Ok(new { message = Messages.MAPA_REMOVIDO_COM_SUCESSO });
             }

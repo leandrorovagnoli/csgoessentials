@@ -47,6 +47,7 @@
         #region Map
 
         public const string MAPA_NAO_ENCONTRADO = "Mapa não encontrado.";
+        public const string MAPA_EXISTENTE = "Mapa existente, não é possível recria-lo.";
         public const string MAPA_REMOVIDO_COM_SUCESSO = "Mapa removido com sucesso.";
         public const string NAO_FOI_POSSIVEL_BUSCAR_OS_MAPAS = "Não foi possível buscar os mapas.";
         public const string NAO_FOI_POSSIVEL_CRIAR_O_MAPA = "Não foi possível criar o mapa.";

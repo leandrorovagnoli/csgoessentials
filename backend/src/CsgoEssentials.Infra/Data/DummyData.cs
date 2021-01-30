@@ -14,6 +14,8 @@ namespace CsgoEssentials.Infra.Data
             await context.Database.EnsureCreatedAsync();
             await GenerateUsers(context, false);
             await GenerateArticles(context, false);
+            await GenerateMaps(context, false);
+            //await GenerateVideos(context, false);
 
             await context.SaveChangesAsync();
         }
@@ -100,5 +102,47 @@ namespace CsgoEssentials.Infra.Data
             if (saveChanges)
                 await context.SaveChangesAsync();
         }
+
+        public static async Task GenerateMaps(DataContext context, bool saveChanges)
+        {
+            var maps = await context
+                .Maps
+                .AsNoTracking()
+                .ToListAsync();
+
+            if (maps != null && maps.Count() > 0)
+                return;
+
+            var _dust2Map = new Map(
+                "Dust2",
+                "As melhores smokes do Mapa Dust2");
+
+            var _infernoMap = new Map(
+                "Inferno",
+                "As melhores smokes do Mapa Inferno");
+
+            context.Maps.AddRange(_dust2Map, _infernoMap);
+
+            if (saveChanges)
+                await context.SaveChangesAsync();
+        }
+
+        //public static async Task GenerateVideos(DataContext context, bool saveChanges)
+        //{
+        //    var videos = await context
+        //        .Videos
+        //        .AsNoTracking()
+        //        .ToListAsync();
+
+        //    if (videos != null && videos.Count() > 0)
+        //        return;
+
+        // // Add videos here
+
+        //    context.Videos.AddRange();
+
+        //    if (saveChanges)
+        //        await context.SaveChangesAsync();
+        //}
     }
 }
