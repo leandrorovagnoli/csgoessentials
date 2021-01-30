@@ -76,7 +76,7 @@ namespace CsgoEssentials.API.Controllers
         [HttpPut]
         [Route("{id:int}")]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<Map> Put(
+        public async Task<ActionResult<Map>> Put(
             int id,
             [FromServices] IMapService MapService,
             [FromBody] Map map)
@@ -90,7 +90,7 @@ namespace CsgoEssentials.API.Controllers
 
             try
             {
-                MapService.Update(map);
+                await MapService.Update(map);
                 return map;
             }
             catch (InvalidOperationException ex)
