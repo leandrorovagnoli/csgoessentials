@@ -9,6 +9,22 @@ namespace CsgoEssentials.Domain.Entities
 {
     public class Video : IValidatableObject
     {
+        #region Constructor
+
+        public Video(string title, DateTime releaseDate, EGrenadeType grenadeType, ETick tickRate,  string description, int userId, int mapId)
+        {
+            Title = title;
+            ReleaseDate = releaseDate;
+            GrenadeType = grenadeType;
+            TickRate = tickRate;
+            Description = description;
+            UserId = userId;
+            MapId = mapId;
+        }
+
+        #endregion
+
+        #region Properties
         [Key]
         public int Id { get; set; }
 
@@ -37,12 +53,15 @@ namespace CsgoEssentials.Domain.Entities
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         [DisplayName(Messages.USUARIO)]
-        public User User { get; set; }
+        public int UserId { get; set; }
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         [DisplayName(Messages.MAPA)]
-        public Map Map { get; set; }
+        public int MapId { get; set; }
 
+        #endregion
+
+        #region Methods
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();
@@ -51,5 +70,6 @@ namespace CsgoEssentials.Domain.Entities
 
             return results;
         }
+        #endregion
     }
 }

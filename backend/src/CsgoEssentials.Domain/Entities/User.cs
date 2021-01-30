@@ -1,5 +1,4 @@
 ﻿using CsgoEssentials.Domain.Enum;
-using CsgoEssentials.Domain.Services;
 using CsgoEssentials.Infra.Utils;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,7 +19,7 @@ namespace CsgoEssentials.Domain.Entities
             Password = password;
             Role = role;
             Articles = new List<Article>();
-            
+            Videos = new List<Video>();
         }
 
         #endregion
@@ -56,6 +55,9 @@ namespace CsgoEssentials.Domain.Entities
 
         [DisplayName(Messages.ARTIGOS)]
         public IList<Article> Articles { get; set; }
+
+        [DisplayName(Messages.VIDEO)]
+        public IList<Video> Videos { get; set; }
 
 
         #endregion

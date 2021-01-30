@@ -1,6 +1,7 @@
 ﻿using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Interfaces.Repository;
 using CsgoEssentials.Domain.Interfaces.Services;
+using CsgoEssentials.Infra.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -11,14 +12,20 @@ namespace CsgoEssentials.Domain.Services
     public class VideoService : IVideoService
     {
         private readonly IVideoRepository _videoRepository;
+        private readonly IMapRepository _mapRepository;
+        private readonly IUserRepository _userRepository;
 
-        public VideoService(IVideoRepository VideoRepository)
+        public VideoService(IVideoRepository VideoRepository, IMapRepository MapRepository, IUserRepository UserRepository )
         {
             _videoRepository = VideoRepository;
+            _mapRepository = MapRepository;
+            _userRepository = UserRepository;
         }
 
         public async Task<Video> Add(Video entity)
         {
+            await ReferencialIntegrityCheckUser(entity);
+            await ReferencialIntegrityCheckMap(entity);
             return await _videoRepository.Add(entity);
         }
 
@@ -58,8 +65,26 @@ namespace CsgoEssentials.Domain.Services
 
         public async Task Update(Video entity)
         {
+            await ReferencialIntegrityCheckUser(entity);
+            await ReferencialIntegrityCheckMap(entity);
             await _videoRepository.Update(entity);
         }
+
+        private async Task ReferencialIntegrityCheckUser(Video entity)
+        {
+            var users = await _userRepository.GetByIdAsNoTracking(entity.UserId);
+            
+            if (users == null)
+                throw new InvalidOperationException(Messages.NOME_DE_USUARIO_JA_EXISTENTE);
+        }
+
+        private async Task ReferencialIntegrityCheckMap(Video entity)
+        {
+            var maps = await _mapRepository.GetByIdAsNoTracking(entity.MapId);
+            
+            if (maps == null)
+                throw new InvalidOperationException(Messages.MAPA_EXISTENTE);
+        }        
     }
 }
 

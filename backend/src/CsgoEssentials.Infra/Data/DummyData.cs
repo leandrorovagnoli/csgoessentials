@@ -15,7 +15,7 @@ namespace CsgoEssentials.Infra.Data
             await GenerateUsers(context, false);
             await GenerateArticles(context, false);
             await GenerateMaps(context, false);
-            //await GenerateVideos(context, false);
+            await GenerateVideos(context, false);
 
             await context.SaveChangesAsync();
         }
@@ -127,22 +127,38 @@ namespace CsgoEssentials.Infra.Data
                 await context.SaveChangesAsync();
         }
 
-        //public static async Task GenerateVideos(DataContext context, bool saveChanges)
-        //{
-        //    var videos = await context
-        //        .Videos
-        //        .AsNoTracking()
-        //        .ToListAsync();
+        public static async Task GenerateVideos(DataContext context, bool saveChanges)
+        {
+            var videos = await context
+                .Videos
+                .AsNoTracking()
+                .ToListAsync();
 
-        //    if (videos != null && videos.Count() > 0)
-        //        return;
+            if (videos != null && videos.Count() > 0)
+                return;
 
-        // // Add videos here
+            var _video1 = new Video(
+                "Smoke Fundo D2",
+                new DateTime(2021, 01, 10),
+                EGrenadeType.Smoke,
+                ETick.Tick128,
+                "Video demonstracao de uma smoke fundo na d2",
+                1,
+                1);
 
-        //    context.Videos.AddRange();
+            var _video2 = new Video(
+                 "Smoke Mirage",
+                 new DateTime(2021, 01, 10),
+                 EGrenadeType.Smoke,
+                ETick.Tick128,
+                 "Video demonstracao de uma smoke fundo na Mirage",
+                 2,
+                 2);
 
-        //    if (saveChanges)
-        //        await context.SaveChangesAsync();
-        //}
+            context.Videos.AddRange(_video1, _video2);
+
+            if (saveChanges)
+                await context.SaveChangesAsync();
+        }
     }
 }

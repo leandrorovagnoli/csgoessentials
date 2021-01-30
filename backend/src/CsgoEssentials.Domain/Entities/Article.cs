@@ -13,7 +13,6 @@ namespace CsgoEssentials.Domain.Entities
             Title = title;
             ReleaseDate = releaseDate;
             Description = description;
-
         }
 
         [Key]
