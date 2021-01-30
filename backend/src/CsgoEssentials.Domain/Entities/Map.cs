@@ -14,6 +14,7 @@ namespace CsgoEssentials.Domain.Entities
         {
             Name = name;
             Description = description;
+            Videos = new List<Video>();
         }
 
         #endregion 
@@ -32,6 +33,9 @@ namespace CsgoEssentials.Domain.Entities
         [StringLength(maximumLength: 60, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 3)]
         [DisplayName(Messages.DESCRICAO)]
         public string Description { get; set; }
+
+        [DisplayName(Messages.VIDEO)]
+        public IList<Video> Videos { get; set; }
 
         #endregion
 

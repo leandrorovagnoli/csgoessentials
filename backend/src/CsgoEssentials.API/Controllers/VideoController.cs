@@ -4,6 +4,7 @@ using CsgoEssentials.Infra.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace CsgoEssentials.API.Controllers
 {
@@ -57,6 +58,10 @@ namespace CsgoEssentials.API.Controllers
 
                 return video;
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
             catch
             {
                 return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_CRIAR_O_VIDEO });
@@ -82,6 +87,10 @@ namespace CsgoEssentials.API.Controllers
                 VideoService.Update(video);
                 return video;
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
             catch
             {
                 return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_ATUALIZAR_O_VIDEO });
@@ -101,7 +110,7 @@ namespace CsgoEssentials.API.Controllers
                 if (video == null)
                     return NotFound(new { message = Messages.VIDEO_NAO_ENCONTRADO });
 
-                VideoService.Delete(video);
+                await VideoService.Delete(video);
 
                 return Ok(new { message = Messages.VIDEO_REMOVIDO_COM_SUCESSO });
             }

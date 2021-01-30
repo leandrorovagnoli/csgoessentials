@@ -6,6 +6,7 @@
 
         public const string NOME = "Nome";
         public const string EMAIL = "Email";
+        public const string VIDEO = "Video";
         public const string TITULO = "Título";
         public const string DESCRICAO = "Descrição";
         public const string NOME_DE_USUARIO = "Nome de Usuário";

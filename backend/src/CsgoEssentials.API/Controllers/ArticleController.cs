@@ -60,6 +60,10 @@ namespace CsgoEssentials.API.Controllers
 
                 return Ok(article);
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
             catch
             {
                 return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_CRIAR_UM_ARTIGO });
@@ -86,7 +90,11 @@ namespace CsgoEssentials.API.Controllers
                 await articleService.Update(article);
                 return article;
             }
-            catch(Exception error)
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch
             {
                 return BadRequest(new { message = Messages.NAO_FOI_POSSIVEL_ATUALIZAR_O_ARTIGO });
             }

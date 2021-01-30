@@ -99,11 +99,8 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         {
             //Arrange
             await AuthenticateAsync();
-            var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
+            var responseAux = await Client.GetAsync(ApiRoutes.Maps.GetById.Replace("{mapId}", "2"));
             var mapAux = await responseAux.Content.ReadAsAsync<Map>();
-
-            responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
-            mapAux.Should().NotBeNull();
 
             mapAux.Name = "RANDOMTEST";            
 
@@ -142,11 +139,8 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         {
             //Arrangew
             await AuthenticateAsync();
-            var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
+            var responseAux = await Client.GetAsync(ApiRoutes.Maps.GetById.Replace("{mapId}", "2"));
             var mapAux = await responseAux.Content.ReadAsAsync<Map>();
-
-            responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
-            mapAux.Should().NotBeNull();
 
             //Act
             mapAux.Name = "updatedMap";
@@ -164,11 +158,8 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         {
             //Arrange
             await AuthenticateAsync();
-            var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
+            var responseAux = await Client.GetAsync(ApiRoutes.Maps.GetById.Replace("{mapId}", "2"));
             var mapAux = await responseAux.Content.ReadAsAsync<Map>();
-
-            responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
-            mapAux.Should().NotBeNull();
 
             mapAux.Description = "DESCRICAORANDOMTESTE";
 
