@@ -1,4 +1,5 @@
-﻿using CsgoEssentials.Infra.Utils;
+﻿using CsgoEssentials.Domain.Interfaces.Entities;
+using CsgoEssentials.Infra.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CsgoEssentials.Domain.Entities
 {
-    public class Article : IValidatableObject
+    public class Article : Entity, IValidatableObject
     {
         public Article(string title, DateTime releaseDate, string description, int userId)
         {
@@ -15,9 +16,6 @@ namespace CsgoEssentials.Domain.Entities
             Description = description;
             UserId = userId;
         }
-
-        [Key]
-        public int Id { get; set; }
 
         [DisplayName(Messages.TITULO)]
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
@@ -37,6 +35,8 @@ namespace CsgoEssentials.Domain.Entities
         [DisplayName(Messages.USUARIO)]
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         public int UserId { get; set; }
+
+        public User User { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

@@ -65,6 +65,7 @@ namespace CsgoEssentials.Domain.Services
 
         public async Task Update(Article entity)
         {
+            await CheckIfUserExists(entity);
             await _articleRepository.Update(entity);
         }
 

@@ -12,15 +12,13 @@ namespace CsgoEssentials.Infra.Data
         public static async Task Initialize(DataContext context)
         {
             await context.Database.EnsureCreatedAsync();
-            await GenerateUsers(context, false);
-            await GenerateArticles(context, false);
-            await GenerateMaps(context, false);
-            await GenerateVideos(context, false);
-
-            await context.SaveChangesAsync();
+            await GenerateUsers(context);
+            await GenerateArticles(context);
+            await GenerateMaps(context);
+            await GenerateVideos(context);
         }
 
-        public static async Task GenerateUsers(DataContext context, bool saveChanges)
+        public static async Task GenerateUsers(DataContext context)
         {
             var users = await context
                 .Users
@@ -66,19 +64,25 @@ namespace CsgoEssentials.Infra.Data
                 EUserRole.Editor);
 
             context.Users.AddRange(adminUserLeo, adminUserRock, adminUserJalaska, memberUserJoao, editorUserMaria);
-
-            if (saveChanges)
-                await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
-        public static async Task GenerateArticles(DataContext context, bool saveChanges)
+        public static async Task GenerateArticles(DataContext context)
         {
             var articles = await context
                 .Articles
                 .AsNoTracking()
                 .ToListAsync();
 
-            if (articles != null && articles.Count() > 0)
+            if (articles != null && articles.Any())
+                return;
+
+            var userMaria = await context
+                .Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserName == "maria");
+
+            if (userMaria == null)
                 return;
 
             var _dust2Article = new Article(
@@ -88,29 +92,27 @@ namespace CsgoEssentials.Infra.Data
                "it's a very high chance you will be playing on Dust2. The map is also one of the most beginner-friendly " +
                "maps with a simple layout. So many new players will be starting their journey into Counter-Strike Global " +
                "Offensive on this map. So let's jump straight in and see the essential utility you will need to excel on Dust2.",
-                5);
+                userMaria.Id);
 
             var _smokeLineupCrosshairArticle = new Article(
                 "Smoke Lineup Crosshair Bind for CS:GO",
                 new DateTime(2021, 01, 02),
                 "Create a fullscreen crosshair to line up smokes and other nades. For particular smokes, it can be hard to find " +
                 "something natural to place your crosshair at to hit that perfect smoke. This key bind will help you align those hard nades.",
-                5);
-             
-            context.Articles.AddRange(_dust2Article, _smokeLineupCrosshairArticle);
+                userMaria.Id);
 
-            if (saveChanges)
-                await context.SaveChangesAsync();
+            context.Articles.AddRange(_dust2Article, _smokeLineupCrosshairArticle);
+            await context.SaveChangesAsync();
         }
 
-        public static async Task GenerateMaps(DataContext context, bool saveChanges)
+        public static async Task GenerateMaps(DataContext context)
         {
             var maps = await context
                 .Maps
                 .AsNoTracking()
                 .ToListAsync();
 
-            if (maps != null && maps.Count() > 0)
+            if (maps != null && maps.Any())
                 return;
 
             var _dust2Map = new Map(
@@ -122,19 +124,33 @@ namespace CsgoEssentials.Infra.Data
                 "As melhores smokes do Mapa Inferno");
 
             context.Maps.AddRange(_dust2Map, _infernoMap);
-
-            if (saveChanges)
-                await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
-        public static async Task GenerateVideos(DataContext context, bool saveChanges)
+        public static async Task GenerateVideos(DataContext context)
         {
             var videos = await context
                 .Videos
                 .AsNoTracking()
                 .ToListAsync();
 
-            if (videos != null && videos.Count() > 0)
+            if (videos != null && videos.Any())
+                return;
+
+            var user = await context
+                .Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.UserName == "leolandrooo");
+
+            if (user == null)
+                return;
+
+            var map = await context
+                .Maps
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Name == "Dust2");
+
+            if (map == null)
                 return;
 
             var _video1 = new Video(
@@ -143,22 +159,20 @@ namespace CsgoEssentials.Infra.Data
                 EGrenadeType.Smoke,
                 ETick.Tick128,
                 "Video demonstracao de uma smoke fundo na d2",
-                1,
-                1);
+                user.Id,
+                map.Id);
 
             var _video2 = new Video(
-                 "Smoke Mirage",
-                 new DateTime(2021, 01, 10),
-                 EGrenadeType.Smoke,
+                "Smoke Mirage",
+                new DateTime(2021, 01, 10),
+                EGrenadeType.Smoke,
                 ETick.Tick128,
-                 "Video demonstracao de uma smoke fundo na Mirage",
-                 2,
-                 2);
+                "Video demonstracao de uma smoke fundo na Mirage",
+                user.Id,
+                map.Id);
 
             context.Videos.AddRange(_video1, _video2);
-
-            if (saveChanges)
-                await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
     }
 }

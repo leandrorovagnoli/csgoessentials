@@ -17,6 +17,8 @@ namespace CsgoEssentials.Infra.EntityConfig
             builder.HasKey(x => x.Id);
 
             builder.HasIndex(x => x.Title).IsUnique(true);
+
+            builder.HasOne(x => x.User).WithMany(x => x.Articles).HasForeignKey(x=>x.UserId);
         }
     }
 }

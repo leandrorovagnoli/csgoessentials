@@ -62,6 +62,11 @@ namespace CsgoEssentials.Domain.Services
             return await _userRepository.GetByIdAsNoTracking(id);
         }
 
+        public async Task<User> GetByIdAsNoTrackingWithArticles(int id)
+        {
+            return await _userRepository.GetByIdAsNoTrackingWithArticles(id);
+        }
+
         public async Task Update(User entity)
         {
             await EncryptPassword(entity);

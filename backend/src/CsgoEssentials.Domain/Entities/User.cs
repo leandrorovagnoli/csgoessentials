@@ -1,4 +1,5 @@
 ﻿using CsgoEssentials.Domain.Enum;
+using CsgoEssentials.Domain.Interfaces.Entities;
 using CsgoEssentials.Infra.Utils;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace CsgoEssentials.Domain.Entities
 {
-    public class User : IValidatableObject
+    public class User : Entity, IValidatableObject
     {
         #region Constructor
 
@@ -25,9 +26,6 @@ namespace CsgoEssentials.Domain.Entities
         #endregion
 
         #region Properties
-
-        [Key]
-        public int Id { get; set; }
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         [StringLength(maximumLength: 60, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 4)]

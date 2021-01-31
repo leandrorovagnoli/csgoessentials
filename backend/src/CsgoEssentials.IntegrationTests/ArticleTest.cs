@@ -1,5 +1,4 @@
 using CsgoEssentials.Domain.Entities;
-using CsgoEssentials.Domain.Enum;
 using CsgoEssentials.Infra.Utils;
 using CsgoEssentials.IntegrationTests.Config;
 using FluentAssertions;
@@ -42,12 +41,12 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK); 
-            article.Id.Should().BeGreaterThan(0); 
-            article.Title.Should().Be(_newArticle.Title); 
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            article.Id.Should().BeGreaterThan(0);
+            article.Title.Should().Be(_newArticle.Title);
             article.ReleaseDate.Should().Be(_newArticle.ReleaseDate);
             article.Description.Should().Be(_newArticle.Description);
-            
+
         }
 
         [Fact]
@@ -60,13 +59,13 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
             var article = await response.Content.ReadAsAsync<Article>();
 
-            var responseUser = await Client.GetAsync(ApiRoutes.Users.GetById.Replace("{userId}", "5"));
+            var responseUser = await Client.GetAsync(ApiRoutes.Users.GetByIdWithArticles.Replace("{userId}", "5"));
             var user = await responseUser.Content.ReadAsAsync<User>();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK); 
-            article.Id.Should().BeGreaterThan(0); 
-            article.Title.Should().Be(_newArticle.Title); 
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            article.Id.Should().BeGreaterThan(0);
+            article.Title.Should().Be(_newArticle.Title);
             article.ReleaseDate.Should().Be(_newArticle.ReleaseDate);
             article.Description.Should().Be(_newArticle.Description);
             user.Articles.Should().HaveCount(3);
@@ -99,14 +98,14 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         [Fact]
         public async Task GetAll_Deve_Exibir_Todos_Artigos()
         {
-           
+
             await AuthenticateAsync();
 
             //act
             var response = await Client.GetAsync(ApiRoutes.Articles.GetAll);
             var articles = await response.Content.ReadAsAsync<List<Article>>();
-            
-            
+
+
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             articles.Should().HaveCount(2);
@@ -138,7 +137,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             var article = await responseAux.Content.ReadAsAsync<Article>();
 
             article.Title = "Bomba gira mais que tudo";
-           
+
             //Act
             var response = await Client.PutAsJsonAsync(ApiRoutes.Articles.Update.Replace("{articleId}", article.Id.ToString()), article);
             var title = await response.Content.ReadAsAsync<Article>();
@@ -177,7 +176,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         {
             //Arrange
             await AuthenticateAsync();
-           
+
 
             var responseAux = await Client.GetAsync(ApiRoutes.Articles.GetById.Replace("{articleId}", "1"));
             var article = await responseAux.Content.ReadAsAsync<Article>();
@@ -185,7 +184,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             article.Title = "Bomba gira mais que tudo";
             article.ReleaseDate = new DateTime(1980, 05, 02);
             article.Description = "Nova Description agora";
-            
+
 
             //Act
             var response = await Client.PutAsJsonAsync(ApiRoutes.Articles.Update.Replace("{articleId}", article.Id.ToString()), article);
@@ -270,7 +269,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            
+
         }
 
         // Criar TEST ****
@@ -289,7 +288,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
             var content = await response.Content.ReadAsStringAsync();
 
-            
+
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -352,5 +351,5 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.DESCRICAO, "2000", "20"));
         }
     }
-    }
+}
 

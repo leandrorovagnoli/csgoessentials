@@ -34,7 +34,7 @@ namespace CsgoEssentials.IntegrationTests.Config
                        {
                            options.UseInMemoryDatabase("TestDb");
                            options.UseInternalServiceProvider(serviceProvider);
-                       }, ServiceLifetime.Singleton);
+                       });
                    });
                });
 

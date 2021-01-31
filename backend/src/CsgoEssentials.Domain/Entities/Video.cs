@@ -4,14 +4,15 @@ using CsgoEssentials.Domain.Enum;
 using System.ComponentModel;
 using CsgoEssentials.Infra.Utils;
 using System.Collections.Generic;
+using CsgoEssentials.Domain.Interfaces.Entities;
 
 namespace CsgoEssentials.Domain.Entities
 {
-    public class Video : IValidatableObject
+    public class Video : Entity, IValidatableObject
     {
         #region Constructor
 
-        public Video(string title, DateTime releaseDate, EGrenadeType grenadeType, ETick tickRate,  string description, int userId, int mapId)
+        public Video(string title, DateTime releaseDate, EGrenadeType grenadeType, ETick tickRate, string description, int userId, int mapId)
         {
             Title = title;
             ReleaseDate = releaseDate;
@@ -25,8 +26,6 @@ namespace CsgoEssentials.Domain.Entities
         #endregion
 
         #region Properties
-        [Key]
-        public int Id { get; set; }
 
         [DisplayName(Messages.TITULO)]
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]

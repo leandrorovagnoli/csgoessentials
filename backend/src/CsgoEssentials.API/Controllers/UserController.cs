@@ -48,6 +48,25 @@ namespace CsgoEssentials.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{id:int}/articles")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<User>> GetByIdWithArticles(int id, [FromServices] IUserService userService)
+        {
+            try
+            {
+                var user = await userService.GetByIdAsNoTrackingWithArticles(id);
+                if (user == null)
+                    return BadRequest(new { message = Messages.USUARIO_NAO_ENCONTRADO });
+
+                return Ok(user);
+            }
+            catch
+            {
+                return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
+            }
+        }
+
         [HttpPost]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<User>> Post(

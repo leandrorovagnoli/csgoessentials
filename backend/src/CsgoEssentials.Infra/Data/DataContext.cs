@@ -8,7 +8,6 @@ namespace CsgoEssentials.Infra.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-
         }
 
         public DbSet<Article> Articles { get; set; }
@@ -24,7 +23,6 @@ namespace CsgoEssentials.Infra.Data
             modelBuilder.ApplyConfiguration(new VideoMap());
 
             base.OnModelCreating(modelBuilder);
-
         }
     }
 }

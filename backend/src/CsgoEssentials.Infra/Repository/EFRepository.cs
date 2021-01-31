@@ -1,4 +1,5 @@
-﻿using CsgoEssentials.Domain.Interfaces.Repository;
+﻿using CsgoEssentials.Domain.Interfaces.Entities;
+using CsgoEssentials.Domain.Interfaces.Repository;
 using CsgoEssentials.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CsgoEssentials.Infra.Repository
 {
-    public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity<int>
     {
         protected readonly DataContext _dbContext;
 
@@ -55,13 +56,9 @@ namespace CsgoEssentials.Infra.Repository
             return await _dbContext.Set<TEntity>().FindAsync(id);
         }
 
-        public async Task<TEntity> GetByIdAsNoTracking(int id)
+        public virtual async Task<TEntity> GetByIdAsNoTracking(int id)
         {
-            var entity = await _dbContext.Set<TEntity>().FindAsync(id);
-            if (entity != null)
-                _dbContext.Entry(entity).State = EntityState.Detached;
-
-            return entity;
+            return await _dbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public virtual async Task Update(TEntity entity)

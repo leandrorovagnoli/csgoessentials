@@ -1,12 +1,12 @@
-﻿using CsgoEssentials.Infra.Utils;
+﻿using CsgoEssentials.Domain.Interfaces.Entities;
+using CsgoEssentials.Infra.Utils;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
 namespace CsgoEssentials.Domain.Entities
 {
-    public class Map : IValidatableObject
+    public class Map : Entity, IValidatableObject
     {
         #region Constructor
 
@@ -20,9 +20,6 @@ namespace CsgoEssentials.Domain.Entities
         #endregion 
 
         #region Properties
-
-        [Key]
-        public int Id { get; set; }
 
         [DisplayName(Messages.MAPA)]
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
