@@ -59,7 +59,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
             var article = await response.Content.ReadAsAsync<Article>();
 
-            var responseUser = await Client.GetAsync(ApiRoutes.Users.GetByIdWithArticles.Replace("{userId}", "5"));
+            var responseUser = await Client.GetAsync(ApiRoutes.Users.GetByIdWithRelationship.Replace("{userId}", "5"));
             var user = await responseUser.Content.ReadAsAsync<User>();
 
             //Assert

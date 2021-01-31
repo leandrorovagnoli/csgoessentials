@@ -414,13 +414,13 @@ namespace CsgoEssentials.IntegrationTests.UserTests
         }
 
         [Fact]
-        public async Task GetByIdWithArticles_Deve_Retornar_Usuario_Com_Artigos_Relacionados()
+        public async Task GetByIdWithRelationship_Deve_Retornar_Usuario_Com_Artigos_Relacionados()
         {
             //Arrange
             await AuthenticateAsync();
 
             //Act
-            var response = await Client.GetAsync(ApiRoutes.Users.GetByIdWithArticles.Replace("{userId}", "5"));
+            var response = await Client.GetAsync(ApiRoutes.Users.GetByIdWithRelationship.Replace("{userId}", "5"));
             var user = await response.Content.ReadFromJsonAsync<User>();
 
             //Assert
@@ -434,7 +434,7 @@ namespace CsgoEssentials.IntegrationTests.UserTests
         {
             //Arrange
             await AuthenticateAsync();
-            var responseAux = await Client.GetAsync(ApiRoutes.Users.GetByIdWithArticles.Replace("{userId}", "5"));
+            var responseAux = await Client.GetAsync(ApiRoutes.Users.GetByIdWithRelationship.Replace("{userId}", "5"));
             var user = await responseAux.Content.ReadFromJsonAsync<User>();
 
             //Act
@@ -443,7 +443,7 @@ namespace CsgoEssentials.IntegrationTests.UserTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            jsonModel.Message.Should().Be(Messages.NAO_FOI_POSSIVEL_REMOVER_USUARIO_POSSUI_ARTIGOS_CADASTRADOS);
+            jsonModel.Message.Should().Be(Messages.NAO_FOI_POSSIVEL_REMOVER_USUARIO_POSSUI_ARTIGOS_OU_VIDEOS_CADASTRADOS);
         }
     }
 }
