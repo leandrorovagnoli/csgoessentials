@@ -18,17 +18,18 @@ namespace CsgoEssentials.Domain.Services
         {
             _userRepository = userRepository;
         }
-        
+
         public async Task<User> Add(User entity)
         {
             await CheckUserNameDuplicity(entity);
             await EncryptPassword(entity);
-            
+
             return await _userRepository.Add(entity);
         }
 
         public async Task Delete(User entity)
         {
+            await CheckUserHasArticles(entity);
             await _userRepository.Delete(entity);
         }
 
@@ -56,7 +57,7 @@ namespace CsgoEssentials.Domain.Services
         {
             return await _userRepository.GetById(id);
         }
-        
+
         public async Task<User> GetByIdAsNoTracking(int id)
         {
             return await _userRepository.GetByIdAsNoTracking(id);
@@ -109,6 +110,14 @@ namespace CsgoEssentials.Domain.Services
 
             if (user != null && user.UserName != entity.UserName)
                 throw new InvalidOperationException(Messages.NAO_E_PERMITIDO_ALTERAR_NOME_DE_USUARIO);
+        }
+
+        private async Task CheckUserHasArticles(User entity)
+        {
+            var user = await GetByIdAsNoTrackingWithArticles(entity.Id);
+
+            if (user != null && user.Articles.Any())
+                throw new InvalidOperationException(Messages.NAO_FOI_POSSIVEL_REMOVER_USUARIO_POSSUI_ARTIGOS_CADASTRADOS);
         }
     }
 }

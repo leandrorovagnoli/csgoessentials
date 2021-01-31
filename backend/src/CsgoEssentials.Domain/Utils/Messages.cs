@@ -42,6 +42,7 @@
         public const string NAO_FOI_POSSIVEL_AUTENTICAR_O_USUARIO = "Não foi possível autenticar o usuário.";
         public const string NOME_DE_USUARIO_JA_EXISTENTE = "Nome de Usuário já existente.";
         public const string NAO_E_PERMITIDO_ALTERAR_NOME_DE_USUARIO = "Não é permitido alterar o Nome de Usuário.";
+        public const string NAO_FOI_POSSIVEL_REMOVER_USUARIO_POSSUI_ARTIGOS_CADASTRADOS = "Não foi possível remover. Usuário possui Artigos cadastrados.";
 
         #endregion
 

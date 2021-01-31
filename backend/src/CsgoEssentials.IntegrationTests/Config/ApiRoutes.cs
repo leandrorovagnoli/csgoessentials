@@ -50,6 +50,8 @@
 
             public static readonly string GetById = string.Concat(_articlesControllerUrl, "/{articleId}");
 
+            public static readonly string GetByIdWithArticles = string.Concat(_articlesControllerUrl, "/{articleId}/user");
+
             public static readonly string Delete = string.Concat(_articlesControllerUrl, "/{articleId}");
 
             public static readonly string Update = string.Concat(_articlesControllerUrl, "/{articleId}");

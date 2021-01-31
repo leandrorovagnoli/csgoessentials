@@ -139,6 +139,10 @@ namespace CsgoEssentials.API.Controllers
 
                 return Ok(new { message = Messages.USUARIO_REMOVIDO_COM_SUCESSO });
             }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
             catch
             {
                 return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
