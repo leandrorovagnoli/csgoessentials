@@ -53,6 +53,11 @@ namespace CsgoEssentials.Domain.Services
             return await _articleRepository.GetAllAsNoTracking();
         }
 
+        public async Task<Article> GetByIdAsNoTrackingWithUser(int id)
+        {
+            return await _articleRepository.GetByIdAsNoTrackingWithUser(id);
+        }
+
         public async Task<Article> GetById(int id)
         {
             return await _articleRepository.GetById(id);
@@ -75,5 +80,7 @@ namespace CsgoEssentials.Domain.Services
             if (user == null)
                 throw new InvalidOperationException(Messages.USUARIO_NAO_ENCONTRADO);
         }
+
+
     }
 }

@@ -412,5 +412,38 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             jsonModel.Message.Should().Be(Messages.NOME_DE_USUARIO_JA_EXISTENTE);
         }
+
+        [Fact]
+        public async Task GetByIdWithRelationship_Deve_Retornar_Usuario_Com_Artigos_Relacionados()
+        {
+            //Arrange
+            await AuthenticateAsync();
+
+            //Act
+            var response = await Client.GetAsync(ApiRoutes.Users.GetByIdWithRelationship.Replace("{userId}", "5"));
+            var user = await response.Content.ReadFromJsonAsync<User>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            user.Id.Should().Be(5);
+            user.Articles.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public async Task Delete_Nao_Deve_Apagar_Usuario_Que_Possui_Artigos_Relacionados()
+        {
+            //Arrange
+            await AuthenticateAsync();
+            var responseAux = await Client.GetAsync(ApiRoutes.Users.GetByIdWithRelationship.Replace("{userId}", "5"));
+            var user = await responseAux.Content.ReadFromJsonAsync<User>();
+
+            //Act
+            var response = await Client.DeleteAsync(ApiRoutes.Users.Delete.Replace("{userId}", user.Id.ToString()));
+            var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            jsonModel.Message.Should().Be(Messages.NAO_FOI_POSSIVEL_REMOVER_USUARIO_POSSUI_ARTIGOS_OU_VIDEOS_CADASTRADOS);
+        }
     }
 }

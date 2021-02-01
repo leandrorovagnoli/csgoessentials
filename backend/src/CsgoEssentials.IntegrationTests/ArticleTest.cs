@@ -59,7 +59,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
             var article = await response.Content.ReadAsAsync<Article>();
 
-            var responseUser = await Client.GetAsync(ApiRoutes.Users.GetByIdWithArticles.Replace("{userId}", "5"));
+            var responseUser = await Client.GetAsync(ApiRoutes.Users.GetByIdWithRelationship.Replace("{userId}", "5"));
             var user = await responseUser.Content.ReadAsAsync<User>();
 
             //Assert
@@ -349,6 +349,26 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.DESCRICAO, "2000", "20"));
+        }
+
+        [Fact]
+        public async Task GetById_Deve_Retornar_Um_Artigo_Existente_Com_Seu_Usuario_Associado()
+        {
+            //Arrange
+            await AuthenticateAsync();
+
+            //Act
+            var response = await Client.GetAsync(ApiRoutes.Articles.GetByIdWithArticles.Replace("{articleId}", "1"));
+            var article = await response.Content.ReadAsAsync<Article>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            article.Id.Should().BeGreaterThan(0);
+            article.Title.Should().Be(article.Title);
+            article.ReleaseDate.CompareTo(article.ReleaseDate);
+            article.Description.ToUpper().Should().NotBe(article.Description);
+            article.User.Should().NotBeNull();
+            article.User.UserName.Should().Be("maria");
         }
     }
 }

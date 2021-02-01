@@ -13,7 +13,6 @@ using CsgoEssentials.Domain.Utils;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text.Json.Serialization;
 
 namespace CsgoEssentials.WebAPI
 {
@@ -30,11 +29,8 @@ namespace CsgoEssentials.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddJsonOptions(x =>
-                {
-                    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                    x.JsonSerializerOptions.MaxDepth = 0;
-                });
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
             services.AddAuthentication(x =>

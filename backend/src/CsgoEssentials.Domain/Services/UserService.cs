@@ -18,17 +18,18 @@ namespace CsgoEssentials.Domain.Services
         {
             _userRepository = userRepository;
         }
-        
+
         public async Task<User> Add(User entity)
         {
             await CheckUserNameDuplicity(entity);
             await EncryptPassword(entity);
-            
+
             return await _userRepository.Add(entity);
         }
 
         public async Task Delete(User entity)
         {
+            await CheckUserHasRelationship(entity);
             await _userRepository.Delete(entity);
         }
 
@@ -56,15 +57,15 @@ namespace CsgoEssentials.Domain.Services
         {
             return await _userRepository.GetById(id);
         }
-        
+
         public async Task<User> GetByIdAsNoTracking(int id)
         {
             return await _userRepository.GetByIdAsNoTracking(id);
         }
 
-        public async Task<User> GetByIdAsNoTrackingWithArticles(int id)
+        public async Task<User> GetByIdAsNoTrackingWithRelationship(int id)
         {
-            return await _userRepository.GetByIdAsNoTrackingWithArticles(id);
+            return await _userRepository.GetByIdAsNoTrackingWithRelationship(id);
         }
         public async Task<User> GetByIdAsNoTrackingWithUserVideos(int id)
         {
@@ -113,6 +114,14 @@ namespace CsgoEssentials.Domain.Services
 
             if (user != null && user.UserName != entity.UserName)
                 throw new InvalidOperationException(Messages.NAO_E_PERMITIDO_ALTERAR_NOME_DE_USUARIO);
+        }
+
+        private async Task CheckUserHasRelationship(User entity)
+        {
+            var user = await GetByIdAsNoTrackingWithRelationship(entity.Id);
+
+            if (user != null && (user.Articles.Any() || user.Videos.Any()))
+                throw new InvalidOperationException(Messages.NAO_FOI_POSSIVEL_REMOVER_USUARIO_POSSUI_ARTIGOS_OU_VIDEOS_CADASTRADOS);
         }
     }
 }

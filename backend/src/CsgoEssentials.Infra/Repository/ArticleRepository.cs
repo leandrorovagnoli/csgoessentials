@@ -2,6 +2,8 @@
 using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Interfaces.Repository;
 using CsgoEssentials.Infra.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace CsgoEssentials.Infra.Repository
 {
@@ -10,6 +12,11 @@ namespace CsgoEssentials.Infra.Repository
         public ArticleRepository(DataContext context) : base(context)
         {
 
+        }
+
+        public async Task<Article> GetByIdAsNoTrackingWithUser(int id)
+        {
+            return await _dbContext.Articles.Include(x => x.User).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

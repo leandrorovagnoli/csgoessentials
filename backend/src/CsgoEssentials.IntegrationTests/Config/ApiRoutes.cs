@@ -14,7 +14,7 @@
 
             public static readonly string GetById = string.Concat(_usersControllerUrl, "/{userId}");
 
-            public static readonly string GetByIdWithArticles = string.Concat(_usersControllerUrl, "/{userId}/articles");
+            public static readonly string GetByIdWithRelationship = string.Concat(_usersControllerUrl, "/{userId}/include");
 
             public static readonly string GetByIdWithUserVideos = string.Concat(_usersControllerUrl, "/{userId}/videos");
 
@@ -53,6 +53,8 @@
             public static readonly string Create = _articlesControllerUrl;
 
             public static readonly string GetById = string.Concat(_articlesControllerUrl, "/{articleId}");
+
+            public static readonly string GetByIdWithArticles = string.Concat(_articlesControllerUrl, "/{articleId}/user");
 
             public static readonly string Delete = string.Concat(_articlesControllerUrl, "/{articleId}");
 
