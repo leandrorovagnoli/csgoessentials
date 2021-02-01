@@ -55,7 +55,7 @@ namespace CsgoEssentials.API.Controllers
         {
             try
             {
-                var map = await mapService.GetByIdAsNoTrackingWithVideos(id);
+                var map = await mapService.GetByIdAsNoTrackingWithRelationship(id);
                 if (map == null)
                     return BadRequest(new { message = Messages.MAPA_NAO_ENCONTRADO });
 

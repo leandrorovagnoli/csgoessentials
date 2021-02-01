@@ -348,7 +348,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             var response = await Client.PostAsJsonAsync(ApiRoutes.Videos.Create, _newVideo);
             var video = await response.Content.ReadAsAsync<Video>();
 
-            var responseUser = await Client.GetAsync(ApiRoutes.Users.GetByIdWithUserVideos.Replace("{userId}", "1"));
+            var responseUser = await Client.GetAsync(ApiRoutes.Users.GetByIdWithRelationship.Replace("{userId}", "1"));
             var user = await responseUser.Content.ReadAsAsync<User>();
 
             //Assert
@@ -366,7 +366,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             var response = await Client.PostAsJsonAsync(ApiRoutes.Videos.Create, _newVideo);
             var video = await response.Content.ReadAsAsync<Video>();
 
-            var responseMap = await Client.GetAsync(ApiRoutes.Maps.GetByIdWithVideos.Replace("{mapId}", "1"));
+            var responseMap = await Client.GetAsync(ApiRoutes.Maps.GetByIdWithRelationship.Replace("{mapId}", "1"));
             var map = await responseMap.Content.ReadAsAsync<Map>();
 
             //Assert

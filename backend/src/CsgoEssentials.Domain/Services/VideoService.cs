@@ -63,6 +63,11 @@ namespace CsgoEssentials.Domain.Services
             return await _videoRepository.GetByIdAsNoTracking(id);
         }
 
+        public async Task<Video> GetByIdAsNoTrackingWithRelationship(int id)
+        {
+            return await _videoRepository.GetByIdAsNoTrackingWithRelationship(id);
+        }
+
         public async Task Update(Video entity)
         {
             await ReferencialIntegrityCheckUser(entity);

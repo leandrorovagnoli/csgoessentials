@@ -67,10 +67,6 @@ namespace CsgoEssentials.Domain.Services
         {
             return await _userRepository.GetByIdAsNoTrackingWithRelationship(id);
         }
-        public async Task<User> GetByIdAsNoTrackingWithUserVideos(int id)
-        {
-            return await _userRepository.GetByIdAsNoTrackingWithUserVideos(id);
-        }
 
         public async Task Update(User entity)
         {

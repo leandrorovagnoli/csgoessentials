@@ -57,7 +57,9 @@ namespace CsgoEssentials.Domain.Entities
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         [DisplayName(Messages.MAPA)]
         public int MapId { get; set; }
+
         public User User { get; set; }
+
         public Map Map { get; set; }
 
         #endregion

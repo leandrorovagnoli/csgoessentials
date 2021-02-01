@@ -16,8 +16,6 @@
 
             public static readonly string GetByIdWithRelationship = string.Concat(_usersControllerUrl, "/{userId}/include");
 
-            public static readonly string GetByIdWithUserVideos = string.Concat(_usersControllerUrl, "/{userId}/videos");
-
             public static readonly string Delete = string.Concat(_usersControllerUrl, "/{userId}");
 
             public static readonly string Update = string.Concat(_usersControllerUrl, "/{userId}");
@@ -35,13 +33,11 @@
 
             public static readonly string GetById = string.Concat(_mapsControllerUrl, "/{mapId}");
 
-            public static readonly string GetByIdWithVideos = string.Concat(_mapsControllerUrl, "/{mapId}/videos");
+            public static readonly string GetByIdWithRelationship = string.Concat(_mapsControllerUrl, "/{mapId}/include");
 
             public static readonly string Delete = string.Concat(_mapsControllerUrl, "/{mapId}");
 
             public static readonly string Update = string.Concat(_mapsControllerUrl, "/{mapId}");
-
-            public static readonly string Authenticate = string.Concat(_mapsControllerUrl, "/login");
         }
 
         public static class Articles
@@ -59,23 +55,23 @@
             public static readonly string Delete = string.Concat(_articlesControllerUrl, "/{articleId}");
 
             public static readonly string Update = string.Concat(_articlesControllerUrl, "/{articleId}");
-
         }
 
         public static class Videos
         {
-            private static readonly string _articlesControllerUrl = string.Concat(_baseUrl, "videos");
+            private static readonly string _videosControllerUrl = string.Concat(_baseUrl, "videos");
 
-            public static readonly string GetAll = _articlesControllerUrl;
+            public static readonly string GetAll = _videosControllerUrl;
 
-            public static readonly string Create = _articlesControllerUrl;
+            public static readonly string Create = _videosControllerUrl;
 
-            public static readonly string GetById = string.Concat(_articlesControllerUrl, "/{videoId}");
+            public static readonly string GetById = string.Concat(_videosControllerUrl, "/{videoId}");
 
-            public static readonly string Delete = string.Concat(_articlesControllerUrl, "/{videoId}");
+            public static readonly string GetByIdWithRelationship = string.Concat(_videosControllerUrl, "/{videoId}/include");
 
-            public static readonly string Update = string.Concat(_articlesControllerUrl, "/{videoId}");
+            public static readonly string Delete = string.Concat(_videosControllerUrl, "/{videoId}");
 
+            public static readonly string Update = string.Concat(_videosControllerUrl, "/{videoId}");
         }
     }
 }

@@ -59,6 +59,11 @@ namespace CsgoEssentials.Domain.Services
             return await _mapRepository.GetByIdAsNoTracking(id);
         }
 
+        public async Task<Map> GetByIdAsNoTrackingWithRelationship(int id)
+        {
+            return await _mapRepository.GetByIdAsNoTrackingWithRelationship(id);
+        }
+
         public async Task Update(Map entity)
         {
             await CheckUserNameDuplicity(entity);
@@ -72,10 +77,6 @@ namespace CsgoEssentials.Domain.Services
 
             if (map != null && map.Id != entity.Id)
                 throw new InvalidOperationException(Messages.MAPA_EXISTENTE);
-        }
-        public async Task<Map> GetByIdAsNoTrackingWithVideos(int id)
-        {
-            return await _mapRepository.GetByIdAsNoTrackingWithVideos(id);
         }
     }
 }

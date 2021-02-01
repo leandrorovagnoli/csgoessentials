@@ -8,6 +8,6 @@ namespace CsgoEssentials.Domain.Interfaces.Services
 {
     public interface IMapService : IService<Map>
     {
-        Task<Map> GetByIdAsNoTrackingWithVideos(int id);
+        Task<Map> GetByIdAsNoTrackingWithRelationship(int id);
     }
 }
