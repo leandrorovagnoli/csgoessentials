@@ -18,6 +18,7 @@
         public const string DATA_DE_PUBLICACAO = "Data de Publicação";
         public const string TIPO_DE_GRANADA = "Tipo de Granada";
         public const string DATA = "Data";
+        public const string VIDEOURL = "URL do video";
 
         #endregion
 
@@ -54,6 +55,7 @@
         public const string NAO_FOI_POSSIVEL_BUSCAR_OS_MAPAS = "Não foi possível buscar os mapas.";
         public const string NAO_FOI_POSSIVEL_CRIAR_O_MAPA = "Não foi possível criar o mapa.";
         public const string NAO_FOI_POSSIVEL_ATUALIZAR_O_MAPA = "Não foi possível atualizar o mapa.";
+        public const string NAO_FOI_POSSIVEL_REMOVER_MAP_POSSUI_VIDEOS_CADASTRADOS = "Não foi possível remover. Mapa possui Videos cadastrados.";
 
         #endregion
 
@@ -73,7 +75,7 @@
         public const string NAO_FOI_POSSIVEL_BUSCAR_OS_VIDEOS = "Não foi possível buscar os videos.";
         public const string NAO_FOI_POSSIVEL_CRIAR_O_VIDEO = "Não foi possível criar o video.";
         public const string NAO_FOI_POSSIVEL_ATUALIZAR_O_VIDEO = "Não foi possível atualizar o video.";
-
+        
         #endregion
     }
 }

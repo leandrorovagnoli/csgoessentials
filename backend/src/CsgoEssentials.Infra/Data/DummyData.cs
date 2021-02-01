@@ -119,6 +119,14 @@ namespace CsgoEssentials.Infra.Data
                 "Dust2",
                 "As melhores smokes do Mapa Dust2");
 
+            var _mirageMap = new Map(
+                "Mirage",
+                "As melhores smokes do Mapa Mirage");
+
+            var _overpassMap = new Map(
+                "Overpass",
+                "As melhores smokes do Mapa Overpass");
+
             var _infernoMap = new Map(
                 "Inferno",
                 "As melhores smokes do Mapa Inferno");
@@ -159,6 +167,7 @@ namespace CsgoEssentials.Infra.Data
                 EGrenadeType.Smoke,
                 ETick.Tick128,
                 "Video demonstracao de uma smoke fundo na d2",
+                "http://www.videotesteprj.com",
                 user.Id,
                 map.Id);
 
@@ -168,8 +177,19 @@ namespace CsgoEssentials.Infra.Data
                 EGrenadeType.Smoke,
                 ETick.Tick128,
                 "Video demonstracao de uma smoke fundo na Mirage",
+                "http://www.videotesteprj.com",
                 user.Id,
                 map.Id);
+
+            var _video3 = new Video(
+               "Smoke Varanda D2",
+               new DateTime(2021, 01, 10),
+               EGrenadeType.Smoke,
+               ETick.Tick128,
+               "Video demonstracao de uma smoke Varanda D2",
+               "http://www.videotesteprj.com",
+               user.Id,
+               map.Id);
 
             context.Videos.AddRange(_video1, _video2);
             await context.SaveChangesAsync();
