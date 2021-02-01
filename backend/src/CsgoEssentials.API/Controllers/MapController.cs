@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using CsgoEssentials.Domain.Services;
 
 namespace CsgoEssentials.API.Controllers
 {
@@ -47,6 +48,24 @@ namespace CsgoEssentials.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{id:int}/videos")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<Map>> GetByIdWithVideos(int id, [FromServices] IMapService mapService)
+        {
+            try
+            {
+                var map = await mapService.GetByIdAsNoTrackingWithVideos(id);
+                if (map == null)
+                    return BadRequest(new { message = Messages.MAPA_NAO_ENCONTRADO });
+
+                return Ok(map);
+            }
+            catch
+            {
+                return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
+            }
+        }
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]

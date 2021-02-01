@@ -16,6 +16,8 @@
 
             public static readonly string GetByIdWithArticles = string.Concat(_usersControllerUrl, "/{userId}/articles");
 
+            public static readonly string GetByIdWithUserVideos = string.Concat(_usersControllerUrl, "/{userId}/videos");
+
             public static readonly string Delete = string.Concat(_usersControllerUrl, "/{userId}");
 
             public static readonly string Update = string.Concat(_usersControllerUrl, "/{userId}");
@@ -32,6 +34,8 @@
             public static readonly string Create = _mapsControllerUrl;
 
             public static readonly string GetById = string.Concat(_mapsControllerUrl, "/{mapId}");
+
+            public static readonly string GetByIdWithVideos = string.Concat(_mapsControllerUrl, "/{mapId}/videos");
 
             public static readonly string Delete = string.Concat(_mapsControllerUrl, "/{mapId}");
 

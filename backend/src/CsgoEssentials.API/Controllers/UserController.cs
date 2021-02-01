@@ -67,6 +67,25 @@ namespace CsgoEssentials.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{id:int}/videos")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<User>> GetByIdWithVideos(int id, [FromServices] IUserService userService)
+        {
+            try
+            {
+                var user = await userService.GetByIdAsNoTrackingWithUserVideos(id);
+                if (user == null)
+                    return BadRequest(new { message = Messages.USUARIO_NAO_ENCONTRADO });
+
+                return Ok(user);
+            }
+            catch
+            {
+                return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
+            }
+        }
+
         [HttpPost]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<User>> Post(
