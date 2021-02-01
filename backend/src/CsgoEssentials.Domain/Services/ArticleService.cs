@@ -53,9 +53,9 @@ namespace CsgoEssentials.Domain.Services
             return await _articleRepository.GetAllAsNoTracking();
         }
 
-        public async Task<Article> GetByIdAsNoTrackingWithUser(int id)
+        public async Task<Article> GetByIdAsNoTrackingWithRelationship(int id)
         {
-            return await _articleRepository.GetByIdAsNoTrackingWithUser(id);
+            return await _articleRepository.GetByIdAsNoTrackingWithRelationship(id);
         }
 
         public async Task<Article> GetById(int id)
