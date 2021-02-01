@@ -5,7 +5,7 @@ namespace CsgoEssentials.Domain.Interfaces.Services
 {
     public interface IArticleService : IService<Article>
     {
-        Task<Article> GetByIdAsNoTrackingWithUser(int id);
+        Task<Article> GetByIdAsNoTrackingWithRelationship(int id);
     }
 }
 

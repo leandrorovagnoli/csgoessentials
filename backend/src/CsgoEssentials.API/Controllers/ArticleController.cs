@@ -45,13 +45,13 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}/user")]
+        [Route("{id:int}/include")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<Article>> GetByIdWithUser(int id, [FromServices] IArticleService articleService)
+        public async Task<ActionResult<Article>> GetByIdWithRelationship(int id, [FromServices] IArticleService articleService)
         {
             try
             {
-                var article = await articleService.GetByIdAsNoTrackingWithUser(id);
+                var article = await articleService.GetByIdAsNoTrackingWithRelationship(id);
                 if (article == null)
                     return BadRequest(new { message = Messages.ARTIGO_NAO_ENCONTRADO });
 

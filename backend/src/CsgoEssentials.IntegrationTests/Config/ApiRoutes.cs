@@ -54,7 +54,7 @@
 
             public static readonly string GetById = string.Concat(_articlesControllerUrl, "/{articleId}");
 
-            public static readonly string GetByIdWithArticles = string.Concat(_articlesControllerUrl, "/{articleId}/user");
+            public static readonly string GetByIdWithRelationship = string.Concat(_articlesControllerUrl, "/{articleId}/include");
 
             public static readonly string Delete = string.Concat(_articlesControllerUrl, "/{articleId}");
 

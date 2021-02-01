@@ -358,7 +358,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             await AuthenticateAsync();
 
             //Act
-            var response = await Client.GetAsync(ApiRoutes.Articles.GetByIdWithArticles.Replace("{articleId}", "1"));
+            var response = await Client.GetAsync(ApiRoutes.Articles.GetByIdWithRelationship.Replace("{articleId}", "1"));
             var article = await response.Content.ReadAsAsync<Article>();
 
             //Assert

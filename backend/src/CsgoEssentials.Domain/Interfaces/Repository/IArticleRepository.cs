@@ -5,7 +5,7 @@ namespace CsgoEssentials.Domain.Interfaces.Repository
 {
     public interface IArticleRepository : IRepository<Article>
     {
-        Task<Article> GetByIdAsNoTrackingWithUser(int id);
+        Task<Article> GetByIdAsNoTrackingWithRelationship(int id);
     }
 }
 
