@@ -47,7 +47,7 @@ namespace CsgoEssentials.Domain.Entities
 
         [DisplayName(Messages.DESCRICAO)]
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
-        [StringLength(maximumLength: 60, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 3)]
+        [StringLength(maximumLength: 120, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 20)]
         public string Description { get; set; }
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]

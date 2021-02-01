@@ -99,7 +99,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         }
 
         [Fact]
-        public async Task GetById_Deve_Retornar_Um_Video_Nao_Encontrado_Se_Não_Criado()
+        public async Task GetById_Deve_Retornar_Um_Erro_Nao_Encontrado_Se_O_Video_Nao_Existir()
         {
             //Arrange
             await AuthenticateAsync();
@@ -164,14 +164,12 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             //Arrange
             await AuthenticateAsync();
 
-
             var responseAux = await Client.GetAsync(ApiRoutes.Videos.GetById.Replace("{articleId}", "1"));
             var video = await responseAux.Content.ReadAsAsync<Video>();
 
             video.Title = "Bomba gira mais que tudo";
             video.ReleaseDate = new DateTime(1980, 05, 02);
             video.Description = "Nova Description agora";
-
 
             //Act
             var response = await Client.PutAsJsonAsync(ApiRoutes.Videos.Update.Replace("{articleId}", video.Id.ToString()), video);
@@ -227,7 +225,6 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         [Fact]
         public async Task Create_Deve_Validar_Se_UserId_Estiver_Setado_De_Forma_Correta()
         {
-
             //Arrange
             await AuthenticateAsync();
 
@@ -235,14 +232,12 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             var response = await Client.PostAsJsonAsync(ApiRoutes.Videos.Create, _newVideo);
             var video = await response.Content.ReadAsAsync<Video>();
 
-
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             video.UserId.Should().BeGreaterThan(0).And.Equals(6);
-
         }
 
-        [Fact] // VOLTAR AQUI
+        [Fact]
         public async Task Create_Deve_Invalidar_Se_Houver_UserId_Invalido()
         {
             //Arrange
@@ -256,11 +251,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
         }
-
-        // Criar TEST ****
-        // Atualiar deve invalidar um campo menor que o obrigatorio ou maior, testar isso também.
 
         [Fact]
         public async Task Create_Deve_Invalidar_O_Campo_Title_Menor_Que_O_Permitido()
@@ -275,11 +266,9 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             var response = await Client.PostAsJsonAsync(ApiRoutes.Videos.Create, _newVideo);
             var content = await response.Content.ReadAsStringAsync();
 
-
-
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.TITULO, "200", "10"));
+            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.TITULO, "60", "4"));
         }
 
         [Fact]
@@ -299,7 +288,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.TITULO, "200", "10"));
+            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.TITULO, "60", "4"));
         }
 
         [Fact]
@@ -335,8 +324,8 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.DESCRICAO, "2000", "20"));
-        }        
+            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.DESCRICAO, "120", "20"));
+        }
 
         [Fact]
         public async Task Teste_Deve_Retornar_Todos_Os_Videos_Associados_Com_Usuario_Especifico()
@@ -373,6 +362,40 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             map.Videos.Should().HaveCount(2);
         }
+
+        // To Do 
+        /*  Deve retornar um video de um mapa
+            Deve retornar todos videos do mapa
+            Deve retornar um video do mapa com um tipo de granada
+            Deve retornar um video do mapa com um tipo de granada e tipo de tick64
+            Deve retornar todos videos de todos mapas
+            Deve retornar um video com tick64
+            Deve retornar um video com tipo de granada
+            Deve retornar todos videos com um tipo de granada
+            Deve retornar todos videos com um tipo de granada e tick64
+            Deve retornar todos videos com granadas do tipo e tick64 (INdependente do mapa)
+            Deve retornar todos videos de tick64
+            Deve retornar um video publicado em tal dia (Sugestão)
+            Deve retornar um video publicado em tal dia de HE ou SMoke etc
+            Não deve retornar um video se o mapa for diferente do informado
+            Nao deve retornar um video se o tick informado for diferente
+            Atualizar deve invalidar um campo menor que o obrigatorio
+            Atualizar deve invalidar um campo maior que o obrigatorio
+            Atualizar deve retornar sucesso se alterado somente um campo
+            Delete deve deletar o map se for usuario admin
+            ou
+            Delete deve invalidar se o usuario for editor ou usuario
+            Criar deve invalidar se não existir um mapa associado ao video
+            Criar deve invalidar se não existir um usuario associado ao video
+            Criar deve invalidar se não existir um mapa e usuario associado ao video
+            Criar deve invalidar qualquer campo vazio
+
+        */
+
+
+
+
+
     }
 }
 
