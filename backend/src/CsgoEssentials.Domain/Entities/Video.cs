@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System;
-using CsgoEssentials.Domain.Enum;
-using System.ComponentModel;
+﻿using CsgoEssentials.Domain.Enum;
 using CsgoEssentials.Infra.Utils;
+using System;
 using System.Collections.Generic;
-using CsgoEssentials.Domain.Interfaces.Entities;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CsgoEssentials.Domain.Entities
 {
@@ -12,13 +11,14 @@ namespace CsgoEssentials.Domain.Entities
     {
         #region Constructor
 
-        public Video(string title, DateTime releaseDate, EGrenadeType grenadeType, ETick tickRate, string description, int userId, int mapId)
+        public Video(string title, DateTime releaseDate, EGrenadeType grenadeType, ETick tickRate, string description, string videoURL, int userId, int mapId)
         {
             Title = title;
             ReleaseDate = releaseDate;
             GrenadeType = grenadeType;
             TickRate = tickRate;
             Description = description;
+            VideoURL = videoURL;
             UserId = userId;
             MapId = mapId;
         }
@@ -49,6 +49,11 @@ namespace CsgoEssentials.Domain.Entities
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         [StringLength(maximumLength: 120, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 20)]
         public string Description { get; set; }
+
+        [DisplayName(Messages.VIDEOURL)]
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [StringLength(maximumLength: 100, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 2)]
+        public string VideoURL { get; set; }
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         [DisplayName(Messages.USUARIO)]

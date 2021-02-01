@@ -21,12 +21,13 @@ namespace CsgoEssentials.Domain.Services
 
         public async Task<Map> Add(Map entity)
         {
-            await CheckUserNameDuplicity(entity);
+            await CheckMapNameDuplicity(entity);
             return await _mapRepository.Add(entity);
         }
 
         public async Task Delete(Map entity)
         {
+            await CheckMapHasRelationship(entity);
             await _mapRepository.Delete(entity);
         }
 
@@ -66,17 +67,25 @@ namespace CsgoEssentials.Domain.Services
 
         public async Task Update(Map entity)
         {
-            await CheckUserNameDuplicity(entity);
+            await CheckMapNameDuplicity(entity);
             await _mapRepository.Update(entity);
         }
 
-        private async Task CheckUserNameDuplicity(Map entity)
+        private async Task CheckMapNameDuplicity(Map entity)
         {
             var maps = await FindAsNoTracking(x => x.Name == entity.Name);
             var map = maps.FirstOrDefault();
 
             if (map != null && map.Id != entity.Id)
                 throw new InvalidOperationException(Messages.MAPA_EXISTENTE);
+        }
+
+        private async Task CheckMapHasRelationship(Map entity)
+        {
+            var map = await GetByIdAsNoTrackingWithRelationship(entity.Id);
+
+            if (map != null && map.Videos.Any())
+                throw new InvalidOperationException(Messages.NAO_FOI_POSSIVEL_REMOVER_MAP_POSSUI_VIDEOS_CADASTRADOS);
         }
     }
 }

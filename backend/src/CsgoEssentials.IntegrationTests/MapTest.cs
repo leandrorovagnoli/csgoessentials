@@ -4,6 +4,7 @@ using CsgoEssentials.IntegrationTests.Config;
 using FluentAssertions;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -299,6 +300,23 @@ namespace CsgoEssentials.IntegrationTests.MapTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.DESCRICAO, "60", "3"));
+        }
+
+        [Fact]
+        public async Task Delete_Nao_Deve_Apagar_Map_Que_Possui_Videos_Relacionados()
+        {
+            //Arrange
+            await AuthenticateAsync();
+            var responseAux = await Client.GetAsync(ApiRoutes.Maps.GetByIdWithRelationship.Replace("{mapId}", "1"));
+            var map = await responseAux.Content.ReadFromJsonAsync<Map>();
+
+            //Act
+            var response = await Client.DeleteAsync(ApiRoutes.Maps.Delete.Replace("{mapId}", map.Id.ToString()));
+            var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            jsonModel.Message.Should().Be(Messages.NAO_FOI_POSSIVEL_REMOVER_MAP_POSSUI_VIDEOS_CADASTRADOS);
         }
     }
 }

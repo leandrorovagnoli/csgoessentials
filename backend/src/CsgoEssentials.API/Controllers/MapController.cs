@@ -1,12 +1,11 @@
 ﻿using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Interfaces.Services;
 using CsgoEssentials.Infra.Utils;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using CsgoEssentials.Domain.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks; 
 
 namespace CsgoEssentials.API.Controllers
 {
@@ -49,7 +48,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}/videos")]
+        [Route("{id:int}/include")]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Map>> GetByIdWithVideos(int id, [FromServices] IMapService mapService)
         {
@@ -60,7 +59,7 @@ namespace CsgoEssentials.API.Controllers
                     return BadRequest(new { message = Messages.MAPA_NAO_ENCONTRADO });
 
                 return Ok(map);
-            }
+            }           
             catch
             {
                 return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
@@ -139,6 +138,10 @@ namespace CsgoEssentials.API.Controllers
                 await MapService.Delete(map);
 
                 return Ok(new { message = Messages.MAPA_REMOVIDO_COM_SUCESSO });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch
             {

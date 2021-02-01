@@ -26,6 +26,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
                 EGrenadeType.Smoke,
                 ETick.Tick128,
                 "Video demonstracao de uma smoke fundo na d2",
+                "http://www.videotesteprj.com",
                 2,
                 1);
 
@@ -35,6 +36,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
                 EGrenadeType.Flash,
                 ETick.Tick128,
                 "Video demonstracao de uma Flash na Mirage",
+                "http://www.videotesteprj.com",
                 2,
                 2);
         }
