@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsgoEssentials.Domain", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsgoEssentials.Infra", "src\CsgoEssentials.Infra\CsgoEssentials.Infra.csproj", "{92A0827B-5E51-4271-AFA9-5A2AE6F42828}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsgoEssentials.IntegrationTests", "src\CsgoEssentials.IntegrationTests\CsgoEssentials.IntegrationTests.csproj", "{5B489B7B-E9C7-4D17-A696-3FEDA1A30D59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CsgoEssentials.IntegrationTests", "src\CsgoEssentials.IntegrationTests\CsgoEssentials.IntegrationTests.csproj", "{5B489B7B-E9C7-4D17-A696-3FEDA1A30D59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

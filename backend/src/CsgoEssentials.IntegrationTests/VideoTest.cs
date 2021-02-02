@@ -60,10 +60,10 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             var oneVideo = await responseAux.Content.ReadAsAsync<Video>();
 
             responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
-            oneVideo.Should().NotBeNull().And.Equals(_newVideo);
+            oneVideo.Should().NotBeNull();
 
             //Act
-            var response = await Client.GetAsync(ApiRoutes.Videos.GetById.Replace("{articleId}", oneVideo.Id.ToString()));
+            var response = await Client.GetAsync(ApiRoutes.Videos.GetById.Replace("{videoId}", oneVideo.Id.ToString()));
             var video = await response.Content.ReadAsAsync<Video>();
 
             //Assert
@@ -82,12 +82,28 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
 
             //act
             var response = await Client.GetAsync(ApiRoutes.Videos.GetAll);
-            var articles = await response.Content.ReadAsAsync<List<Video>>();
-
+            var videos = await response.Content.ReadAsAsync<List<Video>>();
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            articles.Should().HaveCount(2);
+            videos.Should().HaveCount(3);
+        }
+
+        [Fact]
+        public async Task GetById_Deve_Retornar_Um_Video_Existente_Com_Seu_Usuario_Associado()
+        {
+            //Arrange
+            await AuthenticateAsync();
+
+            //Act
+            var response = await Client.GetAsync(ApiRoutes.Videos.GetByIdWithRelationship.Replace("{videoId}", "1"));
+            var video = await response.Content.ReadAsAsync<Video>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            video.Id.Should().BeGreaterThan(0);
+            video.User.Should().NotBeNull();
+            video.User.UserName.Should().Be("leolandrooo");
         }
 
         [Fact]
@@ -97,12 +113,12 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             await AuthenticateAsync();
 
             //Act
-            var response = await Client.GetAsync(ApiRoutes.Videos.GetById.Replace("{articleId}", "9999"));
+            var response = await Client.GetAsync(ApiRoutes.Videos.GetById.Replace("{videoId}", "9999"));
             var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            jsonModel.Message.Should().Be(Messages.ARTIGO_NAO_ENCONTRADO);
+            jsonModel.Message.Should().Be(Messages.VIDEO_NAO_ENCONTRADO);
 
         }
 
@@ -112,19 +128,19 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             //Arrange
             await AuthenticateAsync();
 
-            var responseAux = await Client.GetAsync(ApiRoutes.Videos.GetById.Replace("{articleId}", "1"));
+            var responseAux = await Client.GetAsync(ApiRoutes.Videos.GetById.Replace("{videoId}", "1"));
             var video = await responseAux.Content.ReadAsAsync<Video>();
 
-            video.Title = "Bomba gira mais que tudo";
+            video.Title = "Video da bomba gira muito";
 
             //Act
-            var response = await Client.PutAsJsonAsync(ApiRoutes.Videos.Update.Replace("{articleId}", video.Id.ToString()), video);
+            var response = await Client.PutAsJsonAsync(ApiRoutes.Videos.Update.Replace("{videoId}", video.Id.ToString()), video);
             var title = await response.Content.ReadAsAsync<Video>();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             title.Id.Should().BeGreaterThan(0);
-            title.Title.Should().Be("Bomba gira mais que tudo");
+            title.Title.Should().Be("Video da bomba gira muito");
 
         }
 
@@ -134,20 +150,20 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             //Arrange
             await AuthenticateAsync();
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Videos.Create, _newVideo);
-            var articleResp = await responseAux.Content.ReadAsAsync<Video>();
+            var videoResp = await responseAux.Content.ReadAsAsync<Video>();
 
             responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
-            articleResp.Should().NotBeNull();
+            videoResp.Should().NotBeNull();
 
             //Act
-            articleResp.Title = "Titulo Modificado";
+            videoResp.Title = "Titulo do video modificado";
 
-            var response = await Client.PutAsJsonAsync(ApiRoutes.Videos.Update.Replace("{articleId}", "9999"), articleResp);
+            var response = await Client.PutAsJsonAsync(ApiRoutes.Videos.Update.Replace("{videoId}", "9999"), videoResp);
             var content = await response.Content.ReadAsStringAsync();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-            content.Should().Contain(Messages.ARTIGO_NAO_ENCONTRADO);
+            content.Should().Contain(Messages.VIDEO_NAO_ENCONTRADO);
         }
 
         [Fact]
@@ -156,21 +172,21 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             //Arrange
             await AuthenticateAsync();
 
-            var responseAux = await Client.GetAsync(ApiRoutes.Videos.GetById.Replace("{articleId}", "1"));
+            var responseAux = await Client.GetAsync(ApiRoutes.Videos.GetById.Replace("{videoId}", "1"));
             var video = await responseAux.Content.ReadAsAsync<Video>();
 
-            video.Title = "Bomba gira mais que tudo";
+            video.Title = "Titulo novo";
             video.ReleaseDate = new DateTime(1980, 05, 02);
             video.Description = "Nova Description agora";
 
             //Act
-            var response = await Client.PutAsJsonAsync(ApiRoutes.Videos.Update.Replace("{articleId}", video.Id.ToString()), video);
+            var response = await Client.PutAsJsonAsync(ApiRoutes.Videos.Update.Replace("{videoId}", video.Id.ToString()), video);
             var articleResult = await response.Content.ReadAsAsync<Video>();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             articleResult.Id.Should().BeGreaterThan(0);
-            articleResult.Title.Should().Be("Bomba gira mais que tudo");
+            articleResult.Title.Should().Be("Titulo novo");
             articleResult.ReleaseDate.Should().Be(video.ReleaseDate);
             articleResult.Description.Should().Be(video.Description);
 
@@ -182,18 +198,18 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             //Arrange
             await AuthenticateAsync();
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Videos.Create, _newVideo);
-            var articleAux = await responseAux.Content.ReadAsAsync<Video>();
+            var videoAux = await responseAux.Content.ReadAsAsync<Video>();
 
             responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
-            articleAux.Should().NotBeNull();
+            videoAux.Should().NotBeNull();
 
             //Act
-            var response = await Client.DeleteAsync(ApiRoutes.Videos.Delete.Replace("{articleId}", articleAux.Id.ToString()));
+            var response = await Client.DeleteAsync(ApiRoutes.Videos.Delete.Replace("{videoId}", videoAux.Id.ToString()));
             var content = await response.Content.ReadAsStringAsync();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            content.Should().Contain(Messages.ARTIGO_REMOVIDO_COM_SUCESSO);
+            content.Should().Contain(Messages.VIDEO_REMOVIDO_COM_SUCESSO);
         }
 
         [Fact]
@@ -215,7 +231,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         }
 
         [Fact]
-        public async Task Create_Deve_Validar_Se_UserId_Estiver_Setado_De_Forma_Correta()
+        public async Task Create_Deve_Validar_Se_UserId_Estiver_Setado()
         {
             //Arrange
             await AuthenticateAsync();
@@ -226,7 +242,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            video.UserId.Should().BeGreaterThan(0).And.Equals(6);
+            video.UserId.Should().BeGreaterThan(0);
         }
 
         [Fact]
@@ -235,14 +251,16 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             //Arrange
             await AuthenticateAsync();
 
-            _newVideo.UserId = 999;
 
+            _newVideo.UserId = 999;
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Videos.Create, _newVideo);
             var content = await response.Content.ReadAsStringAsync();
 
+  
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            content.Should().Contain(Messages.USUARIO_NAO_ENCONTRADO);
         }
 
         [Fact]
@@ -326,15 +344,12 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             await AuthenticateAsync();
 
             //Act
-            var response = await Client.PostAsJsonAsync(ApiRoutes.Videos.Create, _newVideo);
-            var video = await response.Content.ReadAsAsync<Video>();
-
             var responseUser = await Client.GetAsync(ApiRoutes.Users.GetByIdWithRelationship.Replace("{userId}", "1"));
             var user = await responseUser.Content.ReadAsAsync<User>();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            user.Videos.Should().HaveCount(2);
+            responseUser.StatusCode.Should().Be(HttpStatusCode.OK);
+            user.Videos.Should().HaveCount(3);
         }
 
         [Fact]
@@ -344,15 +359,12 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             await AuthenticateAsync();
 
             //Act
-            var response = await Client.PostAsJsonAsync(ApiRoutes.Videos.Create, _newVideo);
-            var video = await response.Content.ReadAsAsync<Video>();
-
             var responseMap = await Client.GetAsync(ApiRoutes.Maps.GetByIdWithRelationship.Replace("{mapId}", "1"));
             var map = await responseMap.Content.ReadAsAsync<Map>();
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            map.Videos.Should().HaveCount(2);
+            responseMap.StatusCode.Should().Be(HttpStatusCode.OK);
+            map.Videos.Should().HaveCount(3);
         }
 
         // FAZER A ESTRUTURA do INICIO.

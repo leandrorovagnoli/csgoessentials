@@ -55,8 +55,8 @@ namespace CsgoEssentials.Domain.Entities
         [StringLength(maximumLength: 100, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 2)]
         public string VideoURL { get; set; }
 
-        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         [DisplayName(Messages.USUARIO)]
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         public int UserId { get; set; }
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]

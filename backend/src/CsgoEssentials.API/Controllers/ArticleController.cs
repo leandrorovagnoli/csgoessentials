@@ -46,7 +46,6 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpGet]
         [Route("{id:int}/include")]
-        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Article>> GetByIdWithRelationship(int id, [FromServices] IArticleService articleService)
         {
             try

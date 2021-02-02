@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CsgoEssentials.API.Controllers
 {
@@ -43,8 +44,26 @@ namespace CsgoEssentials.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{id:int}/include")]
+        public async Task<ActionResult<Article>> GetByIdWithRelationship(int id, [FromServices] IVideoService videoService)
+        {
+            try
+            {
+                var video = await videoService.GetByIdAsNoTrackingWithRelationship(id);
+                if (video == null)
+                    return BadRequest(new { message = Messages.VIDEO_NAO_ENCONTRADO });
+
+                return Ok(video);
+            }
+            catch
+            {
+                return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
+            }
+        }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Video>> Post(
             [FromServices] IVideoService VideoService,
             [FromBody] Video video)
@@ -70,6 +89,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<Video> Put(
             int id,
             [FromServices] IVideoService VideoService,
@@ -99,6 +119,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Video>> Delete(
             int id,
             [FromServices] IVideoService VideoService)

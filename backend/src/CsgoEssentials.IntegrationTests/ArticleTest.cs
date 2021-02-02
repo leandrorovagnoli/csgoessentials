@@ -238,7 +238,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         }
 
         [Fact]
-        public async Task Create_Deve_Validar_Se_UserId_Estiver_Setado_De_Forma_Correta()
+        public async Task Create_Deve_Validar_Se_UserId_Estiver_Setado()
         {
 
             //Arrange
@@ -251,11 +251,11 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            article.UserId.Should().BeGreaterThan(0).And.Equals(6);
+            article.UserId.Should().BeGreaterThan(0);
 
         }
 
-        [Fact] // VOLTAR AQUI
+        [Fact] 
         public async Task Create_Deve_Invalidar_Se_Houver_UserId_Invalido()
         {
             //Arrange
@@ -269,11 +269,9 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            content.Should().Contain(Messages.USUARIO_NAO_ENCONTRADO);
 
         }
-
-        // Criar TEST ****
-        // Atualiar deve invalidar um campo menor que o obrigatorio ou maior, testar isso também.
 
         [Fact]
         public async Task Create_Deve_Invalidar_O_Campo_Title_Menor_Que_O_Permitido()

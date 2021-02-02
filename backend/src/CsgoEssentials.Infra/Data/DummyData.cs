@@ -191,7 +191,7 @@ namespace CsgoEssentials.Infra.Data
                user.Id,
                map.Id);
 
-            context.Videos.AddRange(_video1, _video2);
+            context.Videos.AddRange(_video1, _video2, _video3);
             await context.SaveChangesAsync();
         }
     }

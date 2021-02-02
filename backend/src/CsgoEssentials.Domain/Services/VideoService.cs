@@ -80,7 +80,7 @@ namespace CsgoEssentials.Domain.Services
             var users = await _userRepository.GetByIdAsNoTracking(entity.UserId);
             
             if (users == null)
-                throw new InvalidOperationException(Messages.NOME_DE_USUARIO_JA_EXISTENTE);
+                throw new InvalidOperationException(Messages.USUARIO_NAO_ENCONTRADO);
         }
 
         private async Task ReferencialIntegrityCheckMap(Video entity)
