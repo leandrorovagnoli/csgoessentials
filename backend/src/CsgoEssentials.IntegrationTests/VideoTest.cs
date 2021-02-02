@@ -21,16 +21,6 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public VideoTest()
         {
             _newVideo = new Video(
-               "Smoke Fundo D2",
-                new DateTime(2021, 01, 10),
-                EGrenadeType.Smoke,
-                ETick.Tick128,
-                "Video demonstracao de uma smoke fundo na d2",
-                "http://www.videotesteprj.com",
-                2,
-                1);
-
-            _newVideo = new Video(
                "Flash Fundo Mirage",
                 new DateTime(2021, 01, 10),
                 EGrenadeType.Flash,
@@ -365,38 +355,119 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             map.Videos.Should().HaveCount(2);
         }
 
-        // To Do 
-        /*  Deve retornar um video de um mapa
-            Deve retornar todos videos do mapa
-            Deve retornar um video do mapa com um tipo de granada
-            Deve retornar um video do mapa com um tipo de granada e tipo de tick64
-            Deve retornar todos videos de todos mapas
-            Deve retornar um video com tick64
-            Deve retornar um video com tipo de granada
-            Deve retornar todos videos com um tipo de granada
-            Deve retornar todos videos com um tipo de granada e tick64
-            Deve retornar todos videos com granadas do tipo e tick64 (INdependente do mapa)
-            Deve retornar todos videos de tick64
-            Deve retornar um video publicado em tal dia (Sugestão)
-            Deve retornar um video publicado em tal dia de HE ou SMoke etc
-            Não deve retornar um video se o mapa for diferente do informado
-            Nao deve retornar um video se o tick informado for diferente
-            Atualizar deve invalidar um campo menor que o obrigatorio
-            Atualizar deve invalidar um campo maior que o obrigatorio
-            Atualizar deve retornar sucesso se alterado somente um campo
-            Delete deve deletar o map se for usuario admin
-            ou
-            Delete deve invalidar se o usuario for editor ou usuario
-            Criar deve invalidar se não existir um mapa associado ao video
-            Criar deve invalidar se não existir um usuario associado ao video
-            Criar deve invalidar se não existir um mapa e usuario associado ao video
-            Criar deve invalidar qualquer campo vazio
+        // FAZER A ESTRUTURA do INICIO.
+        [Fact] 
+        public async Task Deve_Retornar_Videos_De_Um_Mapa_Com_Uma_Granada_Especifica()
+        {
+            //Arrange
+            await AuthenticateAsync();
 
-        */
+        }
 
+        [Fact]
+        public async Task Deve_Retornar_Um_Video_De_Um_Mapa_Com_Um_Tipo_De_Granada_E_Um_TickRate_Especifico()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
 
+        [Fact]
+        public async Task Deve_Retornar_Videos_Com_Tick64()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
 
+        [Fact]
+        public async Task Deve_Retornar_Videos_Com_Tick128()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
 
+        [Fact]
+        public async Task Deve_Retornar_Videos_Com_Um_Tipo_De_Granada_Especifico()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
+
+        [Fact]
+        public async Task Deve_Retornar_Videos_Com_Um_Tipo_De_Granada_E_TickRate_Especifico()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
+
+        [Fact]
+        public async Task Deve_Retornar_Todos_Videos_Com_TickRate_Especifico()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
+
+        [Fact]
+        public async Task Não_Deve_Retornar_Um_Video_Se_O_Mapa_For_Diferente_Do_Informado()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
+
+        [Fact]
+        public async Task Nao_Deve_Retornar_Um_Video_Se_O_Tick_Informado_For_Diferente()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
+
+        [Fact]
+        public async Task Atualizar_Deve_Invalidar_Um_Campo_Menor_Que_O_Obrigatorio()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
+
+        [Fact]
+        public async Task Atualizar_Deve_Invalidar_Um_Campo_Maior_Que_O_Obrigatorio()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
+
+        [Fact]
+        public async Task Delete_Nao_Deve_Deletar_O_Map_Se_Usuario_For_Diferente_De_Admin()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
+
+        [Fact]
+        public async Task Delete_Deve_Validar_Se_Usuario_For_Admin()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
+
+        [Fact]
+        public async Task Criar_Deve_Invalidar_Se_Não_Existir_Um_Mapa_Associado_Ao_Video()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }       
+        
+        [Fact]
+        public async Task Criar_Deve_Invalidar_Se_Não_Existir_Um_Usuario_Associado_Ao_Video()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }   
+        
+        [Fact]
+        public async Task Criar_Deve_Invalidar_Se_Não_Existir_Um_Mapa_E_Usuario_Associado_Ao_Video()
+        {
+            //Arrange
+            await AuthenticateAsync();
+        }
 
     }
 }
