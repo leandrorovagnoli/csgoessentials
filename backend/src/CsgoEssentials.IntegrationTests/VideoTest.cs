@@ -381,7 +381,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         }
 
         [Fact]
-        public async Task Filter_Deve_Retornar_Videos_De_Um_Mapa_Granada_E_TickRate_Especificos()
+        public async Task Filter_Deve_Retornar_Videos_De_Um_Mapa_Com_Granada_E_TickRate_Especificos()
         {
             //Arrange
             var query = $"?mapid={(int)EDummyTestId.Map1Dust2}&grenadetype={(int)EGrenadeType.Smoke}&tickrate={(int)ETick.Tick128}";
@@ -435,68 +435,103 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             videos[2].GrenadeType.Should().Be((int)EGrenadeType.Smoke);
             videos[3].GrenadeType.Should().Be((int)EGrenadeType.Smoke);
         }
-
-        #endregion
-
-
-
-
-
-
-
-
-
         [Fact]
         public async Task Filter_Deve_Retornar_Um_Video_De_Um_Mapa_Com_Um_Tipo_De_Granada_E_Um_TickRate_Especifico()
         {
             //Arrange
-            await AuthenticateAsync();
+            var query = $"?mapid={(int)EDummyTestId.Map1Dust2}&grenadetype={(int)EGrenadeType.Smoke}&tickrate={(int)ETick.Tick128}";
+
+            //Act
+            var response = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.Filter + query);
+            var videos = await response.Content.ReadAsAsync<List<Video>>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            videos.Should().HaveCount(1);
+            videos[0].MapId.Should().Be((int)EDummyTestId.Map1Dust2);
+            videos[0].GrenadeType.Should().Be((int)EGrenadeType.Smoke);
+            videos[0].TickRate.Should().Be((int)ETick.Tick128);
         }
 
         [Fact]
         public async Task Filter_Deve_Retornar_Videos_Com_Tick64()
         {
             //Arrange
-            await AuthenticateAsync();
+            var query = $"?tickrate={(int)ETick.Tick64}";
+
+            //Act
+            var response = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.Filter + query);
+            var videos = await response.Content.ReadAsAsync<List<Video>>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            videos.Should().HaveCount(3);
+            videos[0].TickRate.Should().Be((int)ETick.Tick64);
+            videos[1].TickRate.Should().Be((int)ETick.Tick64);
+            videos[2].TickRate.Should().Be((int)ETick.Tick64);
         }
 
         [Fact]
         public async Task Filter_Deve_Retornar_Videos_Com_Tick128()
         {
             //Arrange
-            await AuthenticateAsync();
+            var query = $"?mapid={(int)EDummyTestId.Map1Dust2}&tickrate={(int)ETick.Tick128}";
+
+            //Act
+            var response = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.Filter + query);
+            var videos = await response.Content.ReadAsAsync<List<Video>>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            videos.Should().HaveCount(2);
+            videos[0].MapId.Should().Be((int)EDummyTestId.Map1Dust2);
+            videos[1].MapId.Should().Be((int)EDummyTestId.Map1Dust2);
+            videos[0].TickRate.Should().Be((int)ETick.Tick128);
+            videos[1].TickRate.Should().Be((int)ETick.Tick128);
         }
 
         [Fact]
         public async Task Filter_Deve_Retornar_Videos_Com_Um_Tipo_De_Granada_Especifico()
         {
             //Arrange
-            await AuthenticateAsync();
+            var query = $"?mapid={(int)EDummyTestId.Map1Dust2}&grenadetype={(int)EGrenadeType.Molotov}";
+
+            //Act
+            var response = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.Filter + query);
+            var videos = await response.Content.ReadAsAsync<List<Video>>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            videos.Should().HaveCount(1);
+            videos[0].MapId.Should().Be((int)EDummyTestId.Map1Dust2);
+            videos[0].TickRate.Should().Be((int)EGrenadeType.Molotov);
         }
 
         [Fact]
         public async Task Filter_Deve_Retornar_Videos_Com_Um_Tipo_De_Granada_E_TickRate_Especifico()
         {
             //Arrange
-            await AuthenticateAsync();
+            var query = $"?grenadetype={(int)EGrenadeType.Smoke}&tickrate={(int)ETick.Tick64}";
+
+            //Act
+            var response = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.Filter + query);
+            var videos = await response.Content.ReadAsAsync<List<Video>>();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            videos.Should().HaveCount(3);
+            videos[0].GrenadeType.Should().Be((int)EGrenadeType.Smoke);
+            videos[0].TickRate.Should().Be((int)ETick.Tick64);
+            videos[1].GrenadeType.Should().Be((int)EGrenadeType.Smoke);
+            videos[1].TickRate.Should().Be((int)ETick.Tick64);
+            videos[2].GrenadeType.Should().Be((int)EGrenadeType.Smoke);
+            videos[2].TickRate.Should().Be((int)ETick.Tick64);
         }
 
-        [Fact]
-        public async Task Filter_Deve_Retornar_Todos_Videos_Com_TickRate_Especifico()
-        {
-            //Arrange
-            await AuthenticateAsync();
-        }
+        #endregion
 
         [Fact]
-        public async Task Nao_Deve_Retornar_Um_Video_Se_O_Mapa_For_Diferente_Do_Informado()
-        {
-            //Arrange
-            await AuthenticateAsync();
-        }
-
-        [Fact]
-        public async Task Nao_Deve_Retornar_Um_Video_Se_O_Tick_Informado_For_Diferente()
+        public async Task Filter_Nao_Deve_Retornar_Um_Video_Se_O_Tick_Informado_For_Diferente()
         {
             //Arrange
             await AuthenticateAsync();
