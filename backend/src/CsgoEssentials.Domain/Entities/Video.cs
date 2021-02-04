@@ -11,6 +11,11 @@ namespace CsgoEssentials.Domain.Entities
     {
         #region Constructor
 
+        public Video()
+        {
+
+        }
+
         public Video(string title, DateTime releaseDate, EGrenadeType grenadeType, ETick tickRate, string description, string videoURL, int userId, int mapId)
         {
             Title = title;

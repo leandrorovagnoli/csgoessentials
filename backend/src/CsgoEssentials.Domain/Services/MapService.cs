@@ -36,33 +36,19 @@ namespace CsgoEssentials.Domain.Services
             return await _mapRepository.Find(predicate);
         }
 
-        public async Task<IEnumerable<Map>> FindAsNoTracking(Expression<Func<Map, bool>> predicate)
-        {
-            return await _mapRepository.FindAsNoTracking(predicate);
-        }
-
         public async Task<IEnumerable<Map>> GetAll()
         {
             return await _mapRepository.GetAll();
-        }
-
-        public async Task<IEnumerable<Map>> GetAllAsNoTracking()
-        {
-            return await _mapRepository.GetAllAsNoTracking();
         }
 
         public async Task<Map> GetById(int id)
         {
             return await _mapRepository.GetById(id);
         }
-        public async Task<Map> GetByIdAsNoTracking(int id)
-        {
-            return await _mapRepository.GetByIdAsNoTracking(id);
-        }
 
-        public async Task<Map> GetByIdAsNoTrackingWithRelationship(int id)
+        public async Task<Map> GetByIdWithRelationship(int id)
         {
-            return await _mapRepository.GetByIdAsNoTrackingWithRelationship(id);
+            return await _mapRepository.GetByIdWithRelationship(id);
         }
 
         public async Task Update(Map entity)
@@ -73,7 +59,7 @@ namespace CsgoEssentials.Domain.Services
 
         private async Task CheckMapNameDuplicity(Map entity)
         {
-            var maps = await FindAsNoTracking(x => x.Name == entity.Name);
+            var maps = await Find(x => x.Name == entity.Name);
             var map = maps.FirstOrDefault();
 
             if (map != null && map.Id != entity.Id)
@@ -82,7 +68,7 @@ namespace CsgoEssentials.Domain.Services
 
         private async Task CheckMapHasRelationship(Map entity)
         {
-            var map = await GetByIdAsNoTrackingWithRelationship(entity.Id);
+            var map = await GetByIdWithRelationship(entity.Id);
 
             if (map != null && map.Videos.Any())
                 throw new InvalidOperationException(Messages.NAO_FOI_POSSIVEL_REMOVER_MAP_POSSUI_VIDEOS_CADASTRADOS);

@@ -12,9 +12,9 @@ namespace CsgoEssentials.Infra.Repository
         {
 
         }
-        public async Task<Map> GetByIdAsNoTrackingWithRelationship(int id)
+        public async Task<Map> GetByIdWithRelationship(int id)
         {
-            return await _dbContext.Maps.Include(x => x.Videos).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await _dbContext.Maps.AsNoTracking().Include(x => x.Videos).FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

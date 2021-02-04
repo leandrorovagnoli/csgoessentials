@@ -1,6 +1,7 @@
 ﻿using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Interfaces.Services;
 using CsgoEssentials.Infra.Utils;
+using CsgoEssentials.IntegrationTests.Config;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CsgoEssentials.API.Controllers
 {
-    [Route("v1/maps")]
+    [Route(ApiRoutes.Maps.Route)]
     [Authorize(Roles = "Administrator")]
     public class MapController : Controller
     {
@@ -19,7 +20,7 @@ namespace CsgoEssentials.API.Controllers
         {
             try
             {
-                var maps = await MapService.GetAllAsNoTracking();
+                var maps = await MapService.GetAll();
                 return Ok(maps);
             }
             catch
@@ -31,11 +32,11 @@ namespace CsgoEssentials.API.Controllers
         [HttpGet]
         [Route("{id:int}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<IEnumerable<Map>>> GetById(int id, [FromServices] IMapService mapService)
+        public async Task<ActionResult<Map>> GetById(int id, [FromServices] IMapService mapService)
         {
             try
             {
-                var map = await mapService.GetByIdAsNoTracking(id);
+                var map = await mapService.GetById(id);
                 if (map == null)
                     return BadRequest(new { message = Messages.MAPA_NAO_ENCONTRADO });
 
@@ -50,11 +51,11 @@ namespace CsgoEssentials.API.Controllers
         [HttpGet]
         [Route("{id:int}/include")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<Map>> GetByIdWithVideos(int id, [FromServices] IMapService mapService)
+        public async Task<ActionResult<Map>> GetByIdWithRelationship(int id, [FromServices] IMapService mapService)
         {
             try
             {
-                var map = await mapService.GetByIdAsNoTrackingWithRelationship(id);
+                var map = await mapService.GetByIdWithRelationship(id);
                 if (map == null)
                     return BadRequest(new { message = Messages.MAPA_NAO_ENCONTRADO });
 
@@ -68,7 +69,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<Map>> Post(
+        public async Task<ActionResult<Map>> Create(
             [FromServices] IMapService MapService,
             [FromBody] Map map)
         {
@@ -148,6 +149,5 @@ namespace CsgoEssentials.API.Controllers
                 return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
             }
         }
-
     }
 }

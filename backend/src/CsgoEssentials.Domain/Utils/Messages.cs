@@ -71,11 +71,12 @@
         #region Video
 
         public const string VIDEO_NAO_ENCONTRADO = "Video não encontrado.";
+        public const string NENHUM_VIDEO_ENCONTRADO = "Nenhum video encontrado.";
         public const string VIDEO_REMOVIDO_COM_SUCESSO = "Video removido com sucesso.";
         public const string NAO_FOI_POSSIVEL_BUSCAR_OS_VIDEOS = "Não foi possível buscar os videos.";
         public const string NAO_FOI_POSSIVEL_CRIAR_O_VIDEO = "Não foi possível criar o video.";
         public const string NAO_FOI_POSSIVEL_ATUALIZAR_O_VIDEO = "Não foi possível atualizar o video.";
-        
+
         #endregion
     }
 }

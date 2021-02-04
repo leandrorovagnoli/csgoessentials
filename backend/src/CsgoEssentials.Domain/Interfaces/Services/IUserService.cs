@@ -8,6 +8,6 @@ namespace CsgoEssentials.Domain.Interfaces.Services
 {
     public interface IUserService : IService<User>
     {
-        Task<User> GetByIdAsNoTrackingWithRelationship(int id);
+        Task<User> GetByIdWithRelationship(int id);
     }
 }

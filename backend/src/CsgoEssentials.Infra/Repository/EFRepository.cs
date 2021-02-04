@@ -25,6 +25,12 @@ namespace CsgoEssentials.Infra.Repository
             return entity;
         }
 
+        public virtual async Task Update(TEntity entity)
+        {
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task Delete(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
@@ -33,38 +39,17 @@ namespace CsgoEssentials.Infra.Repository
 
         public async Task<IEnumerable<TEntity>> Find(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbContext.Set<TEntity>().Where(predicate).ToListAsync();
-        }
-
-        public async Task<IEnumerable<TEntity>> FindAsNoTracking(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate)
-        {
             return await _dbContext.Set<TEntity>().AsNoTracking().Where(predicate).ToListAsync();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAll()
-        {
-            return await _dbContext.Set<TEntity>().ToListAsync();
-        }
-
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsNoTracking()
         {
             return await _dbContext.Set<TEntity>().AsNoTracking().ToListAsync();
         }
 
         public async Task<TEntity> GetById(int id)
         {
-            return await _dbContext.Set<TEntity>().FindAsync(id);
-        }
-
-        public virtual async Task<TEntity> GetByIdAsNoTracking(int id)
-        {
             return await _dbContext.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        public virtual async Task Update(TEntity entity)
-        {
-            _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -14,9 +14,9 @@ namespace CsgoEssentials.Infra.Repository
 
         }
 
-        public async Task<Article> GetByIdAsNoTrackingWithRelationship(int id)
+        public async Task<Article> GetByIdWithRelationship(int id)
         {
-            return await _dbContext.Articles.Include(x => x.User).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await _dbContext.Articles.AsNoTracking().Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

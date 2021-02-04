@@ -1,6 +1,7 @@
 ﻿using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Interfaces.Services;
 using CsgoEssentials.Infra.Utils;
+using CsgoEssentials.IntegrationTests.Config;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CsgoEssentials.API.Controllers
 {
-    [Route("v1/articles")]
+    [Route(ApiRoutes.Articles.Route)]
     public class ArticleController : Controller
     {
         [HttpGet]
@@ -17,7 +18,7 @@ namespace CsgoEssentials.API.Controllers
         {
             try
             {
-                var articles = await articleService.GetAllAsNoTracking();
+                var articles = await articleService.GetAll();
                 return Ok(articles);
             }
             catch
@@ -28,11 +29,11 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpGet]
         [Route("{id:int}")]
-        public async Task<ActionResult<IEnumerable<Article>>> GetById(int id, [FromServices] IArticleService articleService)
+        public async Task<ActionResult<Article>> GetById(int id, [FromServices] IArticleService articleService)
         {
             try
             {
-                var article = await articleService.GetByIdAsNoTracking(id);
+                var article = await articleService.GetById(id);
                 if (article == null)
                     return BadRequest(new { message = Messages.ARTIGO_NAO_ENCONTRADO });
 
@@ -50,7 +51,7 @@ namespace CsgoEssentials.API.Controllers
         {
             try
             {
-                var article = await articleService.GetByIdAsNoTrackingWithRelationship(id);
+                var article = await articleService.GetByIdWithRelationship(id);
                 if (article == null)
                     return BadRequest(new { message = Messages.ARTIGO_NAO_ENCONTRADO });
 
@@ -64,7 +65,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator,Editor")]
-        public async Task<ActionResult<Article>> Post(
+        public async Task<ActionResult<Article>> Create(
             [FromServices] IArticleService articleService,
             [FromBody] Article article)
         {

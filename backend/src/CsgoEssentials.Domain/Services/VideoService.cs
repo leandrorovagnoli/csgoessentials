@@ -15,11 +15,11 @@ namespace CsgoEssentials.Domain.Services
         private readonly IMapRepository _mapRepository;
         private readonly IUserRepository _userRepository;
 
-        public VideoService(IVideoRepository VideoRepository, IMapRepository MapRepository, IUserRepository UserRepository )
+        public VideoService(IVideoRepository videoRepository, IMapRepository mapRepository, IUserRepository userRepository )
         {
-            _videoRepository = VideoRepository;
-            _mapRepository = MapRepository;
-            _userRepository = UserRepository;
+            _videoRepository = videoRepository;
+            _mapRepository = mapRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<Video> Add(Video entity)
@@ -38,34 +38,19 @@ namespace CsgoEssentials.Domain.Services
         {
             return await _videoRepository.Find(predicate);
         }
-
-        public async Task<IEnumerable<Video>> FindAsNoTracking(Expression<Func<Video, bool>> predicate)
-        {
-            return await _videoRepository.FindAsNoTracking(predicate);
-        }
-
         public async Task<IEnumerable<Video>> GetAll()
         {
             return await _videoRepository.GetAll();
-        }
-
-        public async Task<IEnumerable<Video>> GetAllAsNoTracking()
-        {
-            return await _videoRepository.GetAllAsNoTracking();
         }
 
         public async Task<Video> GetById(int id)
         {
             return await _videoRepository.GetById(id);
         }
-        public async Task<Video> GetByIdAsNoTracking(int id)
-        {
-            return await _videoRepository.GetByIdAsNoTracking(id);
-        }
 
-        public async Task<Video> GetByIdAsNoTrackingWithRelationship(int id)
+        public async Task<Video> GetByIdWithRelationship(int id)
         {
-            return await _videoRepository.GetByIdAsNoTrackingWithRelationship(id);
+            return await _videoRepository.GetByIdWithRelationship(id);
         }
 
         public async Task Update(Video entity)
@@ -75,9 +60,14 @@ namespace CsgoEssentials.Domain.Services
             await _videoRepository.Update(entity);
         }
 
+        public async Task<IList<Video>> Filter(Query query)
+        {
+            return await _videoRepository.Filter(query);
+        }
+
         private async Task ReferencialIntegrityCheckUser(Video entity)
         {
-            var users = await _userRepository.GetByIdAsNoTracking(entity.UserId);
+            var users = await _userRepository.GetById(entity.UserId);
             
             if (users == null)
                 throw new InvalidOperationException(Messages.USUARIO_NAO_ENCONTRADO);
@@ -85,11 +75,11 @@ namespace CsgoEssentials.Domain.Services
 
         private async Task ReferencialIntegrityCheckMap(Video entity)
         {
-            var maps = await _mapRepository.GetByIdAsNoTracking(entity.MapId);
+            var maps = await _mapRepository.GetById(entity.MapId);
             
             if (maps == null)
                 throw new InvalidOperationException(Messages.MAPA_EXISTENTE);
-        }        
+        }
     }
 }
 

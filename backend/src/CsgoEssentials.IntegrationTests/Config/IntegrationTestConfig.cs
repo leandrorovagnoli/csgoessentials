@@ -15,6 +15,7 @@ namespace CsgoEssentials.IntegrationTests.Config
     {
         protected readonly HttpClient Client;
         private readonly WebApplicationFactory<Startup> _appFactory;
+        protected readonly string _baseUrl = "https://localhost:5001/";
 
         protected IntegrationTestConfig()
         {

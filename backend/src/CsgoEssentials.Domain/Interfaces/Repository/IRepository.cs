@@ -10,11 +10,8 @@ namespace CsgoEssentials.Domain.Interfaces.Repository
         Task<TEntity> Add(TEntity entity);
         Task Update(TEntity entity);
         Task<TEntity> GetById(int id);
-        Task<TEntity> GetByIdAsNoTracking(int id);
         Task<IEnumerable<TEntity>> GetAll();
-        Task<IEnumerable<TEntity>> GetAllAsNoTracking();
         Task Delete(TEntity entity);
         Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
-        Task<IEnumerable<TEntity>> FindAsNoTracking(Expression<Func<TEntity, bool>> predicate);
     }
 }

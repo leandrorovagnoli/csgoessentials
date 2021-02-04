@@ -1,23 +1,26 @@
 ﻿using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Interfaces.Services;
 using CsgoEssentials.Infra.Utils;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
+using CsgoEssentials.IntegrationTests.Config;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CsgoEssentials.API.Controllers
 {
-    [Route("v1/videos")]
+    [Route(ApiRoutes.Videos.Route)]
     public class VideoController : Controller
     {
         [HttpGet]
+        [Route(ApiRoutes.Videos.GetAll)]
         public async Task<ActionResult<IEnumerable<Video>>> GetAll([FromServices] IVideoService VideoService)
         {
             try
             {
-                var videos = await VideoService.GetAllAsNoTracking();
+                var videos = await VideoService.GetAll();
                 return Ok(videos);
             }
             catch
@@ -27,12 +30,12 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
-        public async Task<ActionResult<IEnumerable<Video>>> GetById(int id, [FromServices] IVideoService videoService)
+        [Route(ApiRoutes.Videos.GetById)]
+        public async Task<ActionResult<Video>> GetById(int id, [FromServices] IVideoService videoService)
         {
             try
             {
-                var video = await videoService.GetByIdAsNoTracking(id);
+                var video = await videoService.GetById(id);
                 if (video == null)
                     return BadRequest(new { message = Messages.VIDEO_NAO_ENCONTRADO });
 
@@ -45,12 +48,12 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}/include")]
+        [Route(ApiRoutes.Videos.GetByIdWithRelationship)]
         public async Task<ActionResult<Article>> GetByIdWithRelationship(int id, [FromServices] IVideoService videoService)
         {
             try
             {
-                var video = await videoService.GetByIdAsNoTrackingWithRelationship(id);
+                var video = await videoService.GetByIdWithRelationship(id);
                 if (video == null)
                     return BadRequest(new { message = Messages.VIDEO_NAO_ENCONTRADO });
 
@@ -62,9 +65,31 @@ namespace CsgoEssentials.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route(ApiRoutes.Videos.Filter)]
+        public async Task<ActionResult<IEnumerable<Video>>> Filter(
+            [FromQuery] Query query,
+            [FromServices] IVideoService videoService)
+        {
+            try
+            {
+                var videos = await videoService.Filter(query);
+
+                if (!videos.Any())
+                    return BadRequest(new { message = Messages.NENHUM_VIDEO_ENCONTRADO });
+
+                return Ok(videos);
+            }
+            catch
+            {
+                return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
+            }
+        }
+
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<Video>> Post(
+        [Route(ApiRoutes.Videos.Create)]
+        public async Task<ActionResult<Video>> Create(
             [FromServices] IVideoService VideoService,
             [FromBody] Video video)
         {
@@ -88,9 +113,9 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Videos.Update)]
         [Authorize(Roles = "Administrator")]
-        public ActionResult<Video> Put(
+        public ActionResult<Video> Update(
             int id,
             [FromServices] IVideoService VideoService,
             [FromBody] Video video)
@@ -118,7 +143,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Videos.Delete)]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Video>> Delete(
             int id,
@@ -140,6 +165,5 @@ namespace CsgoEssentials.API.Controllers
                 return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
             }
         }
-
     }
 }

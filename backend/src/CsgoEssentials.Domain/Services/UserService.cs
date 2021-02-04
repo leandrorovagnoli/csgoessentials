@@ -38,19 +38,9 @@ namespace CsgoEssentials.Domain.Services
             return await _userRepository.Find(predicate);
         }
 
-        public async Task<IEnumerable<User>> FindAsNoTracking(Expression<Func<User, bool>> predicate)
-        {
-            return await _userRepository.FindAsNoTracking(predicate);
-        }
-
         public async Task<IEnumerable<User>> GetAll()
         {
             return await _userRepository.GetAll();
-        }
-
-        public async Task<IEnumerable<User>> GetAllAsNoTracking()
-        {
-            return await _userRepository.GetAllAsNoTracking();
         }
 
         public async Task<User> GetById(int id)
@@ -58,14 +48,9 @@ namespace CsgoEssentials.Domain.Services
             return await _userRepository.GetById(id);
         }
 
-        public async Task<User> GetByIdAsNoTracking(int id)
+        public async Task<User> GetByIdWithRelationship(int id)
         {
-            return await _userRepository.GetByIdAsNoTracking(id);
-        }
-
-        public async Task<User> GetByIdAsNoTrackingWithRelationship(int id)
-        {
-            return await _userRepository.GetByIdAsNoTrackingWithRelationship(id);
+            return await _userRepository.GetByIdWithRelationship(id);
         }
 
         public async Task Update(User entity)
@@ -86,14 +71,14 @@ namespace CsgoEssentials.Domain.Services
             }
 
             //updating user
-            var user = await GetByIdAsNoTracking(entity.Id);
+            var user = await GetById(entity.Id);
             if (user != null && user.Password != entity.Password)
                 entity.Password = MD5Hash.CalculaHash(entity.Password);
         }
 
         private async Task CheckUserNameDuplicity(User entity)
         {
-            var users = await FindAsNoTracking(x => x.UserName == entity.UserName);
+            var users = await Find(x => x.UserName == entity.UserName);
             var user = users.FirstOrDefault();
 
             if (user != null && user.Id != entity.Id)
@@ -105,7 +90,7 @@ namespace CsgoEssentials.Domain.Services
             if (entity.Id == 0)
                 return;
 
-            var users = await FindAsNoTracking(x => x.Id == entity.Id);
+            var users = await Find(x => x.Id == entity.Id);
             var user = users.FirstOrDefault();
 
             if (user != null && user.UserName != entity.UserName)
@@ -114,7 +99,7 @@ namespace CsgoEssentials.Domain.Services
 
         private async Task CheckUserHasRelationship(User entity)
         {
-            var user = await GetByIdAsNoTrackingWithRelationship(entity.Id);
+            var user = await GetByIdWithRelationship(entity.Id);
 
             if (user != null && (user.Articles.Any() || user.Videos.Any()))
                 throw new InvalidOperationException(Messages.NAO_FOI_POSSIVEL_REMOVER_USUARIO_POSSUI_ARTIGOS_OU_VIDEOS_CADASTRADOS);

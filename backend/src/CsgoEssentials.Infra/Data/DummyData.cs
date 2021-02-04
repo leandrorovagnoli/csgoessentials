@@ -119,6 +119,10 @@ namespace CsgoEssentials.Infra.Data
                 "Dust2",
                 "As melhores smokes do Mapa Dust2");
 
+            var _infernoMap = new Map(
+                "Inferno",
+                "As melhores smokes do Mapa Inferno");
+
             var _mirageMap = new Map(
                 "Mirage",
                 "As melhores smokes do Mapa Mirage");
@@ -127,11 +131,7 @@ namespace CsgoEssentials.Infra.Data
                 "Overpass",
                 "As melhores smokes do Mapa Overpass");
 
-            var _infernoMap = new Map(
-                "Inferno",
-                "As melhores smokes do Mapa Inferno");
-
-            context.Maps.AddRange(_dust2Map, _infernoMap);
+            context.Maps.AddRange(_dust2Map, _infernoMap, _mirageMap, _overpassMap);
             await context.SaveChangesAsync();
         }
 
@@ -145,20 +145,28 @@ namespace CsgoEssentials.Infra.Data
             if (videos != null && videos.Any())
                 return;
 
-            var user = await context
+            var userLeolandrooo = await context
                 .Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.UserName == "leolandrooo");
 
-            if (user == null)
+            if (userLeolandrooo == null)
                 return;
 
-            var map = await context
+            var mapDust2 = await context
                 .Maps
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Name == "Dust2");
 
-            if (map == null)
+            if (mapDust2 == null)
+                return;
+
+            var mapMirage = await context
+                .Maps
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Name == "Mirage");
+
+            if (mapMirage == null)
                 return;
 
             var _video1 = new Video(
@@ -168,31 +176,74 @@ namespace CsgoEssentials.Infra.Data
                 ETick.Tick128,
                 "Video demonstracao de uma smoke fundo na d2",
                 "http://www.videotesteprj.com",
-                user.Id,
-                map.Id);
+                userLeolandrooo.Id,
+                mapDust2.Id);
 
             var _video2 = new Video(
-                "Smoke Mirage",
+                "Molotov Varanda D2",
                 new DateTime(2021, 01, 10),
-                EGrenadeType.Smoke,
+                EGrenadeType.Molotov,
                 ETick.Tick128,
-                "Video demonstracao de uma smoke fundo na Mirage",
+                "Video demonstracao de uma molotov Varanda D2",
                 "http://www.videotesteprj.com",
-                user.Id,
-                map.Id);
+                userLeolandrooo.Id,
+                mapDust2.Id);
 
             var _video3 = new Video(
-               "Smoke Varanda D2",
-               new DateTime(2021, 01, 10),
-               EGrenadeType.Smoke,
-               ETick.Tick128,
-               "Video demonstracao de uma smoke Varanda D2",
-               "http://www.videotesteprj.com",
-               user.Id,
-               map.Id);
+                "Smoke Bomb A",
+                new DateTime(2021, 01, 10),
+                EGrenadeType.Smoke,
+                ETick.Tick64,
+                "Video demonstracao de uma smoke Bomb A",
+                "http://www.videotesteprj.com",
+                userLeolandrooo.Id,
+                mapDust2.Id);
 
-            context.Videos.AddRange(_video1, _video2, _video3);
+            var _video4 = new Video(
+                "Smoke A Mirage",
+                new DateTime(2021, 01, 10),
+                EGrenadeType.Smoke,
+                ETick.Tick64,
+                "Video demonstracao de uma smoke A na Mirage",
+                "http://www.videotesteprj.com",
+                userLeolandrooo.Id,
+                mapMirage.Id);
+
+            var _video5 = new Video(
+                "Smoke B Mirage",
+                new DateTime(2021, 01, 10),
+                EGrenadeType.Smoke,
+                ETick.Tick64,
+                "Video demonstracao de uma smoke B na Mirage",
+                "http://www.videotesteprj.com",
+                userLeolandrooo.Id,
+                mapMirage.Id);
+
+            context.Videos.AddRange(_video1, _video2, _video3, _video4, _video5);
             await context.SaveChangesAsync();
         }
+    }
+
+    /// <summary>
+    /// Enum to simplify the way we get the id for tests purposes (using in memory database)
+    /// </summary>
+    public enum EDummyTestId
+    {
+        User1Leolandrooo = 1,
+        User2Rock = 2,
+        User3Jalaska = 3,
+        User4Joao = 4,
+        User5Maria = 5,
+        Article1BestGrenadeUserMaria = 1,
+        Article2SmokeLineupUserMaria = 2,
+        Map1Dust2 = 1,
+        Map2Inferno = 2,
+        Map3Mirage = 3,
+        Map4Overpass = 4,
+        Video1Dust2UserLeolandroooSmokeTick128 = 1,
+        Video2Dust2UserLeolandroooMolotovTick128 = 2,
+        Video3Dust2UserLeolandroooSmokeTick64 = 3,
+        Video4MirageUserLeolandroooSmokeTick64 = 4,
+        Video5MirageUserLeolandroooSmokeTick64 = 5
     }
 }

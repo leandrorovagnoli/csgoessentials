@@ -5,6 +5,6 @@ namespace CsgoEssentials.Domain.Interfaces.Repository
 {
     public interface IMapRepository : IRepository<Map>
     {
-        Task<Map> GetByIdAsNoTrackingWithRelationship(int id);
+        Task<Map> GetByIdWithRelationship(int id);
     }
 }

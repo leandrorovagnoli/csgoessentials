@@ -8,6 +8,8 @@ namespace CsgoEssentials.Domain.Interfaces.Services
 {
     public interface IVideoService : IService<Video>
     {
-        Task<Video> GetByIdAsNoTrackingWithRelationship(int id);
+        Task<Video> GetByIdWithRelationship(int id);
+
+        Task<IList<Video>> Filter(Query query);
     }
 }

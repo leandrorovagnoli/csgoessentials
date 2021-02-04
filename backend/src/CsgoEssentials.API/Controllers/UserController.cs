@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using CsgoEssentials.IntegrationTests.Config;
 
 namespace CsgoEssentials.API.Controllers
 {
-    [Route("v1/users")]
+    [Route(ApiRoutes.Users.Route)]
     [Authorize(Roles = "Administrator")]
     public class UserController : Controller
     {
@@ -20,7 +21,7 @@ namespace CsgoEssentials.API.Controllers
         {
             try
             {
-                var users = await userService.GetAllAsNoTracking();
+                var users = await userService.GetAll();
                 return Ok(users);
             }
             catch
@@ -32,11 +33,11 @@ namespace CsgoEssentials.API.Controllers
         [HttpGet]
         [Route("{id:int}")]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<IEnumerable<User>>> GetById(int id, [FromServices] IUserService userService)
+        public async Task<ActionResult<User>> GetById(int id, [FromServices] IUserService userService)
         {
             try
             {
-                var user = await userService.GetByIdAsNoTracking(id);
+                var user = await userService.GetById(id);
                 if (user == null)
                     return BadRequest(new { message = Messages.USUARIO_NAO_ENCONTRADO });
 
@@ -55,7 +56,7 @@ namespace CsgoEssentials.API.Controllers
         {
             try
             {
-                var user = await userService.GetByIdAsNoTrackingWithRelationship(id);
+                var user = await userService.GetByIdWithRelationship(id);
                 if (user == null)
                     return BadRequest(new { message = Messages.USUARIO_NAO_ENCONTRADO });
 
@@ -69,7 +70,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<User>> Post(
+        public async Task<ActionResult<User>> Create(
             [FromServices] IUserService userService,
             [FromBody] User user)
         {

@@ -430,7 +430,7 @@ namespace CsgoEssentials.IntegrationTests.UserTests
         }
 
         [Fact]
-        public async Task Delete_Nao_Deve_Apagar_Usuario_Que_Possui_Artigos_Relacionados()
+        public async Task Delete_Nao_Deve_Apagar_Usuario_Que_Possui_Relacionamentos()
         {
             //Arrange
             await AuthenticateAsync();
