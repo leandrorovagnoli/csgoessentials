@@ -57,6 +57,7 @@ namespace CsgoEssentials.Domain.Entities
 
         [DisplayName(Messages.VIDEOURL)]
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [Url(ErrorMessage = Messages.URL_INVALIDA)]
         [StringLength(maximumLength: 100, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 2)]
         public string VideoURL { get; set; }
 

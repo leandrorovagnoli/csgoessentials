@@ -71,6 +71,7 @@
         #region Video
 
         public const string VIDEO_NAO_ENCONTRADO = "Video não encontrado.";
+        public const string URL_INVALIDA = "URL inválida.";
         public const string NENHUM_VIDEO_ENCONTRADO = "Nenhum video encontrado.";
         public const string VIDEO_REMOVIDO_COM_SUCESSO = "Video removido com sucesso.";
         public const string NAO_FOI_POSSIVEL_BUSCAR_OS_VIDEOS = "Não foi possível buscar os videos.";

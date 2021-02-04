@@ -39,6 +39,20 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         #region Create
 
         [Fact]
+        public async Task Create_Deve_Invalidar_Campo_URL()
+        {
+            await AuthenticateAsync();
+            _newVideo.VideoURL = "hpplnao@nao";
+            var response = await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
+            var message = await response.Content.ReadAsStringAsync();
+
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            message.Contains(Messages.URL_INVALIDA);
+            //jsonModel.Message.Should().Be(Messages.URL_INVALIDA);
+
+        }
+
+        [Fact]
         public async Task Create_Deve_Retornar_O_Video_Criado()
         {
             //Arrange
@@ -252,6 +266,52 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
             articleResult.ReleaseDate.Should().Be(video.ReleaseDate);
             articleResult.Description.Should().Be(video.Description);
 
+        }
+
+        [Fact]
+        public async Task Update_Deve_Invalidar_Um_Campo_Menor_Que_O_Obrigatorio()
+        {
+            //Arrange
+            await AuthenticateAsync();
+            var responseAux = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.GetById.Replace("{id:int}", "1"));
+            var video = await responseAux.Content.ReadAsAsync<Video>();
+
+            responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
+            video.Should().NotBeNull();
+
+            //Act
+            video.VideoURL = "o";
+
+            var response = await Client.PutAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Update.Replace("{id:int}", "1"), video);
+            var content = await response.Content.ReadAsStringAsync();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.VIDEOURL, "100", "2"));
+        }
+
+        [Fact]
+        public async Task Update_Deve_Invalidar_Um_Campo_Maior_Que_O_Obrigatorio()
+        {
+            await AuthenticateAsync();
+            var responseAux = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.GetById.Replace("{id:int}", "1"));
+            var video = await responseAux.Content.ReadAsAsync<Video>();
+
+            responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
+            video.Should().NotBeNull();
+
+            //Act
+            video.Title = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit.Aenean commodo " +
+               "ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis " +
+               "dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies " +
+               "nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.";
+
+            var response = await Client.PutAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Update.Replace("{id:int}", "1"), video);
+            var content = await response.Content.ReadAsStringAsync();
+
+            //Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.TITULO, "60", "4"));
         }
 
         #endregion
@@ -530,61 +590,9 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
 
         #endregion
 
-        [Fact]
-        public async Task Filter_Nao_Deve_Retornar_Um_Video_Se_O_Tick_Informado_For_Diferente()
-        {
-            //Arrange
-            await AuthenticateAsync();
-        }
 
-        [Fact]
-        public async Task Update_Deve_Invalidar_Um_Campo_Menor_Que_O_Obrigatorio()
-        {
-            //Arrange
-            await AuthenticateAsync();
-        }
 
-        [Fact]
-        public async Task Update_Deve_Invalidar_Um_Campo_Maior_Que_O_Obrigatorio()
-        {
-            //Arrange
-            await AuthenticateAsync();
-        }
 
-        [Fact]
-        public async Task Delete_Nao_Deve_Deletar_O_Map_Se_Usuario_For_Diferente_De_Admin()
-        {
-            //Arrange
-            await AuthenticateAsync();
-        }
-
-        [Fact]
-        public async Task Delete_Deve_Validar_Se_Usuario_For_Admin()
-        {
-            //Arrange
-            await AuthenticateAsync();
-        }
-
-        [Fact]
-        public async Task Create_Deve_Invalidar_Se_Não_Existir_Um_Mapa_Associado_Ao_Video()
-        {
-            //Arrange
-            await AuthenticateAsync();
-        }
-
-        [Fact]
-        public async Task Create_Deve_Invalidar_Se_Não_Existir_Um_Usuario_Associado_Ao_Video()
-        {
-            //Arrange
-            await AuthenticateAsync();
-        }
-
-        [Fact]
-        public async Task Create_Deve_Invalidar_Se_Não_Existir_Um_Mapa_E_Usuario_Associado_Ao_Video()
-        {
-            //Arrange
-            await AuthenticateAsync();
-        }
 
     }
 }
