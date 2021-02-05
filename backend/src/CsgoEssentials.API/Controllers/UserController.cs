@@ -17,6 +17,7 @@ namespace CsgoEssentials.API.Controllers
     public class UserController : Controller
     {
         [HttpGet]
+        [Route(ApiRoutes.Users.GetAll)]
         public async Task<ActionResult<IEnumerable<User>>> GetAll([FromServices] IUserService userService)
         {
             try
@@ -31,7 +32,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Users.GetById)]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<User>> GetById(int id, [FromServices] IUserService userService)
         {
@@ -50,7 +51,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}/include")]
+        [Route(ApiRoutes.Users.GetByIdWithRelationship)]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<User>> GetByIdWithRelationship(int id, [FromServices] IUserService userService)
         {
@@ -69,6 +70,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpPost]
+        [Route(ApiRoutes.Users.Create)]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<User>> Create(
             [FromServices] IUserService userService,
@@ -94,9 +96,9 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Users.Update)]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<User>> Put(
+        public async Task<ActionResult<User>> Update(
             int id,
             [FromServices] IUserService userService,
             [FromBody] User user)
@@ -123,7 +125,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Users.Delete)]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<User>> Delete(
             int id,
@@ -151,7 +153,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route(ApiRoutes.Users.Authenticate)]
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate(
             [FromServices] IUserService userService,
@@ -173,7 +175,9 @@ namespace CsgoEssentials.API.Controllers
                     user = new
                     {
                         id = user.Id,
+                        name = user.Name,
                         username = user.UserName,
+                        email = user.Email,
                         role = user.Role.ToString()
                     },
 

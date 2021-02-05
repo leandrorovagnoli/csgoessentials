@@ -41,7 +41,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         [Fact]
         public async Task Create_Deve_Invalidar_Campo_URL()
         {
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             _newVideo.VideoURL = "hpplnao@nao";
             var response = await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
             var message = await response.Content.ReadAsStringAsync();
@@ -56,7 +56,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Create_Deve_Retornar_O_Video_Criado()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             //Act
             var response = await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
@@ -74,7 +74,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Create_Deve_Invalidar_O_Title_Vazio()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
 
             _newVideo.Title = string.Empty;
@@ -92,7 +92,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Create_Deve_Validar_Se_UserId_Estiver_Setado()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             //Act
             var response = await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
@@ -107,7 +107,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Create_Deve_Invalidar_Se_Houver_UserId_Invalido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             _newVideo.UserId = 999;
             //Act
@@ -124,7 +124,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Create_Deve_Invalidar_O_Campo_Title_Menor_Que_O_Permitido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
 
             _newVideo.Title = "oi";
@@ -142,7 +142,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Create_Deve_Invalidar_Nome_De_Usuario_Maior_Do_Que_Permitido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
 
             _newVideo.Title = "Lorem ipsum odio auctor lorem augue lacus leo curae viverra nostra," +
@@ -162,7 +162,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Create_Deve_Invalidar_Se_Campo_Description_Nao_For_Preenchido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
 
             _newVideo.Description = null;
@@ -180,7 +180,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Create_Deve_Invalidar_Description_Se_For_Menor_Do_Que_O_Permitido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
 
             _newVideo.Description = "Ola";
@@ -202,7 +202,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Update_Deve_Atualizar_O_Campo_Title_Do_Video_Existente_No_Banco()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             var responseAux = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.GetById.Replace("{id:int}", "1"));
             var video = await responseAux.Content.ReadAsAsync<Video>();
@@ -224,7 +224,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Update_Nao_Deve_Atualizar_Os_Campos_Do_Video_Com_Id_Diferente()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
             var videoResp = await responseAux.Content.ReadAsAsync<Video>();
 
@@ -246,7 +246,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Update_Deve_Atualizar_Todos_Campos_Do_Video()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             var responseAux = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.GetById.Replace("{id:int}", "1"));
             var video = await responseAux.Content.ReadAsAsync<Video>();
@@ -272,7 +272,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Update_Deve_Invalidar_Um_Campo_Menor_Que_O_Obrigatorio()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.GetById.Replace("{id:int}", "1"));
             var video = await responseAux.Content.ReadAsAsync<Video>();
 
@@ -293,7 +293,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         [Fact]
         public async Task Update_Deve_Invalidar_Um_Campo_Maior_Que_O_Obrigatorio()
         {
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.GetAsync(_defaultRoute + ApiRoutes.Videos.GetById.Replace("{id:int}", "1"));
             var video = await responseAux.Content.ReadAsAsync<Video>();
 
@@ -322,7 +322,7 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         public async Task Delete_Deve_Apagar_Um_Video_Existente_Retornando_Mensagem()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Videos.Create, _newVideo);
             var videoAux = await responseAux.Content.ReadAsAsync<Video>();
 
@@ -589,11 +589,6 @@ namespace CsgoEssentials.IntegrationTests.VideoTests
         }
 
         #endregion
-
-
-
-
-
     }
 }
 

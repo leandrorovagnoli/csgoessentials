@@ -8,21 +8,19 @@
         {
             public const string Route = "v1/users";
 
-            private static readonly string _usersControllerUrl = string.Concat(_baseUrl, Route);
+            public const string GetAll = "";
 
-            public static readonly string GetAll = _usersControllerUrl;
+            public const string Create = "";
 
-            public static readonly string Create = _usersControllerUrl;
+            public const string GetById = "{id:int}";
 
-            public static readonly string GetById = string.Concat(_usersControllerUrl, "/{userId}");
+            public const string GetByIdWithRelationship = "{id:int}/include";
 
-            public static readonly string GetByIdWithRelationship = string.Concat(_usersControllerUrl, "/{userId}/include");
+            public const string Delete = "{id:int}";
 
-            public static readonly string Delete = string.Concat(_usersControllerUrl, "/{userId}");
+            public const string Update = "{id:int}";
 
-            public static readonly string Update = string.Concat(_usersControllerUrl, "/{userId}");
-
-            public static readonly string Authenticate = string.Concat(_usersControllerUrl, "/login");
+            public const string Authenticate = "login";
         }
 
         public static class Maps

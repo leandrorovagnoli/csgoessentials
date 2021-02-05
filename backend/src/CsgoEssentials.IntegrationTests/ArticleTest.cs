@@ -1,4 +1,5 @@
 using CsgoEssentials.Domain.Entities;
+using CsgoEssentials.Domain.Enum;
 using CsgoEssentials.Infra.Utils;
 using CsgoEssentials.IntegrationTests.Config;
 using FluentAssertions;
@@ -33,12 +34,11 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         public async Task Create_Deve_Retornar_O_Artigo_Criado()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
             var article = await response.Content.ReadAsAsync<Article>();
-
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -46,21 +46,23 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             article.Title.Should().Be(_newArticle.Title);
             article.ReleaseDate.Should().Be(_newArticle.ReleaseDate);
             article.Description.Should().Be(_newArticle.Description);
-
         }
 
         [Fact]
-        public async Task Create_Deve_Retornar_O_Artigo_Criado_E_Outros_Que_Ja_Foram_Criados_Por_Aquele_Usuario()
+        public async Task Create_Deve_Retornar_O_Artigo_Criado_Com_Usuario_Associado()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             //Act
-            var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
-            var article = await response.Content.ReadAsAsync<Article>();
+            var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
+            var articleAux = await responseAux.Content.ReadAsAsync<Article>();
 
-            var responseUser = await Client.GetAsync(ApiRoutes.Users.GetByIdWithRelationship.Replace("{userId}", "5"));
-            var user = await responseUser.Content.ReadAsAsync<User>();
+            responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
+            articleAux.Id.Should().BeGreaterThan(0);
+
+            var response = await Client.GetAsync(ApiRoutes.Articles.GetByIdWithRelationship.Replace("{articleId}", articleAux.Id.ToString()));
+            var article = await response.Content.ReadAsAsync<Article>();
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -68,23 +70,24 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             article.Title.Should().Be(_newArticle.Title);
             article.ReleaseDate.Should().Be(_newArticle.ReleaseDate);
             article.Description.Should().Be(_newArticle.Description);
-            user.Articles.Should().HaveCount(3);
+            article.User.Should().NotBeNull();
+            article.User.Id.Should().Be(article.UserId);
         }
 
         [Fact]
         public async Task GetById_Deve_Retornar_Um_Unico_Artigo()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
-            var oneArticle = await responseAux.Content.ReadAsAsync<Article>();
+            var articleAux = await responseAux.Content.ReadAsAsync<Article>();
 
             responseAux.StatusCode.Should().Be(HttpStatusCode.OK);
-            oneArticle.Should().NotBeNull().And.Equals(_newArticle);
+            articleAux.Should().NotBeNull().And.Equals(_newArticle);
 
             //Act
-            var response = await Client.GetAsync(ApiRoutes.Articles.GetById.Replace("{articleId}", oneArticle.Id.ToString()));
+            var response = await Client.GetAsync(ApiRoutes.Articles.GetById.Replace("{articleId}", articleAux.Id.ToString()));
             var article = await response.Content.ReadAsAsync<Article>();
 
             //Assert
@@ -98,13 +101,11 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         [Fact]
         public async Task GetAll_Deve_Exibir_Todos_Artigos()
         {
-
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             //act
             var response = await Client.GetAsync(ApiRoutes.Articles.GetAll);
             var articles = await response.Content.ReadAsAsync<List<Article>>();
-
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -115,7 +116,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         public async Task GetById_Deve_Retornar_Um_Artigo_Nao_Encontrado_Se_Não_Criado()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             //Act
             var response = await Client.GetAsync(ApiRoutes.Articles.GetById.Replace("{articleId}", "9999"));
@@ -124,14 +125,13 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             jsonModel.Message.Should().Be(Messages.ARTIGO_NAO_ENCONTRADO);
-
         }
 
         [Fact]
         public async Task Update_Deve_Atualizar_O_Campo_Title_Do_Artigo_Existente_No_Banco()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             var responseAux = await Client.GetAsync(ApiRoutes.Articles.GetById.Replace("{articleId}", "1"));
             var article = await responseAux.Content.ReadAsAsync<Article>();
@@ -146,14 +146,13 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             title.Id.Should().BeGreaterThan(0);
             title.Title.Should().Be("Bomba gira mais que tudo");
-
         }
 
         [Fact]
         public async Task Update_Nao_Deve_Atualizar_Os_Campos_Do_Artigo_Com_Id_Diferente()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
             var articleResp = await responseAux.Content.ReadAsAsync<Article>();
 
@@ -175,7 +174,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         public async Task Update_Deve_Atualizar_Todos_Campos_Do_Artigo()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
 
             var responseAux = await Client.GetAsync(ApiRoutes.Articles.GetById.Replace("{articleId}", "1"));
@@ -184,7 +183,6 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             article.Title = "Bomba gira mais que tudo";
             article.ReleaseDate = new DateTime(1980, 05, 02);
             article.Description = "Nova Description agora";
-
 
             //Act
             var response = await Client.PutAsJsonAsync(ApiRoutes.Articles.Update.Replace("{articleId}", article.Id.ToString()), article);
@@ -196,14 +194,13 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             articleResult.Title.Should().Be("Bomba gira mais que tudo");
             articleResult.ReleaseDate.Should().Be(article.ReleaseDate);
             articleResult.Description.Should().Be(article.Description);
-
         }
 
         [Fact]
         public async Task Delete_Deve_Apagar_Um_Artigo_Existente_Retornando_Mensagem()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
             var articleAux = await responseAux.Content.ReadAsAsync<Article>();
 
@@ -223,7 +220,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         public async Task Create_Deve_Invalidar_O_Title_Vazio()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
             _newArticle.Title = string.Empty;
@@ -240,9 +237,8 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         [Fact]
         public async Task Create_Deve_Validar_Se_UserId_Estiver_Setado()
         {
-
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
@@ -252,14 +248,13 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             article.UserId.Should().BeGreaterThan(0);
-
         }
 
-        [Fact] 
+        [Fact]
         public async Task Create_Deve_Invalidar_Se_Houver_UserId_Invalido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             _newArticle.UserId = 999;
 
@@ -270,14 +265,13 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
             content.Should().Contain(Messages.USUARIO_NAO_ENCONTRADO);
-
         }
 
         [Fact]
         public async Task Create_Deve_Invalidar_O_Campo_Title_Menor_Que_O_Permitido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Users.Create, _newArticle);
 
             _newArticle.Title = "oi";
@@ -285,8 +279,6 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
             var content = await response.Content.ReadAsStringAsync();
-
-
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -297,7 +289,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         public async Task Create_Deve_Invalidar_Nome_De_Usuario_Maior_Do_Que_Permitido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
             _newArticle.Title = "Lorem ipsum odio auctor lorem augue lacus leo curae viverra nostra," +
@@ -317,7 +309,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         public async Task Create_Deve_Invalidar_Se_Campo_Description_Nao_For_Preenchido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
             _newArticle.Description = null;
@@ -335,7 +327,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         public async Task Create_Deve_Invalidar_Description_Se_For_Menor_Do_Que_O_Permitido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Articles.Create, _newArticle);
 
             _newArticle.Description = "Ola";
@@ -353,7 +345,7 @@ namespace CsgoEssentials.IntegrationTests.ArticleTests
         public async Task GetById_Deve_Retornar_Um_Artigo_Existente_Com_Seu_Usuario_Associado()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             //Act
             var response = await Client.GetAsync(ApiRoutes.Articles.GetByIdWithRelationship.Replace("{articleId}", "1"));

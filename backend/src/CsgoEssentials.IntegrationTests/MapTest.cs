@@ -1,4 +1,5 @@
 ﻿using CsgoEssentials.Domain.Entities;
+using CsgoEssentials.Domain.Enum;
 using CsgoEssentials.Infra.Utils;
 using CsgoEssentials.IntegrationTests.Config;
 using FluentAssertions;
@@ -24,7 +25,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Create_Deve_Criar_Mapa_Retornando_Mapa_Criado()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             //Act
             var response = await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
@@ -40,7 +41,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task GetById_Deve_Retornar_Um_Mapa_Do_Banco()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
             var mapAux = await responseAux.Content.ReadAsAsync<Map>();
@@ -62,7 +63,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task GetById_Deve_Retornar_Uma_Descricao_Do_Banco()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
             var mapAux = await responseAux.Content.ReadAsAsync<Map>();
@@ -84,7 +85,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task GetById_Deve_Retornar_Mapa_Nao_Encontrado_Quando_Id_Nao_Existir()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
 
             //Act
             var response = await Client.GetAsync(ApiRoutes.Maps.GetById.Replace("{mapId}", "9999"));
@@ -99,7 +100,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Update_Deve_Atualizar_Mapa_Existente()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.GetAsync(ApiRoutes.Maps.GetById.Replace("{mapId}", "2"));
             var mapAux = await responseAux.Content.ReadAsAsync<Map>();
 
@@ -119,7 +120,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Create_Nao_Deve_Inserir_Mapa_Novo_Se_Houver_Map_Com_Mesmo_Nome()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
             var mapAux = await responseAux.Content.ReadAsAsync<Map>();
 
@@ -139,7 +140,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Update_Nao_Deve_Atualizar_Mapa_Com_Id_Diferente_Do_Editado_Retornando_NotFound()
         {
             //Arrangew
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.GetAsync(ApiRoutes.Maps.GetById.Replace("{mapId}", "2"));
             var mapAux = await responseAux.Content.ReadAsAsync<Map>();
 
@@ -158,7 +159,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Update_Deve_Atualizar_Mapa_Existente_Com_Nova_Descricao()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.GetAsync(ApiRoutes.Maps.GetById.Replace("{mapId}", "2"));
             var mapAux = await responseAux.Content.ReadAsAsync<Map>();
 
@@ -179,7 +180,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Delete_Deve_Apagar_Mapa_Existente_Retornando_Mensagem()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
             var userAux = await responseAux.Content.ReadAsAsync<Map>();
 
@@ -199,7 +200,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Create_Deve_Invalidar_MapName_Vazio()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
 
             _newMap.Name = string.Empty;
@@ -217,7 +218,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Create_Nao_Deve_CriarMap_Com_Descricao_De_Mapa_Vazio()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
 
             _newMap.Description = string.Empty;
@@ -234,7 +235,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Create_Deve_Invalidar_Nome_Menor_Do_Que_Permitido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
 
             _newMap.Name = "Le";
@@ -252,7 +253,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Create_Deve_Invalidar_Nome_De_Mapa_Maior_Do_Que_Permitido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
 
             _newMap.Name = "nomedeusuariomuitograndenomedeusuariomuitograndenomedeusuariomuitogrande";
@@ -270,7 +271,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Create_Deve_Invalidar_Descricao_De_Mapa_Maior_Do_Que_Permitido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
 
             _newMap.Description = "nomedeusuariomuitograndenomedeusuariomuitograndenomedeusuariomuitogrande";
@@ -288,7 +289,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Create_Deve_Invalidar_Descricao_De_Mapa_Menor_Do_Que_Permitido()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(ApiRoutes.Maps.Create, _newMap);
 
             _newMap.Description = "OU";
@@ -306,7 +307,7 @@ namespace CsgoEssentials.IntegrationTests.MapTests
         public async Task Delete_Nao_Deve_Apagar_Map_Que_Possui_Videos_Relacionados()
         {
             //Arrange
-            await AuthenticateAsync();
+            await AuthenticateAsync(EUserRole.Administrator);
             var responseAux = await Client.GetAsync(ApiRoutes.Maps.GetByIdWithRelationship.Replace("{mapId}", "1"));
             var map = await responseAux.Content.ReadFromJsonAsync<Map>();
 
