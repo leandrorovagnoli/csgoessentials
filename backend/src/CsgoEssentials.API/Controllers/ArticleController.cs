@@ -14,6 +14,7 @@ namespace CsgoEssentials.API.Controllers
     public class ArticleController : Controller
     {
         [HttpGet]
+        [Route(ApiRoutes.Articles.GetAll)]
         public async Task<ActionResult<IEnumerable<Article>>> GetAll([FromServices] IArticleService articleService)
         {
             try
@@ -28,7 +29,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Articles.GetById)]
         public async Task<ActionResult<Article>> GetById(int id, [FromServices] IArticleService articleService)
         {
             try
@@ -46,7 +47,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}/include")]
+        [Route(ApiRoutes.Articles.GetByIdWithRelationship)]
         public async Task<ActionResult<Article>> GetByIdWithRelationship(int id, [FromServices] IArticleService articleService)
         {
             try
@@ -65,6 +66,7 @@ namespace CsgoEssentials.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator,Editor")]
+        [Route(ApiRoutes.Articles.Create)]
         public async Task<ActionResult<Article>> Create(
             [FromServices] IArticleService articleService,
             [FromBody] Article article)
@@ -75,7 +77,6 @@ namespace CsgoEssentials.API.Controllers
             try
             {
                 await articleService.Add(article);
-
                 return Ok(article);
             }
             catch (InvalidOperationException ex)
@@ -89,9 +90,9 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Articles.Update)]
         [Authorize(Roles = "Administrator,Editor")]
-        public async Task<ActionResult<Article>> Put(
+        public async Task<ActionResult<Article>> Update(
             int id,
             [FromServices] IArticleService articleService,
             [FromBody] Article article)
@@ -119,7 +120,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Articles.Delete)]
         [Authorize(Roles = "Administrator,Editor")]
         public async Task<ActionResult<Article>> Delete(
             int id,
@@ -141,7 +142,5 @@ namespace CsgoEssentials.API.Controllers
                 return BadRequest(new { message = Messages.OCORREU_UM_ERRO_INESPERADO });
             }
         }
-
     }
-
 }

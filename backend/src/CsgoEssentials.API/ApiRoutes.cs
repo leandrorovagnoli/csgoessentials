@@ -2,8 +2,6 @@
 {
     public class ApiRoutes
     {
-        private static readonly string _baseUrl = "https://localhost:5001/";
-
         public static class Users
         {
             public const string Route = "v1/users";
@@ -27,38 +25,34 @@
         {
             public const string Route = "v1/maps";
 
-            private static readonly string _mapsControllerUrl = string.Concat(_baseUrl, Route);
+            public const string GetAll = "";
 
-            public static readonly string GetAll = _mapsControllerUrl;
+            public const string Create = "";
 
-            public static readonly string Create = _mapsControllerUrl;
+            public const string GetById = "{id:int}";
 
-            public static readonly string GetById = string.Concat(_mapsControllerUrl, "/{mapId}");
+            public const string GetByIdWithRelationship = "{id:int}/include";
 
-            public static readonly string GetByIdWithRelationship = string.Concat(_mapsControllerUrl, "/{mapId}/include");
+            public const string Delete = "{id:int}";
 
-            public static readonly string Delete = string.Concat(_mapsControllerUrl, "/{mapId}");
-
-            public static readonly string Update = string.Concat(_mapsControllerUrl, "/{mapId}");
+            public const string Update = "{id:int}";
         }
 
         public static class Articles
         {
             public const string Route = "v1/articles";
 
-            private static readonly string _articlesControllerUrl = string.Concat(_baseUrl, Route);
+            public const string GetAll = "";
 
-            public static readonly string GetAll = _articlesControllerUrl;
+            public const string Create = "";
 
-            public static readonly string Create = _articlesControllerUrl;
+            public const string GetById = "{id:int}";
 
-            public static readonly string GetById = string.Concat(_articlesControllerUrl, "/{articleId}");
+            public const string GetByIdWithRelationship = "{id:int}/include";
 
-            public static readonly string GetByIdWithRelationship = string.Concat(_articlesControllerUrl, "/{articleId}/include");
+            public const string Delete = "{id:int}";
 
-            public static readonly string Delete = string.Concat(_articlesControllerUrl, "/{articleId}");
-
-            public static readonly string Update = string.Concat(_articlesControllerUrl, "/{articleId}");
+            public const string Update = "{id:int}";
         }
 
         public static class Videos

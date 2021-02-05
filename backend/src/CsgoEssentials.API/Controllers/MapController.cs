@@ -15,7 +15,7 @@ namespace CsgoEssentials.API.Controllers
     public class MapController : Controller
     {
         [HttpGet]
-
+        [Route(ApiRoutes.Maps.GetAll)]
         public async Task<ActionResult<IEnumerable<Map>>> GetAll([FromServices] IMapService MapService)
         {
             try
@@ -30,7 +30,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Maps.GetById)]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Map>> GetById(int id, [FromServices] IMapService mapService)
         {
@@ -49,7 +49,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}/include")]
+        [Route(ApiRoutes.Maps.GetByIdWithRelationship)]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Map>> GetByIdWithRelationship(int id, [FromServices] IMapService mapService)
         {
@@ -68,6 +68,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpPost]
+        [Route(ApiRoutes.Maps.Create)]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Map>> Create(
             [FromServices] IMapService MapService,
@@ -93,9 +94,9 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Maps.Update)]
         [Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<Map>> Put(
+        public async Task<ActionResult<Map>> Update(
             int id,
             [FromServices] IMapService MapService,
             [FromBody] Map map)
@@ -123,7 +124,7 @@ namespace CsgoEssentials.API.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route(ApiRoutes.Maps.Delete)]
         [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<Map>> Delete(
             int id,
