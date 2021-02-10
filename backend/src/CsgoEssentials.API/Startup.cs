@@ -13,6 +13,7 @@ using CsgoEssentials.Domain.Utils;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace CsgoEssentials.WebAPI
 {
@@ -28,6 +29,15 @@ namespace CsgoEssentials.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200");
+                    });
+            });
+
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
@@ -72,6 +82,7 @@ namespace CsgoEssentials.WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors();
             app.UseHttpsRedirection();
 
             app.UseRouting();
