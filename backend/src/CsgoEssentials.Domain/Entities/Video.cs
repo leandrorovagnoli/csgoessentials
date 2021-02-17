@@ -1,5 +1,5 @@
 ﻿using CsgoEssentials.Domain.Enum;
-using CsgoEssentials.Infra.Utils;
+using CsgoEssentials.Domain.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

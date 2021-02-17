@@ -2,7 +2,7 @@
 using CsgoEssentials.Domain.Interfaces.Repository;
 using CsgoEssentials.Domain.Interfaces.Services;
 using System;
-using CsgoEssentials.Infra.Utils;
+using CsgoEssentials.Domain.Utils;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;

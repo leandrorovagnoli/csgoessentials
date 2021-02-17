@@ -1,4 +1,4 @@
-﻿namespace CsgoEssentials.Infra.Utils
+﻿namespace CsgoEssentials.Domain.Utils
 {
     public static class Messages
     {

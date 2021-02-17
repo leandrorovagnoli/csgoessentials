@@ -1,6 +1,6 @@
 ﻿using CsgoEssentials.Domain.Enum;
 using CsgoEssentials.Domain.Interfaces.Entities;
-using CsgoEssentials.Infra.Utils;
+using CsgoEssentials.Domain.Utils;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;

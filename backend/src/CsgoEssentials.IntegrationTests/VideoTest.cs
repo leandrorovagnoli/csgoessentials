@@ -1,7 +1,7 @@
 ﻿using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Enum;
 using CsgoEssentials.Infra.Data;
-using CsgoEssentials.Infra.Utils;
+using CsgoEssentials.Domain.Utils;
 using CsgoEssentials.IntegrationTests.Config;
 using FluentAssertions;
 using System;

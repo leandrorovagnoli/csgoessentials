@@ -1,6 +1,6 @@
 ﻿using CsgoEssentials.Domain.Entities;
 using CsgoEssentials.Domain.Interfaces.Services;
-using CsgoEssentials.Infra.Utils;
+using CsgoEssentials.Domain.Utils;
 using CsgoEssentials.IntegrationTests.Config;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
