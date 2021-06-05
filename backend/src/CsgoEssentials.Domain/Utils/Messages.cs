@@ -5,13 +5,17 @@
         #region Names
 
         public const string NOME = "Nome";
+        public const string SOBRENOME = "Sobrenome";
+        public const string APELIDO = "Apelido";
         public const string EMAIL = "Email";
         public const string VIDEO = "Video";
         public const string TITULO = "Título";
         public const string DESCRICAO = "Descrição";
+        public const string NOTA = "Nota";
         public const string NOME_DE_USUARIO = "Nome de Usuário";
         public const string SENHA = "Senha";
-        public const string FUNCAO = "Função";
+        public const string FUNCAO_DE_USUARIO = "Função de Usuário";
+        public const string FUNCAO_NO_JOGO = "Função no Jogo";
         public const string ARTIGOS = "Artigos";
         public const string USUARIO = "Usuário";
         public const string MAPA = "Mapa";

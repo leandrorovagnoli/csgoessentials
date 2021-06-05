@@ -1,5 +1,4 @@
 ﻿using CsgoEssentials.Domain.Enum;
-using CsgoEssentials.Domain.Interfaces.Entities;
 using CsgoEssentials.Domain.Utils;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,13 +11,16 @@ namespace CsgoEssentials.Domain.Entities
     {
         #region Constructor
 
-        public User(string name, string email, string userName, string password, EUserRole role)
+        public User(string firstName, string lastName, string nickName, EPlayerRole playerRole, string email, string userName, string password, EUserRole userRole)
         {
-            Name = name;
+            FirstName = firstName;
+            LastName = lastName;
+            NickName = nickName;
+            PlayerRole = playerRole;
             Email = email;
             UserName = userName;
             Password = password;
-            Role = role;
+            UserRole = userRole;
             Articles = new List<Article>();
             Videos = new List<Video>();
         }
@@ -28,9 +30,23 @@ namespace CsgoEssentials.Domain.Entities
         #region Properties
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
-        [StringLength(maximumLength: 60, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 4)]
+        [StringLength(maximumLength: 60, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 3)]
         [DisplayName(Messages.NOME)]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [StringLength(maximumLength: 60, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 3)]
+        [DisplayName(Messages.SOBRENOME)]
+        public string LastName { get; set; }
+
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [StringLength(maximumLength: 60, ErrorMessage = Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, MinimumLength = 2)]
+        [DisplayName(Messages.APELIDO)]
+        public string NickName { get; set; }
+
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [DisplayName(Messages.FUNCAO_NO_JOGO)]
+        public EPlayerRole PlayerRole { get; set; }
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         [EmailAddress(ErrorMessage = Messages.CAMPO_INVALIDO)]
@@ -48,15 +64,14 @@ namespace CsgoEssentials.Domain.Entities
         public string Password { get; set; }
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
-        [DisplayName(Messages.FUNCAO)]
-        public EUserRole Role { get; set; }
+        [DisplayName(Messages.FUNCAO_DE_USUARIO)]
+        public EUserRole UserRole { get; set; }
 
         [DisplayName(Messages.ARTIGOS)]
         public IList<Article> Articles { get; set; }
 
         [DisplayName(Messages.VIDEO)]
         public IList<Video> Videos { get; set; }
-
 
         #endregion
 

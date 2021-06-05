@@ -23,27 +23,36 @@ namespace CsgoEssentials.Infra.Data
             var users = await context
                 .Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Role == EUserRole.Administrator);
+                .FirstOrDefaultAsync(x => x.UserRole == EUserRole.Administrator);
 
             if (users != null)
                 return;
 
             var adminUserLeo = new User(
                 "Leandro",
+                "Rovagnoli",
+                "Leolandrooo",
+                EPlayerRole.AWPer,
                 "leo@leo.com",
                 "leolandrooo",
                 MD5Hash.CalculaHash("@123456*"),
                 EUserRole.Administrator);
 
             var adminUserRock = new User(
+                "Ricardo",
+                "Santos",
                 "Rock",
+                EPlayerRole.EntryFragger,
                 "rock@rock.com",
                 "rock",
                 MD5Hash.CalculaHash("@123456*"),
                 EUserRole.Administrator);
 
             var adminUserJalaska = new User(
+                "Paulo",
                 "Jalaska",
+                "Seph",
+                EPlayerRole.Support,
                 "jalaska@jalaska.com",
                 "jalaska",
                 MD5Hash.CalculaHash("@123456*"),
@@ -51,6 +60,9 @@ namespace CsgoEssentials.Infra.Data
 
             var memberUserJoao = new User(
                 "Joao",
+                "Manuel",
+                "Joakim",
+                EPlayerRole.Lurker,
                 "joao@joao.com",
                 "joao",
                 MD5Hash.CalculaHash("@123456*"),
@@ -58,6 +70,9 @@ namespace CsgoEssentials.Infra.Data
 
             var editorUserMaria = new User(
                 "Maria",
+                "Silva",
+                "Annabelle",
+                EPlayerRole.Beginner,
                 "maria@maria.com",
                 "maria",
                 MD5Hash.CalculaHash("@123456*"),

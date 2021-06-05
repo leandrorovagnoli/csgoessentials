@@ -25,7 +25,10 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             _defaultRoute = _baseUrl + ApiRoutes.Users.Route + "/";
 
             _newMemberUser = new User(
-                "Joao da Silva Member User",
+                "Joao",
+                "da Silva Member User",
+                "Joaozinho",
+                EPlayerRole.Coach,
                 "joaozinho@gmail.com",
                 "joaomember",
                 "@123456*",
@@ -47,9 +50,9 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             user.Id.Should().BeGreaterThan(0);
-            user.Name.Should().Be(_newMemberUser.Name);
+            user.FirstName.Should().Be(_newMemberUser.FirstName);
             user.Password.Should().Be(MD5Hash.CalculaHash(_newMemberUser.Password));
-            user.Role.Should().Be(_newMemberUser.Role);
+            user.UserRole.Should().Be(_newMemberUser.UserRole);
         }
 
         [Fact]
@@ -59,7 +62,7 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             await AuthenticateAsync(EUserRole.Administrator);
             await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Users.Create, _newMemberUser);
 
-            _newMemberUser.Name = string.Empty;
+            _newMemberUser.FirstName = string.Empty;
 
             //Act
             var response = await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Users.Create, _newMemberUser);
@@ -111,9 +114,7 @@ namespace CsgoEssentials.IntegrationTests.UserTests
         {
             //Arrange
             await AuthenticateAsync(EUserRole.Administrator);
-            await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Users.Create, _newMemberUser);
-
-            _newMemberUser.Name = "Leo";
+            _newMemberUser.FirstName = "Le";
 
             //Act
             var response = await Client.PostAsJsonAsync(_defaultRoute + ApiRoutes.Users.Create, _newMemberUser);
@@ -121,7 +122,7 @@ namespace CsgoEssentials.IntegrationTests.UserTests
 
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.NOME, "60", "4"));
+            content.Should().Contain(string.Format(Messages.CAMPO_PRECISA_TER_ENTRE_X2_E_Y1_CARACTERES, Messages.NOME, "60", "3"));
         }
 
         [Fact]
@@ -224,8 +225,8 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             var responseAux = await Client.GetAsync(_defaultRoute + ApiRoutes.Users.GetById.Replace("{id:int}", "2"));
             var userAux = await responseAux.Content.ReadAsAsync<User>();
 
-            userAux.Name = "updatedUser";
-            userAux.Role = EUserRole.Editor;
+            userAux.FirstName = "updatedUser";
+            userAux.UserRole = EUserRole.Editor;
 
             //Act
             var response = await Client.PutAsJsonAsync(_defaultRoute + ApiRoutes.Users.Update.Replace("{id:int}", userAux.Id.ToString()), userAux);
@@ -234,9 +235,9 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             user.Id.Should().BeGreaterThan(0);
-            user.Name.Should().Be("updatedUser");
+            user.FirstName.Should().Be("updatedUser");
             user.Password.Should().Be(MD5Hash.CalculaHash(_newMemberUser.Password));
-            user.Role.Should().Be(EUserRole.Editor);
+            user.UserRole.Should().Be(EUserRole.Editor);
         }
 
         [Fact]
@@ -270,8 +271,8 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             userAux.Should().NotBeNull();
 
             //Act
-            userAux.Name = "updatedUser";
-            userAux.Role = EUserRole.Editor;
+            userAux.FirstName = "updatedUser";
+            userAux.UserRole = EUserRole.Editor;
 
             var response = await Client.PutAsJsonAsync(_defaultRoute + ApiRoutes.Users.Update.Replace("{id:int}", "9999"), userAux);
             var jsonModel = await response.Content.ReadFromJsonAsync<JsonModel>();
@@ -301,9 +302,9 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             user.Id.Should().BeGreaterThan(0);
-            user.Name.Should().Be(userAux.Name);
+            user.FirstName.Should().Be(userAux.FirstName);
             user.Password.Should().Be(MD5Hash.CalculaHash("@ABC123"));
-            user.Role.Should().Be(userAux.Role);
+            user.UserRole.Should().Be(userAux.UserRole);
         }
 
         #endregion
@@ -370,9 +371,9 @@ namespace CsgoEssentials.IntegrationTests.UserTests
             //Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             user.Id.Should().BeGreaterThan(0);
-            user.Name.Should().Be(_newMemberUser.Name);
+            user.FirstName.Should().Be(_newMemberUser.FirstName);
             user.Password.Should().Be(MD5Hash.CalculaHash(_newMemberUser.Password));
-            user.Role.Should().Be(_newMemberUser.Role);
+            user.UserRole.Should().Be(_newMemberUser.UserRole);
         }
 
         [Fact]

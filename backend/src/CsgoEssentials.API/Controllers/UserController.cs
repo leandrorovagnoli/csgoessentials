@@ -175,10 +175,10 @@ namespace CsgoEssentials.API.Controllers
                     user = new
                     {
                         id = user.Id,
-                        name = user.Name,
+                        name = user.FirstName,
                         username = user.UserName,
                         email = user.Email,
-                        role = user.Role.ToString()
+                        role = user.UserRole.ToString()
                     },
 
                     token = token
