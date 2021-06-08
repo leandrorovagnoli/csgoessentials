@@ -11,12 +11,14 @@ namespace CsgoEssentials.Domain.Entities
     {
         #region Constructor
 
-        public User(string firstName, string lastName, string nickName, EPlayerRole playerRole, string email, string userName, string password, EUserRole userRole)
+        public User(string firstName, string lastName, string nickName, EPlayerRole playerRole1, EPlayerRole playerRole2, EPlayerRole playerRole3, string email, string userName, string password, EUserRole userRole)
         {
             FirstName = firstName;
             LastName = lastName;
             NickName = nickName;
-            PlayerRole = playerRole;
+            PlayerRole1 = playerRole1;
+            PlayerRole2 = playerRole2;
+            PlayerRole3 = playerRole3;
             Email = email;
             UserName = userName;
             Password = password;
@@ -45,8 +47,16 @@ namespace CsgoEssentials.Domain.Entities
         public string NickName { get; set; }
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
-        [DisplayName(Messages.FUNCAO_NO_JOGO)]
-        public EPlayerRole PlayerRole { get; set; }
+        [DisplayName(Messages.FUNCAO_PRINCIPAL_NO_JOGO)]
+        public EPlayerRole PlayerRole1 { get; set; }
+
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [DisplayName(Messages.FUNCAO_SECUNDARIA_NO_JOGO)]
+        public EPlayerRole PlayerRole2 { get; set; }
+
+        [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
+        [DisplayName(Messages.FUNCAO_OPCIONAL_NO_JOGO)]
+        public EPlayerRole PlayerRole3 { get; set; }
 
         [Required(ErrorMessage = Messages.CAMPO_OBRIGATORIO)]
         [EmailAddress(ErrorMessage = Messages.CAMPO_INVALIDO)]

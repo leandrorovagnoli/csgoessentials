@@ -32,12 +32,18 @@ namespace CsgoEssentials.Domain.Entities
         /// <summary>
         /// Role that this player has the best performance
         /// </summary>
-        public EPlayerRole BestPlayerRole { get; set; }
+        public User PlayerRole1 { get; set; }
 
         /// <summary>
         /// Role that this player has the worst performance
         /// </summary>
-        public EPlayerRole WorstPlayerRole { get; set; }
+        public User PlayerRole2 { get; set; }
+
+        /// <summary>
+        /// General strength points to be described
+        /// </summary>
+        /// 
+        public User PlayerRole3 { get; set; }
 
         /// <summary>
         /// General strength points to be described
