@@ -15,7 +15,9 @@
         public const string NOME_DE_USUARIO = "Nome de Usuário";
         public const string SENHA = "Senha";
         public const string FUNCAO_DE_USUARIO = "Função de Usuário";
-        public const string FUNCAO_NO_JOGO = "Função no Jogo";
+        public const string FUNCAO_PRINCIPAL_NO_JOGO = "Função Principal no Jogo";
+        public const string FUNCAO_SECUNDARIA_NO_JOGO = "Função Secundária no Jogo";
+        public const string FUNCAO_OPCIONAL_NO_JOGO = "Função Opcional no Jogo";
         public const string ARTIGOS = "Artigos";
         public const string USUARIO = "Usuário";
         public const string MAPA = "Mapa";

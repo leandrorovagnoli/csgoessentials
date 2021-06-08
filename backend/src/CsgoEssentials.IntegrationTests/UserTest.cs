@@ -29,6 +29,8 @@ namespace CsgoEssentials.IntegrationTests.UserTests
                 "da Silva Member User",
                 "Joaozinho",
                 EPlayerRole.Coach,
+                EPlayerRole.Lurker,
+                EPlayerRole.IGL,
                 "joaozinho@gmail.com",
                 "joaomember",
                 "@123456*",
