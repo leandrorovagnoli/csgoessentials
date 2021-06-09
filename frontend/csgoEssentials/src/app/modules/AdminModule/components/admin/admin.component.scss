@@ -1,0 +1,23 @@
+.container{
+  display: grid;
+  width: auto;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+  ". . meio . .";
+}
+
+.logar {
+  grid-area: meio;
+  height: 35vh;
+  width: 40vh;
+  min-width: 200px;
+  justify-self: center;
+  align-self: center;
+
+
+  background-color: rgb(25, 54, 54);
+
+
+}
