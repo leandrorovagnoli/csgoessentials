@@ -6,6 +6,7 @@ import { HomeComponent } from './modules/Home/components/home.component';
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'admin', component: AdminComponent},
+
 ];
 
 @NgModule({

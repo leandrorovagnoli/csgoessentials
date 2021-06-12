@@ -1,9 +1,32 @@
 .container {
   display: grid;
+  grid-template-columns: repeat(12, [col-start] 1fr);
+  grid-template-rows: 1fr repeat(4, 2fr) 0.7fr;
+  background-color: cornflowerblue;
   height: 100vh;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  background-color: black;
-  color: crimson;
-  align-content: center;
+
+}
+
+.cabecalho {
+  grid-column: col-start / span 12;
+}
+
+.barraLateral {
+  grid-column: col-start / span 2;
+  grid-row: 2 / 6;
+  background-color: rgb(34, 14, 14);
+  color: antiquewhite;
+}
+
+.principal {
+  grid-column: col-start 3 / span 10;
+  grid-row: 2 / 6;
+  background-color: rgb(1, 2, 2);
+  color: aliceblue;
+}
+
+.rodape {
+  grid-column: col-start / span 12;
+  grid-row: 6;
+  background-color: brown;
 }
