@@ -3,30 +3,27 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AdminModule } from './modules/Admin/admin.module';
-import { HomeModule } from './modules/Home/home.module';
-import { FooterComponent } from './core/template/footer/footer.component';
-import { HeaderComponent } from './core/template/header/header.component';
-import { MainComponent } from './core/template/main/main.component';
-import { SidebarComponent } from './core/template/sidebar/sidebar.component';
-import { VideoComponent } from './modules/video/video.component';
-
+import { AdminLayoutComponent } from './_layout/dashboard/admin-layout.component';
+import { MainLayoutComponent } from './_layout/main-layout/main-layout.component';
+import { HeaderComponent } from './_layout/main-layout/header/header.component';
+import { FooterComponent } from './_layout/main-layout/footer/footer.component';
+import { SidebarComponent } from './_layout/main-layout/sidebar/sidebar.component';
+import { AdminLoginComponent } from './pages/admin-login/admin-login.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    FooterComponent,
+    AdminLayoutComponent,
+    MainLayoutComponent,
     HeaderComponent,
-    MainComponent,
+    FooterComponent,
     SidebarComponent,
-    VideoComponent,
+    AdminLoginComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    AdminModule,
-    HomeModule
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
