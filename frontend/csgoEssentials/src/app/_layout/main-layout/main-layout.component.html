@@ -1,8 +1,14 @@
-<app-header></app-header>
-<app-sidebar></app-sidebar>
+<div class="container">
+  <app-header class="cabecalho"></app-header>
+  <app-sidebar class="menulateral"></app-sidebar>
 
-<router-outlet></router-outlet>
+  <div class="principal">
+    <router-outlet></router-outlet>
+  </div>
 
-<app-footer></app-footer>
+
+  <app-footer class="rodape"></app-footer>
+
+</div>
 
 

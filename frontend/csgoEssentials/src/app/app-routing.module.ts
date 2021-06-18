@@ -1,17 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminLoginComponent } from './pages/admin-login/admin-login.component';
+
+import { AdminComponent } from './pages/modules/Admin/component/admin.component';
+
 import { MainLayoutComponent } from './_layout/main-layout/main-layout.component';
 
 const routes: Routes = [
 {
-    path: '',
-    component: MainLayoutComponent,
+    path: '', component: MainLayoutComponent,
   loadChildren: () =>
-  import('./pages/modules/video.module').then( (m) => m.VideoModule)
+  import('./pages/modules/video/video.module').then( m => m.VideoModule)
 },
 {
-  path: 'admin', component: AdminLoginComponent
+  path: 'admin',
+  loadChildren: () =>
+  import('./pages/modules/Admin/admin.module').then( m => m.AdminModule)
 }
 ];
 

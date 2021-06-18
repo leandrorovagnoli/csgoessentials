@@ -1,0 +1,79 @@
+.menu {
+  display: flex;
+  flex-direction: column;
+
+}
+
+nav {
+  color: bisque;
+  display: flex;
+  width: 100%;
+
+}
+
+.testar {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.submenu {
+  color: rgb(255, 255, 255);
+  margin-left: 3rem;
+  font-size: 1.3rem;
+  display: none;
+}
+
+
+ul{
+  list-style: none;
+}
+
+.adminPainel {
+  flex-basis: 9rem;
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 1.7rem;
+  font-style: oblique;
+  color: #fff;
+}
+
+.material-icons {
+  color: rgb(153, 105, 197);
+  margin-right: 1rem;
+  font-size: 1.6rem;
+  margin-left: 2rem;
+}
+
+.menu li:hover ul,
+.menu li.over ul {
+  display: block;
+}
+
+
+.menu li ul li {
+  width: 7.5rem;
+  color: #fff;
+  text-align: center;
+}
+
+
+.menu li a {
+  color: #333;
+  text-decoration: none;
+  padding: 7px ;
+  display: block;
+
+}
+
+.menu li a:hover {
+  background: #333;
+  color: #fff;
+  text-shadow: 0px 0px 5px #fff;
+}
+
+
+
+
+
